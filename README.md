@@ -1,69 +1,77 @@
-# Chinmay Relkar
+# chinmayrelkar.github.io
 
-Email: chinmayrelkar@gmail.com | Phone: +917620437776 | LinkedIn: [linkedin.com/in/chnmy/](https://www.linkedin.com/in/chnmy/)
+Source for my personal site, hosted on GitHub Pages at [chinmayrelkar.github.io](https://chinmayrelkar.github.io).
 
----
+Plain HTML, CSS, and JS — no build step and no framework.
 
-## Skills
+## Structure
 
-GoLang, Python, Java, WebRTC, RTMP, gRPC, Websockets, SQL, NoSQL, Redis, Kafka, DevOps, Kubernetes, Helm, Terraform, GCP, AWS, Distributed Systems, Microservices, Computer Networks, Object Oriented Design, Functional Programming
+- `index.html` — the single-page site: Writing, Projects, Experience, Contact
+- `404.html` — not-found page, served by GitHub Pages
+- `writing/` — long-form posts, one self-contained HTML file each
+- `assets/style.css` — all styles, shared by every page. Theming is
+  `light-dark()` over a `color-scheme` that `data-theme` overrides
+- `assets/script.js` — theme toggle, active-section nav highlighting, the Writing
+  feed, and post heading numbering, dividers, breadcrumb and reading progress
+- `assets/og-image.png` — Open Graph / Twitter card image
 
----
+## Type scale
 
-## Experience
-### Unacademy Group
-**Senior Software Engineer**  December 22 - Present
-* Optimizing platform costs for online classroom experience
+Heading sizes come from five custom properties in `:root`, on an even scale
+between body text and the title. Set a heading from these, never a bare
+`font-size`:
 
-### Cohesive by Unacademy Group  
+| Step | Role        | Variable      | Size    |
+| ---- | ----------- | ------------- | ------- |
+| 10   | title       | `--fs-title`  | 42.0px  |
+| 7    | heading 1   | `--fs-h1`     | 33.7px  |
+| 5    | heading 2   | `--fs-h2`     | 28.1px  |
+| 3    | heading 3   | `--fs-h3`     | 22.6px  |
+| 1    | normal text | `--fs-body`   | 17.0px  |
 
-**Senior Software Engineer**  March 22 - November 22
-* Backend development for various products, driving company strategy pivots.
-* Sole platform engineer responsible for AWS infrastructure setup and observability.
-* Built Cohesive AI, a content generation tool, with ownership of payments integration and complete platform.
-* Managed 4 product engineering teams of intens while building apps for the Saas Marketplace. Aiming to solve the supply problem.
-* Responsible for all SDKs (Python, Go, Ruby, JavaScript).
-* Contributed to building Cohesive Cloud and Cohesive Live, improving test environments and production experience.
+In a post, `h1` is the title, `h2` is heading 1, and `h3` is heading 2. All
+headings use `--ink` rather than the accent colour.
 
-### Amazon
+Each block of content closes with a divider whose weight matches its depth:
+green (2px) ends a section, white (1px) ends a subsection, faint grey ends an
+`h4` block. Only the green rules are authored, as `<hr class="post-hr">` before
+each `<h2>`; `script.js` generates the rest and closes the final section.
 
-**SDE - Expansion & Engagement**  August 21 - March 22
+## Sticky bars
 
-* Drove IAB compliance for in-app advertising on Amazon Appstore.
-* Analyzed performance of Ad SDKs on FOS devices with a focus on ad personalization.
-* Built Tax Category Override for in-app purchases.
-* Worked on the Promotions Console, conducting benchmarking studies and competitive analysis of ad and promotion types.
+Two stacked sticky bars, whose heights live in `--header-h` and `--nav-h`.
+Anything scrolling to an anchor must offset by them or the target lands
+underneath — that is what the `scroll-margin-top` rules on `section` and
+`.post h2, .post h3` are for. `--header-h` is the header's *total* height, so
+`.site-header-inner` is 1px shorter to leave room for the border.
 
-### 100ms.live
+`.site-header` carries the wordmark on every page. On post pages it also holds
+the breadcrumb: `Writing › Title › heading 1 › heading 2`, where the last two
+track the reader's position. Only the deepest level in view is green.
 
-**SOFTWARE ENGINEER E3** February 21 - July 21
+Below 640px the header stacks into three single-line rows — wordmark, fixed
+context, live position — so its height stays constant while scrolling. Only pages
+that have a breadcrumb get the taller bar, via `:root:has(.crumb)`.
 
-* Designed and developed Beam, an on-demand live streaming and recording service for video conferences.
-* Created integrations to stream to RTMP/S destinations like YouTube, Twitch, and Facebook Live.
-* Built an analytics engine for event collection and routing, handling scale of 50k events per minute.
-* Designed a webhook platform for developers to consume key events.
+## The Writing feed
 
-### Schlumberger
+`index.html` ships a static list of posts, which `assets/script.js` then replaces
+at runtime with the live Medium feed (via the `api.rss2json.com` proxy) merged with
+the `LOCAL_POSTS` array and sorted by date.
 
-**Application Engineer** July 19 - February 21
+Two things follow from that:
 
-* Built a distributed system to collect events for service integrations, streaming 10K events/sec into Apache Kafka.
-* Developed real-time analytics and dashboard for pattern recognition on historical events.
-* Led the development of hybrid hosting cost analytics and reporting.
-* Contributed to data archival management, implementing a 3-layer AES256 data encryption and web client design.
+- **Adding a post under `writing/` means editing two places** — add an entry to
+  `LOCAL_POSTS` in `assets/script.js`, *and* add the same `<li>` to the static list
+  in `index.html`. The static copy is what search engines and no-JS visitors see.
+- If the feed fetch fails or times out (6s), the script falls back to
+  `MEDIUM_FALLBACK`, so the section is never empty.
 
-### Internships
+## Local preview
 
-* GarageBot (Android Developer Intern): Built GarageBot Inventory App from scratch in Flutter (Android/Web).
-* ArrayPointer (Data Science Intern): Developed a recommendation engine based on user activity for the Maza group of apps.
+Open `index.html` directly, or serve the directory so that relative paths and the
+feed fetch behave as they do in production:
 
----
-
-## Education
-
-### Bachelor of Engineering in Information Technology
-
-**Savitribai Phule Pune University** July 2015 - July 2019
-
-* Joint Secretary of Students' Council
-* GPA: 8.1
+```sh
+python3 -m http.server 8000
+```

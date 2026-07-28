@@ -1,0 +1,749 @@
+:root {
+  color-scheme: light dark;
+
+  --bg: light-dark(#f6f8f3, #14170f);
+  --bg-card: light-dark(#ffffff, #1c2118);
+  --ink: light-dark(#1c211d, #eef2ea);
+  --ink-muted: light-dark(#5c6b5e, #a9b7a8);
+  --rule: light-dark(#dfe6dc, #2c332a);
+  --accent: light-dark(#1f9d55, #4ade80);
+  --accent-ink: light-dark(#ffffff, #0e2415);
+
+  --font: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Type scale. Steps are 10 / 7 / 5 / 3 / 1, spaced evenly at 2.78px per step
+     between body text (17px) and the title (42px). Every heading on the site
+     draws from these five values — don't set a bare font-size on a heading.
+     Step  Role         rem        px
+      10   title        2.625      42.0
+       7   heading 1    2.104      33.7
+       5   heading 2    1.757      28.1
+       3   heading 3    1.410      22.6
+       1   normal text  1.0625     17.0 */
+  --fs-title: 2.625rem;
+  --fs-h1: 2.104rem;
+  --fs-h2: 1.757rem;
+  --fs-h3: 1.41rem;
+  --fs-body: 1.0625rem;
+
+  /* Heights of the two stacked sticky bars. Anything that scrolls to an anchor
+     must offset by these, or the target lands underneath them. */
+  --header-h: 3.25rem;
+  --nav-h: 3.4rem;
+}
+
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
+
+* { box-sizing: border-box; }
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -3rem;
+  background: var(--accent);
+  color: var(--accent-ink);
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  z-index: 100;
+  transition: top 0.15s ease;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+html { scroll-behavior: smooth; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: var(--fs-body);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+ul { margin: 0; padding: 0; list-style: none; }
+
+.page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 3rem;
+}
+
+/* Title */
+.title-page { margin-bottom: 3rem; }
+
+.eyebrow {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 0.7rem;
+}
+
+.signature {
+  font-weight: 800;
+  font-size: var(--fs-title);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.subhead {
+  font-size: 1rem;
+  color: var(--ink-muted);
+  max-width: 40ch;
+  margin: 1rem 0 0;
+}
+
+#theme-toggle {
+  position: fixed;
+  right: 1.75rem;
+  bottom: 1.75rem;
+  z-index: 40;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+  box-shadow: 0 2px 10px color-mix(in srgb, var(--ink) 14%, transparent);
+  cursor: pointer;
+  color: var(--ink);
+  padding: 0;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+#theme-toggle:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+#theme-toggle svg {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  transition: opacity 0.25s ease, transform 0.3s ease;
+}
+
+.icon-moon {
+  opacity: 0;
+  transform: scale(0.5) rotate(-40deg);
+}
+
+:root[data-theme="dark"] .icon-sun {
+  opacity: 0;
+  transform: scale(0.5) rotate(40deg);
+}
+
+:root[data-theme="dark"] .icon-moon {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .icon-sun {
+    opacity: 0;
+    transform: scale(0.5) rotate(40deg);
+  }
+  :root:not([data-theme]) .icon-moon {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* Tabs */
+.tabs {
+  position: sticky;
+  top: var(--header-h);
+  z-index: 30;
+  background: var(--bg);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.6rem;
+  border-bottom: 1px solid var(--rule);
+  padding: 1rem 0 0.9rem;
+  margin: 0 0 3rem;
+}
+
+.tabs a {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ink-muted);
+  transition: color 0.15s ease;
+}
+
+.tabs a:hover,
+.tabs a.active {
+  color: var(--accent);
+}
+
+/* Cards */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--ink) 6%, transparent);
+  padding: 1.8rem 1.9rem;
+  margin-bottom: 3rem;
+}
+
+/* Section titles */
+.section-title {
+  font-weight: 800;
+  font-size: var(--fs-h1);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0 0 2rem;
+}
+
+section { margin-bottom: 4.5rem; scroll-margin-top: calc(var(--header-h) + var(--nav-h) + 1.75rem); }
+
+/* Timeline / postcards */
+.timeline {
+  border-left: 2px solid var(--rule);
+  padding-left: 1.6rem;
+  margin-left: 0.2rem;
+}
+
+.postcard {
+  position: relative;
+  padding: 0 0 1.6rem;
+}
+
+.postcard:last-child { padding-bottom: 0; }
+
+.postcard::before {
+  content: "";
+  position: absolute;
+  left: -1.85rem;
+  top: 0.5rem;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.postmark {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--ink-muted);
+  margin-bottom: 0.35rem;
+}
+
+.postcard h3 {
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.role {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--ink-muted);
+}
+
+.job-sub {
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+}
+
+.subsection-title {
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  color: var(--ink);
+  margin: 3rem 0 1.6rem;
+}
+
+/* Ticket list */
+.ticket-list li { border-bottom: 1px solid var(--rule); }
+.ticket-list li:first-child { border-top: 1px solid var(--rule); }
+
+.ticket-list a {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 1rem 0.2rem;
+}
+
+.ticket-list a:hover .ticket-title { color: var(--accent); }
+
+.ticket-title {
+  font-size: 1rem;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.ticket-date {
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+.more-link {
+  display: inline-block;
+  margin-top: 1.3rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--accent);
+  border-bottom: 1px solid var(--accent);
+}
+
+/* The margin above is spacing off a preceding list; a lone link in a card
+   (the 404 page) would otherwise sit off-centre in its own padding. */
+.card > .more-link:only-child { margin-top: 0; }
+
+/* Contact */
+.postcard-contact {
+  max-width: 560px;
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--ink) 6%, transparent);
+  padding: 2rem 2.2rem;
+}
+
+.labels {
+  display: flex;
+  gap: 1.4rem;
+  flex-wrap: wrap;
+}
+
+.label-tag {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ink-muted);
+  border-bottom: 1px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.label-tag:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Projects */
+.project-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+}
+
+@media (min-width: 860px) {
+  .project-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.project-grid .project-card { margin-bottom: 0; }
+
+.project-card h3 {
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  margin: 0 0 0.6rem;
+}
+
+.project-card p {
+  margin: 0 0 0.9rem;
+}
+
+.project-card .tags {
+  font-size: 0.78rem;
+  color: var(--accent);
+  margin: 0 0 1.2rem;
+}
+
+/* Footer */
+.site-footer {
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+  margin-top: 2rem;
+}
+
+.back-link {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ink-muted);
+  transition: color 0.15s ease;
+}
+
+.back-link:hover { color: var(--accent); }
+
+/* Post article */
+.post { max-width: 100%; }
+
+.post-meta {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: light-dark(#15803d, var(--accent));
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 0.8rem;
+}
+
+.post h1 {
+  font-weight: 800;
+  font-size: var(--fs-title);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin: 0 0 2.5rem;
+}
+
+.post h1 + h2 {
+  margin-top: 2rem;
+}
+
+.post h2 {
+  font-weight: 800;
+  font-size: var(--fs-h1);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 3rem 0 1.2rem;
+}
+
+.h2-num {
+  display: inline-block;
+  min-width: 1.5em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Persistent site header. Sticky rather than fixed so it occupies flow space
+   and no page needs a compensating padding-top. Present on every page; on post
+   pages it also carries the breadcrumb. */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--bg) 90%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--rule);
+}
+
+.site-header-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  height: calc(var(--header-h) - 1px);
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  font-size: 0.85rem;
+}
+
+.site-wordmark {
+  flex: none;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  transition: color 0.15s ease;
+}
+
+.site-wordmark:hover { color: var(--accent); }
+
+/* Breadcrumb: Writing > Title > heading 1 > heading 2 */
+.crumb {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.crumb-context,
+.crumb-position {
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  overflow: hidden;
+}
+
+.crumb-root,
+.crumb-title,
+.crumb-h1,
+.crumb-h2 {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* One divider rule for every crumb item, so an empty trailing level draws none. */
+.crumb-root::before,
+.crumb-title::before,
+.crumb-h1::before,
+.crumb-h2::before {
+  content: "\203A";
+  margin: 0 0.5rem;
+  /* --rule is a border tone and reads as invisible at text size. Mixed down from
+     the muted ink instead: legible, but still recessive next to the labels. */
+  color: color-mix(in srgb, var(--ink-muted) 75%, transparent);
+}
+
+.crumb-root {
+  flex: none;
+  transition: color 0.15s ease;
+}
+
+.crumb-root:hover { color: var(--accent); }
+
+.crumb-title { flex: 0 4 auto; }
+
+.crumb-h1 { flex: 0 1 auto; }
+
+.crumb-h2 { flex: 0 2 auto; }
+
+/* Green marks only the deepest level currently in view, so the eye lands on where
+   the reader actually is instead of on a fixed rung of the hierarchy. */
+.crumb .is-current {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.crumb-h1[hidden],
+.crumb-h2[hidden] { display: none; }
+
+/* Deep links to a numbered section must clear the header. */
+.post h2, .post h3 { scroll-margin-top: calc(var(--header-h) + 1rem); }
+
+.reading-progress {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 3px;
+  background: light-dark(#cfd8ca, #3a4236);
+  z-index: 35;
+}
+
+.reading-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+}
+
+.post h3 {
+  font-weight: 700;
+  font-size: var(--fs-h2);
+  color: var(--ink);
+  margin: 2rem 0 0.8rem;
+}
+
+.post p strong:only-child {
+  display: inline-block;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.post p:has(> strong:only-child) {
+  margin-bottom: 0.5rem;
+}
+
+.post p {
+  margin: 0 0 1.1rem;
+  line-height: 1.75;
+}
+
+.post ul {
+  list-style: disc;
+  margin: 0 0 1.1rem;
+  padding-left: 1.3rem;
+}
+
+.post ol {
+  list-style: decimal;
+  margin: 0 0 1.1rem;
+  padding-left: 1.3rem;
+}
+
+.post li::marker { color: var(--accent); }
+
+.post li {
+  margin-bottom: 0.55rem;
+  line-height: 1.65;
+}
+
+.post table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 1.5rem;
+  font-size: 0.9rem;
+}
+
+.post th, .post td {
+  text-align: left;
+  padding: 0.65rem 0.9rem 0.65rem 0;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+
+.post th {
+  color: var(--ink-muted);
+  font-weight: 600;
+}
+
+.post code {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.9em;
+}
+
+/* Dividers close the content of the block above them, one weight per heading
+   depth: green ends a heading-1 section, white ends a heading-2 subsection,
+   faint grey ends a heading-3 block. The green rules are authored in the markup
+   as <hr class="post-hr"> so they survive without JavaScript; the deeper ones
+   have no markup to hang off and are inserted by script.js. */
+/* Footnote markers. Superscript links out to the reference list; adjacent markers
+   on one claim (e.g. "4 15") get a hairline separator so they don't read as "415". */
+.post sup.fn {
+  font-size: 0.62em;
+  line-height: 0;
+  vertical-align: super;
+  white-space: nowrap;
+}
+
+.post sup.fn a {
+  color: var(--accent);
+  font-weight: 700;
+  /* A bare superscript digit is far too small to tap. Pad the hit area out and
+     pull the margins back in so the line box is unaffected. */
+  padding: 0.75em 0.7em;
+  margin: -0.75em -0.45em;
+}
+
+.post sup.fn a:hover { text-decoration: underline; }
+
+.post sup.fn a + a::before {
+  content: ",";
+  color: var(--ink-muted);
+  margin-right: 0.1em;
+}
+
+.references {
+  font-size: 0.95rem;
+}
+
+.references li {
+  margin-bottom: 0.8rem;
+  /* Jumping from a marker must clear the sticky header. */
+  scroll-margin-top: calc(var(--header-h) + 1.5rem);
+}
+
+.references li:target {
+  /* Brief tint so the reader can see which entry they landed on. */
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border-radius: 3px;
+}
+
+.references .ref-pub,
+.references .ref-note { color: var(--ink-muted); }
+
+.references a {
+  color: var(--accent);
+  overflow-wrap: anywhere;
+}
+
+.references a:hover { text-decoration: underline; }
+
+.post-hr,
+.post-rule {
+  border: none;
+}
+
+.post-hr,
+.post-rule--1 {
+  border-top: 2px solid var(--accent);
+  margin: 2.5rem 0;
+}
+
+.post-rule--2 {
+  border-top: 1px solid var(--ink);
+  margin: 2rem 0;
+}
+
+.post-rule--3 {
+  border-top: 1px solid var(--rule);
+  margin: 1.5rem 0;
+}
+
+/* Scroll reveal */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 25%;
+    }
+  }
+}
+
+@keyframes reveal-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  /* Three rows instead of one, but only where a breadcrumb exists. --header-h
+     stays the single source of truth for the sticky offsets. */
+  :root:has(.crumb) { --header-h: 4.6rem; }
+
+  .page { padding: 2.5rem 1.1rem 2rem; }
+  .project-grid { grid-template-columns: 1fr; }
+
+  /* The wordmark plus four crumb levels cannot share a phone-width line, so the
+     header goes multi-row: wordmark, then fixed context, then live position.
+     Three single-line rows, so the height is stable while scrolling — a header
+     that grew and shrank would reflow the article under the reader's thumb. */
+  .site-header-inner {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 0.1rem;
+    padding: 0 1.1rem;
+    font-size: 0.8rem;
+  }
+
+  .crumb {
+    flex-direction: column;
+    align-items: stretch;
+    overflow: hidden;
+  }
+
+  /* Each group now starts its own row, so it must not lead with a separator. */
+  .crumb-root::before,
+  .crumb-h1::before { content: none; }
+
+  #theme-toggle {
+    width: 40px;
+    height: 40px;
+    backdrop-filter: blur(3px);
+    opacity: 0.92;
+  }
+}
