@@ -27,6 +27,36 @@
     });
   }
 
+  // Home only: reveal the wordmark in the sticky pill once the hero name is gone.
+  // Hysteresis avoids flicker at the threshold so the CSS transition can finish.
+  const heroName = document.querySelector(".title-page .signature");
+  if (heroName) {
+    let headerQueued = false;
+    let compact = false;
+    const ENTER_AT = 8;  // become compact when hero bottom clears this
+    const LEAVE_AT = 56; // expand again only when hero is clearly back
+    const syncHomeHeader = () => {
+      const bottom = heroName.getBoundingClientRect().bottom;
+      let next = compact;
+      if (!compact && bottom <= ENTER_AT) next = true;
+      if (compact && bottom > LEAVE_AT) next = false;
+      if (next === compact) return;
+      compact = next;
+      document.body.classList.toggle("header-compact", compact);
+    };
+    const onHomeScroll = () => {
+      if (headerQueued) return;
+      headerQueued = true;
+      requestAnimationFrame(() => {
+        headerQueued = false;
+        syncHomeHeader();
+      });
+    };
+    window.addEventListener("scroll", onHomeScroll, { passive: true });
+    window.addEventListener("resize", onHomeScroll);
+    syncHomeHeader();
+  }
+
   const tabLinks = document.querySelectorAll(".tabs a[data-tab]");
   const sections = [...tabLinks]
     .map((link) => document.querySelector(link.getAttribute("href")))
@@ -177,11 +207,22 @@
       post.appendChild(endRule);
     }
 
+    // Progress as a pipe: the essay's metaphor (free pipes, accumulation
+    // inside). Same scroll math as before; the chrome is the design move.
     const progress = document.createElement("div");
     progress.className = "reading-progress";
+    progress.setAttribute("role", "progressbar");
+    progress.setAttribute("aria-label", "Reading progress through the essay");
+    progress.setAttribute("aria-valuemin", "0");
+    progress.setAttribute("aria-valuemax", "100");
+    progress.setAttribute("aria-valuenow", "0");
+
+    const pipe = document.createElement("div");
+    pipe.className = "reading-progress-pipe";
     const bar = document.createElement("div");
     bar.className = "reading-progress-bar";
-    progress.appendChild(bar);
+    pipe.appendChild(bar);
+    progress.appendChild(pipe);
     document.body.appendChild(progress);
 
     const updateProgress = () => {
@@ -191,6 +232,8 @@
         ? Math.min(1, Math.max(0, (window.scrollY - top) / scrollable))
         : 1;
       bar.style.width = `${pct * 100}%`;
+      bar.classList.toggle("has-fill", pct > 0.002);
+      progress.setAttribute("aria-valuenow", String(Math.round(pct * 100)));
     };
 
     // Fill the last two breadcrumb levels in the site header with the section and

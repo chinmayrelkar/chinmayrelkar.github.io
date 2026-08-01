@@ -1,12 +1,13 @@
 :root {
   color-scheme: light dark;
 
-  --bg: light-dark(#f6f8f3, #14170f);
-  --bg-card: light-dark(#ffffff, #1c2118);
-  --ink: light-dark(#1c211d, #eef2ea);
-  --ink-muted: light-dark(#5c6b5e, #a9b7a8);
-  --rule: light-dark(#dfe6dc, #2c332a);
-  --accent: light-dark(#1f9d55, #4ade80);
+  /* One system for home + essays (signal field). */
+  --bg: light-dark(#eef4ea, #0c100b);
+  --bg-card: light-dark(#fbfdf9, #161c13);
+  --ink: light-dark(#121612, #f2f7ef);
+  --ink-muted: light-dark(#4d5c50, #9aab98);
+  --rule: light-dark(#c9d6c4, #2a3327);
+  --accent: light-dark(#159a4a, #5eef8a);
   --accent-ink: light-dark(#ffffff, #0e2415);
 
   --font: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -25,10 +26,16 @@
   --fs-h2: 1.757rem;
   --fs-h3: 1.41rem;
   --fs-body: 1.0625rem;
+  --measure: 58rem;
+  --essay-pad: clamp(1.25rem, 3vw, 2.75rem);
+  --radius-card: 1.25rem;
+  --radius-pill: 999px;
+  --glass: color-mix(in srgb, var(--bg-card) 78%, transparent);
+  --shadow-soft: 0 10px 40px color-mix(in srgb, var(--ink) 10%, transparent);
 
   /* Heights of the two stacked sticky bars. Anything that scrolls to an anchor
      must offset by these, or the target lands underneath them. */
-  --header-h: 3.25rem;
+  --header-h: 4.1rem;
   --nav-h: 3.4rem;
 }
 
@@ -70,73 +77,97 @@ html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(ellipse 90% 55% at 8% -15%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 58%),
+    radial-gradient(ellipse 70% 45% at 100% 5%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 52%),
+    radial-gradient(ellipse 55% 35% at 50% 110%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 50%);
+  background-attachment: fixed;
   color: var(--ink);
   font-family: var(--font);
   font-size: var(--fs-body);
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
+  color: var(--ink);
 }
 
 a { color: inherit; text-decoration: none; }
 ul { margin: 0; padding: 0; list-style: none; }
 
 .page {
-  max-width: 900px;
+  max-width: min(900px, var(--measure));
   margin: 0 auto;
-  padding: 3rem 1.5rem 3rem;
+  padding: 1.5rem 1.5rem 3.5rem;
 }
 
 /* Title */
-.title-page { margin-bottom: 3rem; }
+.title-page { margin-bottom: 2.25rem; }
 
 .eyebrow {
-  font-size: 0.8rem;
-  font-weight: 600;
+  display: inline-flex;
+  font-size: 0.72rem;
+  font-weight: 700;
   color: var(--accent);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin: 0 0 0.7rem;
+  letter-spacing: 0.07em;
+  margin: 0 0 0.9rem;
+  padding: 0.38rem 0.75rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .signature {
   font-weight: 800;
-  font-size: var(--fs-title);
-  line-height: 1.05;
-  letter-spacing: -0.01em;
+  font-size: clamp(2.4rem, 5.5vw, 3.4rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
   margin: 0;
+  text-wrap: balance;
 }
 
 .subhead {
-  font-size: 1rem;
+  font-size: 1.05rem;
+  font-weight: 500;
   color: var(--ink-muted);
-  max-width: 40ch;
+  max-width: 36ch;
   margin: 1rem 0 0;
+  line-height: 1.45;
 }
 
 #theme-toggle {
   position: fixed;
-  right: 1.75rem;
-  bottom: 1.75rem;
-  z-index: 40;
-  width: 48px;
-  height: 48px;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 80;
+  width: 52px;
+  height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg-card);
-  border: 1px solid var(--rule);
+  color: var(--accent-ink);
+  background: var(--accent);
+  border: none;
   border-radius: 50%;
-  box-shadow: 0 2px 10px color-mix(in srgb, var(--ink) 14%, transparent);
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--accent) 22%, transparent),
+    0 12px 32px color-mix(in srgb, var(--accent) 35%, transparent);
   cursor: pointer;
-  color: var(--ink);
   padding: 0;
-  transition: border-color 0.15s ease, transform 0.15s ease;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
 }
 
-#theme-toggle:hover {
-  border-color: var(--accent);
-  transform: translateY(-2px);
+#theme-toggle:hover,
+#theme-toggle:focus-visible {
+  transform: translateY(-3px) scale(1.04);
+  box-shadow:
+    0 0 0 5px color-mix(in srgb, var(--accent) 28%, transparent),
+    0 16px 40px color-mix(in srgb, var(--accent) 45%, transparent);
 }
 
 #theme-toggle svg {
@@ -172,49 +203,65 @@ ul { margin: 0; padding: 0; list-style: none; }
   }
 }
 
-/* Tabs */
+/* Tabs — standalone look when not nested; nested look under home .site-header-inner */
 .tabs {
-  position: sticky;
-  top: var(--header-h);
-  z-index: 30;
-  background: var(--bg);
   display: flex;
   flex-wrap: wrap;
-  gap: 1.6rem;
-  border-bottom: 1px solid var(--rule);
-  padding: 1rem 0 0.9rem;
-  margin: 0 0 3rem;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.55rem;
+  margin: 0 0 2.5rem;
+  border: 1px solid color-mix(in srgb, var(--rule) 90%, var(--accent));
+  border-radius: var(--radius-pill);
+  background: var(--glass);
+  backdrop-filter: blur(16px) saturate(1.15);
+  box-shadow: var(--shadow-soft);
 }
 
 .tabs a {
-  font-size: 0.85rem;
-  font-weight: 500;
+  font-size: 0.82rem;
+  font-weight: 600;
   color: var(--ink-muted);
-  transition: color 0.15s ease;
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-pill);
+  transition: color 0.15s ease, background 0.15s ease;
 }
 
-.tabs a:hover,
-.tabs a.active {
+.tabs a:hover {
   color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.tabs a.active {
+  color: var(--accent-ink);
+  background: var(--accent);
 }
 
 /* Cards */
 .card {
-  background: var(--bg-card);
-  border: 1px solid var(--rule);
-  border-radius: 10px;
-  box-shadow: 0 1px 2px color-mix(in srgb, var(--ink) 6%, transparent);
-  padding: 1.8rem 1.9rem;
-  margin-bottom: 3rem;
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--bg-card) 96%, var(--accent)) 0%,
+      var(--bg-card) 40%,
+      var(--bg-card) 100%
+    );
+  border: 1px solid color-mix(in srgb, var(--rule) 85%, var(--accent));
+  border-radius: var(--radius-card);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--accent) 8%, transparent),
+    var(--shadow-soft);
+  padding: 1.7rem 1.8rem;
+  margin-bottom: 1.25rem;
 }
 
 /* Section titles */
 .section-title {
   font-weight: 800;
-  font-size: var(--fs-h1);
-  letter-spacing: -0.01em;
+  font-size: clamp(1.55rem, 2.5vw, var(--fs-h1));
+  letter-spacing: -0.02em;
   color: var(--ink);
-  margin: 0 0 2rem;
+  margin: 0 0 1.35rem;
 }
 
 section { margin-bottom: 4.5rem; scroll-margin-top: calc(var(--header-h) + var(--nav-h) + 1.75rem); }
@@ -277,38 +324,64 @@ section { margin-bottom: 4.5rem; scroll-margin-top: calc(var(--header-h) + var(-
 }
 
 /* Ticket list */
+.ticket-list {
+  border: 1px solid color-mix(in srgb, var(--rule) 85%, var(--accent));
+  border-radius: var(--radius-card);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+
 .ticket-list li { border-bottom: 1px solid var(--rule); }
-.ticket-list li:first-child { border-top: 1px solid var(--rule); }
+.ticket-list li:last-child { border-bottom: none; }
 
 .ticket-list a {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   gap: 1rem;
-  padding: 1rem 0.2rem;
+  padding: 1rem 1.15rem;
+  transition: background 0.15s ease;
+}
+
+.ticket-list a:hover {
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
 }
 
 .ticket-list a:hover .ticket-title { color: var(--accent); }
 
 .ticket-title {
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
   transition: color 0.15s ease;
 }
 
 .ticket-date {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: var(--ink-muted);
   white-space: nowrap;
 }
 
 .more-link {
-  display: inline-block;
-  margin-top: 1.3rem;
+  display: inline-flex;
+  align-items: center;
+  margin-top: 1.15rem;
+  padding: 0.5rem 0.95rem;
   font-size: 0.85rem;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--accent);
-  border-bottom: 1px solid var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.more-link:hover {
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  border-color: var(--accent);
 }
 
 /* The margin above is spacing off a preceding list; a lone link in a card
@@ -318,10 +391,15 @@ section { margin-bottom: 4.5rem; scroll-margin-top: calc(var(--header-h) + var(-
 /* Contact */
 .postcard-contact {
   max-width: 560px;
-  background: var(--bg-card);
-  border: 1px solid var(--rule);
-  border-radius: 10px;
-  box-shadow: 0 1px 2px color-mix(in srgb, var(--ink) 6%, transparent);
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--bg-card) 96%, var(--accent)) 0%,
+      var(--bg-card) 100%
+    );
+  border: 1px solid color-mix(in srgb, var(--rule) 85%, var(--accent));
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
   padding: 2rem 2.2rem;
 }
 
@@ -375,79 +453,183 @@ section { margin-bottom: 4.5rem; scroll-margin-top: calc(var(--header-h) + var(-
 
 /* Footer */
 .site-footer {
-  font-size: 0.8rem;
+  font-family: var(--font);
+  font-size: 0.9rem;
   color: var(--ink-muted);
-  margin-top: 2rem;
+  margin-top: 2.5rem;
 }
 
 .back-link {
-  font-size: 0.85rem;
-  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.55rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
   color: var(--ink-muted);
-  transition: color 0.15s ease;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--rule);
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  transition: color 0.15s ease, border-color 0.15s ease;
 }
 
-.back-link:hover { color: var(--accent); }
+.back-link:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
 
-/* Post article */
-.post { max-width: 100%; }
+/* ── Shared chrome (home + essay) ────────────────────────────────────────── */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: transparent;
+  border-bottom: none;
+  backdrop-filter: none;
+  padding: 0.65rem 0 0;
+}
+
+.site-header-inner {
+  max-width: min(900px, var(--measure));
+  height: 3rem;
+  margin: 0 auto;
+  padding: 0 1.15rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  font-size: 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--rule) 90%, var(--accent));
+  border-radius: var(--radius-pill);
+  background: var(--glass);
+  backdrop-filter: blur(18px) saturate(1.2);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, #fff 8%, transparent) inset,
+    var(--shadow-soft);
+}
+
+/* Essay shell is a touch wider; same language as home. */
+body:has(.post) .site-header-inner,
+body:has(.post) .page {
+  max-width: var(--measure);
+}
+
+body:has(.post) .page {
+  padding: 1.25rem 1.25rem 4.5rem;
+}
+
+body:has(.post) .site-footer {
+  margin-top: 0.75rem;
+}
+
+.post {
+  max-width: 100%;
+  position: relative;
+  padding: var(--essay-pad);
+  border-radius: calc(var(--radius-card) + 0.25rem);
+  border: 1px solid color-mix(in srgb, var(--rule) 85%, var(--accent));
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--bg-card) 96%, var(--accent)) 0%,
+      var(--bg-card) 38%,
+      var(--bg-card) 100%
+    );
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--accent) 10%, transparent),
+    0 30px 90px color-mix(in srgb, var(--ink) 12%, transparent),
+    0 2px 0 color-mix(in srgb, #fff 6%, transparent) inset;
+  overflow: clip;
+}
+
+.post::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 14rem;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 90% at 0% 0%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 70%),
+    radial-gradient(ellipse 50% 80% at 100% 10%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 65%);
+  opacity: 0.9;
+}
+
+.post > * {
+  position: relative;
+  z-index: 1;
+}
 
 .post-meta {
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: light-dark(#15803d, var(--accent));
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0 0 1.35rem;
+  font-size: 0;
+}
+
+.post-meta span {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin: 0 0 0.8rem;
+  color: var(--accent);
+  padding: 0.38rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .post h1 {
   font-weight: 800;
-  font-size: var(--fs-title);
-  line-height: 1.15;
-  letter-spacing: -0.01em;
-  margin: 0 0 2.5rem;
+  font-size: clamp(2.35rem, 5.2vw, 3.55rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+  margin: 0 0 1.15rem;
+  max-width: 14ch;
 }
 
-.post h1 + h2 {
-  margin-top: 2rem;
+.post-dek {
+  font-size: clamp(1.08rem, 1.6vw, 1.28rem);
+  font-weight: 500;
+  font-style: normal;
+  line-height: 1.45;
+  color: var(--ink);
+  text-wrap: pretty;
+  margin: 0 0 2.75rem;
+  padding: 1rem 1.15rem 1rem 1.25rem;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 14px 14px 0;
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.post h1 + h2,
+.post-dek + h2 {
+  margin-top: 0.5rem;
 }
 
 .post h2 {
   font-weight: 800;
-  font-size: var(--fs-h1);
-  letter-spacing: -0.01em;
+  font-size: clamp(1.35rem, 2.2vw, 1.7rem);
+  letter-spacing: -0.025em;
+  line-height: 1.2;
   color: var(--ink);
-  margin: 3rem 0 1.2rem;
+  text-wrap: balance;
+  margin: 2.75rem 0 1.05rem;
+  padding: 1.35rem 0 0;
+  border-top: 1px solid color-mix(in srgb, var(--rule) 80%, var(--accent));
+  font-variant-numeric: tabular-nums;
 }
 
 .h2-num {
   display: inline-block;
   min-width: 1.5em;
   font-variant-numeric: tabular-nums;
-}
-
-/* Persistent site header. Sticky rather than fixed so it occupies flow space
-   and no page needs a compensating padding-top. Present on every page; on post
-   pages it also carries the breadcrumb. */
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background: color-mix(in srgb, var(--bg) 90%, transparent);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--rule);
-}
-
-.site-header-inner {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-  height: calc(var(--header-h) - 1px);
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-  font-size: 0.85rem;
+  color: var(--accent);
 }
 
 .site-wordmark {
@@ -459,6 +641,94 @@ section { margin-bottom: 4.5rem; scroll-margin-top: calc(var(--header-h) + var(-
 }
 
 .site-wordmark:hover { color: var(--accent); }
+
+/* Home: one sticky pill under the hero. Tabs always; wordmark expands in after
+   the hero scrolls away. Grid 0fr→1fr + opacity/transform keeps the motion smooth. */
+body:has(.title-page) {
+  --header-h: 0px;
+}
+
+body:has(.title-page) .site-header {
+  position: sticky;
+  top: 0.65rem;
+  z-index: 50;
+  padding: 0;
+  margin: 0 0 2.25rem;
+  background: transparent;
+  border: none;
+}
+
+body:has(.title-page) .site-header-inner {
+  max-width: none;
+  width: 100%;
+  height: auto;
+  min-height: 3rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+/* Tabs live inside the pill — drop the nested card chrome. Stay right so they
+   never jump when the name expands on the left. */
+body:has(.title-page) .site-header .tabs {
+  flex: 1 1 auto;
+  justify-content: flex-end;
+  margin: 0;
+  margin-left: auto;
+  padding: 0.15rem;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+body:has(.title-page) section {
+  scroll-margin-top: 5.25rem;
+}
+
+/* Expand/collapse: outer grid 0fr→1fr, inner clip + fade/slide on the link. */
+body:has(.title-page) .site-wordmark-slot {
+  display: grid;
+  grid-template-columns: 0fr;
+  transition: grid-template-columns 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body:has(.title-page) .site-wordmark-clip {
+  min-width: 0;
+  overflow: hidden;
+}
+
+body:has(.title-page) .site-wordmark-slot .site-wordmark {
+  display: block;
+  width: max-content;
+  white-space: nowrap;
+  padding-right: 0.85rem;
+  opacity: 0;
+  transform: translate3d(-0.5rem, 0, 0);
+  pointer-events: none;
+  transition:
+    opacity 0.35s ease 0.02s,
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body.header-compact:has(.title-page) .site-wordmark-slot {
+  grid-template-columns: 1fr;
+}
+
+body.header-compact:has(.title-page) .site-wordmark-slot .site-wordmark {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  pointer-events: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body:has(.title-page) .site-wordmark-slot,
+  body:has(.title-page) .site-wordmark-slot .site-wordmark {
+    transition-duration: 0.01ms;
+  }
+}
 
 /* Breadcrumb: Writing > Title > heading 1 > heading 2 */
 .crumb {
@@ -526,92 +796,265 @@ section { margin-bottom: 4.5rem; scroll-margin-top: calc(var(--header-h) + var(-
 /* Deep links to a numbered section must clear the header. */
 .post h2, .post h3 { scroll-margin-top: calc(var(--header-h) + 1rem); }
 
+/* Pipe progress: a conduit that fills as you read. Must read as a clear object
+   even at 0% fill (empty tube), on both light and dark essay backgrounds. */
 .reading-progress {
   position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 3px;
-  background: light-dark(#cfd8ca, #3a4236);
-  z-index: 35;
+  left: 50%;
+  bottom: 1.35rem;
+  top: auto;
+  z-index: 80;
+  width: min(var(--measure, 56.25rem), calc(100vw - 6rem));
+  transform: translateX(-50%);
+  pointer-events: none;
+  padding: 0 0.65rem;
+  box-sizing: border-box;
+  /* Keep it out from under browser UI / home indicators a bit. */
+  margin: 0;
 }
 
+.reading-progress-pipe {
+  position: relative;
+  height: 0.85rem;
+  border-radius: 999px;
+  border: 2px solid var(--accent);
+  /* Hollow track: clearly lighter/darker than the page so the empty pipe shows. */
+  background: light-dark(
+    color-mix(in srgb, #ffffff 88%, var(--accent)),
+    color-mix(in srgb, #0a0f09 55%, var(--accent))
+  );
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent),
+    0 0 24px color-mix(in srgb, var(--accent) 35%, transparent),
+    0 10px 28px color-mix(in srgb, var(--ink) 16%, transparent),
+    inset 0 1px 2px color-mix(in srgb, #000 22%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, #fff 12%, transparent);
+  overflow: hidden;
+}
+
+/* Coupling rings — bright so the pipe is recognizable as a pipe. */
+.reading-progress-pipe::before,
+.reading-progress-pipe::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  width: 0.62rem;
+  height: 1.15rem;
+  border-radius: 4px;
+  transform: translateY(-50%);
+  border: 2px solid var(--accent);
+  background: light-dark(
+    color-mix(in srgb, #fff 70%, var(--accent)),
+    color-mix(in srgb, #1a2418 40%, var(--accent))
+  );
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--accent) 30%, transparent),
+    0 2px 8px color-mix(in srgb, var(--ink) 20%, transparent);
+}
+
+.reading-progress-pipe::before { left: -0.28rem; }
+.reading-progress-pipe::after { right: -0.28rem; }
+
 .reading-progress-bar {
-  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
   width: 0%;
-  background: var(--accent);
+  min-width: 0;
+  border-radius: 999px;
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--accent) 70%, #064e2a),
+      var(--accent) 40%,
+      color-mix(in srgb, var(--accent) 65%, #fff)
+    );
+  box-shadow:
+    0 0 14px color-mix(in srgb, var(--accent) 75%, transparent),
+    inset 0 1px 0 color-mix(in srgb, #fff 40%, transparent);
+  transition: width 50ms linear;
+}
+
+/* Leading meniscus when there is any fill (class set from JS). */
+.reading-progress-bar.has-fill::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 0.7rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, #fff 55%, var(--accent));
+  opacity: 0.65;
+  filter: blur(0.5px);
+}
+
+body:has(.post) .reading-progress {
+  width: min(var(--measure), calc(100vw - 6.5rem));
+}
+
+@media (max-width: 640px) {
+  .reading-progress {
+    bottom: 1rem;
+    left: 0.75rem;
+    right: 4.25rem;
+    width: auto;
+    transform: none;
+    padding: 0 0.5rem;
+  }
+
+  .reading-progress-pipe {
+    height: 0.75rem;
+  }
+
+  body:has(.post) .reading-progress {
+    width: auto;
+  }
 }
 
 .post h3 {
   font-weight: 700;
-  font-size: var(--fs-h2);
+  font-size: 1.15rem;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
   color: var(--ink);
-  margin: 2rem 0 0.8rem;
+  text-wrap: balance;
+  margin: 2rem 0 0.7rem;
 }
 
 .post p strong:only-child {
-  display: inline-block;
-  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  color: var(--ink-muted);
+  color: var(--accent);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.07em;
+  margin-top: 0.35rem;
+}
+
+.post p strong:only-child::before {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
 }
 
 .post p:has(> strong:only-child) {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 
 .post p {
-  margin: 0 0 1.1rem;
-  line-height: 1.75;
+  margin: 0 0 1.15rem;
+  line-height: 1.72;
+  text-wrap: pretty;
+  font-size: 1.0625rem;
 }
 
 .post ul {
-  list-style: disc;
-  margin: 0 0 1.1rem;
-  padding-left: 1.3rem;
+  list-style: none;
+  margin: 0 0 1.15rem;
+  padding-left: 0;
 }
 
-.post ol {
-  list-style: decimal;
-  margin: 0 0 1.1rem;
-  padding-left: 1.3rem;
+.post ol:not(.references) {
+  list-style: none;
+  margin: 0 0 1.15rem;
+  padding-left: 0;
+  counter-reset: post-ol;
 }
 
-.post li::marker { color: var(--accent); }
+.post ol:not(.references) > li {
+  counter-increment: post-ol;
+  padding-left: 1.7rem;
+  position: relative;
+}
+
+.post ol:not(.references) > li::before {
+  content: counter(post-ol);
+  position: absolute;
+  left: 0;
+  top: 0.1em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.post ul > li {
+  position: relative;
+  padding-left: 1.25rem;
+}
+
+.post ul > li::before {
+  content: "";
+  position: absolute;
+  left: 0.15rem;
+  top: 0.65em;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--accent);
+}
 
 .post li {
   margin-bottom: 0.55rem;
-  line-height: 1.65;
+  line-height: 1.68;
 }
 
 .post table {
   width: 100%;
-  border-collapse: collapse;
-  margin: 0 0 1.5rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0.6rem 0 1.7rem;
   font-size: 0.9rem;
+  line-height: 1.5;
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--bg) 55%, var(--bg-card));
 }
 
 .post th, .post td {
   text-align: left;
-  padding: 0.65rem 0.9rem 0.65rem 0;
+  padding: 0.75rem 1rem;
   border-bottom: 1px solid var(--rule);
   vertical-align: top;
 }
 
 .post th {
-  color: var(--ink-muted);
-  font-weight: 600;
+  color: var(--accent);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+.post tr:last-child td {
+  border-bottom: none;
+}
+
+.post td:first-child {
+  font-weight: 700;
+  padding-right: 1rem;
 }
 
 .post code {
   font-family: ui-monospace, 'SF Mono', Menlo, monospace;
-  background: var(--bg-card);
-  border: 1px solid var(--rule);
-  border-radius: 4px;
-  padding: 0.1rem 0.4rem;
-  font-size: 0.9em;
+  font-size: 0.86em;
+  color: light-dark(#0d6b38, #b6ffce);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+  border-radius: 6px;
+  padding: 0.08em 0.35em;
 }
 
 /* Dividers close the content of the block above them, one weight per heading
@@ -645,20 +1088,42 @@ section { margin-bottom: 4.5rem; scroll-margin-top: calc(var(--header-h) + var(-
   margin-right: 0.1em;
 }
 
+.post ol.references,
 .references {
-  font-size: 0.95rem;
+  font-family: var(--font);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  counter-reset: ref;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .references li {
-  margin-bottom: 0.8rem;
+  position: relative;
+  margin-bottom: 0.85rem;
+  padding: 0.35rem 0.5rem 0.35rem 2rem;
   /* Jumping from a marker must clear the sticky header. */
   scroll-margin-top: calc(var(--header-h) + 1.5rem);
+  transition: background 0.2s ease;
+}
+
+.references li::before {
+  counter-increment: ref;
+  content: counter(ref) ".";
+  position: absolute;
+  left: 0;
+  top: 0.35rem;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink-muted);
 }
 
 .references li:target {
   /* Brief tint so the reader can see which entry they landed on. */
   background: color-mix(in srgb, var(--accent) 12%, transparent);
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
 .references .ref-pub,
@@ -674,22 +1139,46 @@ section { margin-bottom: 4.5rem; scroll-margin-top: calc(var(--header-h) + var(-
 .post-hr,
 .post-rule {
   border: none;
+  position: relative;
+  height: 1px;
+  margin: 2.75rem 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--accent) 70%, var(--rule)) 18%,
+    color-mix(in srgb, var(--accent) 70%, var(--rule)) 82%,
+    transparent 100%
+  );
 }
 
-.post-hr,
-.post-rule--1 {
-  border-top: 2px solid var(--accent);
-  margin: 2.5rem 0;
+.post-hr::after,
+.post-rule--1::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--bg-card) 90%, transparent);
 }
 
-.post-rule--2 {
-  border-top: 1px solid var(--ink);
-  margin: 2rem 0;
-}
-
+.post-rule--2,
 .post-rule--3 {
-  border-top: 1px solid var(--rule);
-  margin: 1.5rem 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--rule) 20%,
+    var(--rule) 80%,
+    transparent
+  );
+}
+
+.post-rule--2::after,
+.post-rule--3::after {
+  display: none;
 }
 
 /* Scroll reveal */
@@ -710,24 +1199,32 @@ section { margin-bottom: 4.5rem; scroll-margin-top: calc(var(--header-h) + var(-
 
 /* Responsive */
 @media (max-width: 640px) {
-  /* Three rows instead of one, but only where a breadcrumb exists. --header-h
-     stays the single source of truth for the sticky offsets. */
-  :root:has(.crumb) { --header-h: 4.6rem; }
-
-  .page { padding: 2.5rem 1.1rem 2rem; }
   .project-grid { grid-template-columns: 1fr; }
 
-  /* The wordmark plus four crumb levels cannot share a phone-width line, so the
-     header goes multi-row: wordmark, then fixed context, then live position.
-     Three single-line rows, so the height is stable while scrolling — a header
-     that grew and shrank would reflow the article under the reader's thumb. */
+  body {
+    background-attachment: scroll;
+  }
+
+  .site-header {
+    padding: 0.5rem 0.75rem 0;
+  }
+
+  /* Crumb rows on essay pages: wordmark, then context, then position. */
+  :root:has(.crumb) { --header-h: 5.4rem; }
+
   .site-header-inner {
+    height: auto;
+    min-height: 3rem;
+    border-radius: 1.1rem;
+    padding: 0.55rem 0.85rem;
+    font-size: 0.8rem;
+  }
+
+  .site-header-inner:has(.crumb) {
     flex-direction: column;
     align-items: stretch;
     justify-content: center;
-    gap: 0.1rem;
-    padding: 0 1.1rem;
-    font-size: 0.8rem;
+    gap: 0.15rem;
   }
 
   .crumb {
@@ -736,14 +1233,44 @@ section { margin-bottom: 4.5rem; scroll-margin-top: calc(var(--header-h) + var(-
     overflow: hidden;
   }
 
-  /* Each group now starts its own row, so it must not lead with a separator. */
   .crumb-root::before,
   .crumb-h1::before { content: none; }
 
+  .tabs {
+    border-radius: 1.1rem;
+    gap: 0.25rem;
+  }
+
+  body:has(.title-page) .site-header .tabs a {
+    padding: 0.4rem 0.7rem;
+    font-size: 0.78rem;
+  }
+
+  .page {
+    padding: 0.85rem 0.75rem 3rem;
+  }
+
+  body:has(.post) .page {
+    padding: 0.85rem 0.75rem 3rem;
+  }
+
+  .post {
+    border-radius: 1.15rem;
+    padding: 1.25rem 1.15rem 1.75rem;
+  }
+
+  .post h1 {
+    font-size: clamp(2rem, 9vw, 2.6rem);
+    max-width: none;
+  }
+
+  .post-dek {
+    font-size: 1.05rem;
+    padding: 0.85rem 0.9rem 0.85rem 1rem;
+  }
+
   #theme-toggle {
-    width: 40px;
-    height: 40px;
-    backdrop-filter: blur(3px);
-    opacity: 0.92;
+    width: 46px;
+    height: 46px;
   }
 }
