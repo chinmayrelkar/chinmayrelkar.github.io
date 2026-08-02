@@ -19,11 +19,16 @@
 <meta property="og:url" content="https://chinmayrelkar.github.io/writing/organizational-cognition.html" />
 <meta property="og:title" content="Organizational Cognition" />
 <meta property="og:description" content="Why every AI lab is building the same layer, and giving the interfaces away." />
-<meta property="og:image" content="https://chinmayrelkar.github.io/assets/og-image.png" />
+<meta property="og:image" content="https://chinmayrelkar.github.io/assets/og-organizational-cognition.jpg" />
+<meta property="og:image:type" content="image/jpeg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Organizational Cognition: free the pipe, own the asset, export test for data vs cognition" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Organizational Cognition" />
 <meta name="twitter:description" content="Why every AI lab is building the same layer, and giving the interfaces away." />
-<meta name="twitter:image" content="https://chinmayrelkar.github.io/assets/og-image.png" />
+<meta name="twitter:image" content="https://chinmayrelkar.github.io/assets/og-organizational-cognition.jpg" />
+<meta name="twitter:image:alt" content="Organizational Cognition: free the pipe, own the asset, export test for data vs cognition" />
 <meta name="color-scheme" content="light dark" />
 <meta name="theme-color" content="#f6f8f3" media="(prefers-color-scheme: light)" />
 <meta name="theme-color" content="#14170f" media="(prefers-color-scheme: dark)" />
@@ -67,15 +72,21 @@
 
   <main id="main-content">
     <article class="post">
-      <p class="post-meta"><span>Essay</span><span>July 2026</span><span>~18 min</span></p>
+      <p class="post-meta"><span>Essay</span><span>July 2026</span><span>~15 min</span></p>
       <h1>Organizational Cognition</h1>
       <p class="post-dek">Why every AI lab is building the same layer, and giving the interfaces away.</p>
 
       <h2>1. The Asset Is Not the Pipe</h2>
       <p>Labs disagree on models and markets. They agree on the accumulation surfaces: memory, connectors, projects, custom instructions, agent frameworks, enterprise identity, and governance. Separately, they open the connector and protocol interfaces (MCP, A2A, <code>AGENTS.md</code>) under neutral foundations their rivals can use.</p>
       <p>That is not a product roadmap. It is a bet on what the asset is.</p>
+
+      <figure class="post-figure">
+        <img src="infographics/01-asset-vs-pipe.jpg" alt="Two panels: the free pipe (MCP, A2A, AGENTS.md, connectors) versus the proprietary asset (memory, judgment history, agent identity, governance), with context flowing between them." width="732" height="460" loading="lazy" decoding="async" />
+        <figcaption>Labs open the interface. They compete on what accumulates through it.</figcaption>
+      </figure>
+
       <p>Anthropic donates MCP. Google donates A2A. OpenAI contributes <code>AGENTS.md</code>. Microsoft, AWS, Cloudflare, and Bloomberg back neutral foundation projects under the Linux Foundation.<sup class="fn"><a href="#ref-3" role="doc-noteref" aria-label="Reference 3">3</a><a href="#ref-10" role="doc-noteref" aria-label="Reference 10">10</a></sup> Salesforce rebuilds Slackbot on a competitor's model and a competitor's protocol.<sup class="fn"><a href="#ref-1" role="doc-noteref" aria-label="Reference 1">1</a><a href="#ref-16" role="doc-noteref" aria-label="Reference 16">16</a></sup> Team judgment files converge on a vendor-neutral format (<code>AGENTS.md</code>) that essentially every serious coding agent now reads.<sup class="fn"><a href="#ref-14" role="doc-noteref" aria-label="Reference 14">14</a></sup></p>
-      <p>Existing explanations account for pieces of this. No single explanation accounts for all of it. Which suggests we are missing a category for what everyone is trying to accumulate once the pipes are free.</p>
+      <p>Existing explanations account for pieces of this. None account for all of it. Missing category: what everyone is trying to accumulate once the pipes are free.</p>
 
       <hr class="post-hr" />
 
@@ -83,25 +94,25 @@
 
       <h3>Better Models</h3>
       <p><strong>Where it works.</strong> For two years the dominant theory was simple: the smartest model wins. It explained training spend, benchmark culture, and how enterprises picked providers.</p>
-      <p><strong>Where it breaks.</strong> It does not explain why every frontier lab is also building infrastructure that has nothing to do with model architecture. If smarter models were sufficient, Anthropic would not need MCP, OpenAI would not need Connectors, and Google would not need Gemini inside Workspace. Those products solve a different problem than intelligence. Even if leaders were pulling away on quality, it would not explain why the leaders are building the surrounding layer fastest.</p>
+      <p><strong>Where it breaks.</strong> It does not explain the infrastructure every frontier lab is building that has nothing to do with model architecture. If smarter models were sufficient, Anthropic would not need MCP, OpenAI would not need Connectors, and Google would not need Gemini inside Workspace. Those products solve a different problem than intelligence. Model leadership would not explain why leaders are building the surrounding layer fastest.</p>
 
       <h3>Better Workflows</h3>
-      <p><strong>Where it works.</strong> Agent frameworks, tool use, and reliability matter. "Agentic" became the industry's favorite adjective for a reason.</p>
-      <p><strong>Where it breaks.</strong> Workflows are not sticky in a structural sense. A workflow on one platform can be rewritten on another. The harder problem is not <em>what</em> the AI does, but <em>how</em> it knows what to do in a specific organizational context: which workflow to invoke, when, with what parameters, under whose authority. Workflows explain execution. They do not explain judgment.</p>
+      <p><strong>Where it works.</strong> Agent frameworks, tool use, and reliability matter.</p>
+      <p><strong>Where it breaks.</strong> A workflow on one platform can be rewritten on another. The harder problem is not <em>what</em> the AI does, but <em>how</em> it knows what to do in a specific organization: which workflow to invoke, when, with what parameters, under whose authority. Workflows explain execution, not judgment.</p>
 
       <h3>Better Distribution</h3>
-      <p><strong>Where it works.</strong> Microsoft and Google can afford to be fast-followers on model quality because Copilot and Gemini ship inside software enterprises already pay for.</p>
-      <p><strong>Where it breaks.</strong> Distribution explains how you reach an enterprise, not what you build once you arrive. Microsoft's first Copilot wave was chat bolted onto Office; what followed was Graph grounding, custom agents, and identity for non-human actors. Salesforce, with Slack bundled into every new account, spent 2026 wiring Slackbot into everyone else's systems over MCP and Claude.<sup class="fn"><a href="#ref-1" role="doc-noteref" aria-label="Reference 1">1</a></sup> A company that believed distribution was the prize would not spend distribution becoming dependent on rivals' models and protocols.</p>
+      <p><strong>Where it works.</strong> Microsoft and Google can be fast-followers on model quality because Copilot and Gemini ship inside software enterprises already pay for.</p>
+      <p><strong>Where it breaks.</strong> Distribution explains how you reach an enterprise, not what you build once you arrive. Microsoft's first Copilot wave was chat bolted onto Office; what followed was Graph grounding, custom agents, and identity for non-human actors. Salesforce, with Slack bundled into every new account, spent 2026 wiring Slackbot into everyone else's systems over MCP and Claude.<sup class="fn"><a href="#ref-1" role="doc-noteref" aria-label="Reference 1">1</a></sup> A company that believed distribution was the prize would not spend it becoming dependent on rivals' models and protocols.</p>
 
       <h3>Statelessness</h3>
-      <p><strong>Where it works.</strong> Language models start each request from zero. Memory, connectors, projects, and custom instructions look like the boring engineering patches: caches, retrieval, and prompt prefixes. Every lab faces the same constraint, so every lab builds the same compensating machinery. No new conceptual category required.</p>
-      <p><strong>Where it breaks.</strong> Statelessness explains why you would want memory and connectors at all. It does not explain the <em>shape</em> of what is being remembered. Products are not converging on generic recall. They are converging on organization-specific judgment: which reviewer this routes to, what this team means by "done", which of two conflicting documents is authoritative, how much risk this company tolerates. That is not a fact sitting in a repository. It has to be inferred from how the organization behaves, then stored somewhere that is not the model.</p>
-      <p>The account also predicts that as windows grow, surrounding infrastructure should taper. Windows have grown by orders of magnitude. The infrastructure around them has grown faster. In July 2026, MCP's largest revision made the core protocol <em>more</em> stateless so servers could run on serverless and edge, and moved long-running Tasks into an extension.<sup class="fn"><a href="#ref-2" role="doc-noteref" aria-label="Reference 2">2</a></sup> If the industry believed the surrounding machinery existed to give models memory, the shared protocol is where you would put that memory. Instead the protocol shed it. Memory went up into platforms and products.</p>
-      <p>Audit trails, permission models for which agent may act on whose authority, approval paths for changing a system prompt. None of these compensate for a finite context window. A perfectly stateful model with an unlimited window would need them just as much. Statelessness explains the mechanism. It does not explain the content.</p>
+      <p><strong>Where it works.</strong> Language models start each request from zero. Memory, connectors, projects, and custom instructions look like engineering patches: caches, retrieval, prompt prefixes. Same constraint, same compensating machinery. No new category required.</p>
+      <p><strong>Where it breaks.</strong> Statelessness explains why memory and connectors exist. It does not explain the <em>shape</em> of what is remembered. Products are not converging on generic recall. They are converging on organization-specific judgment: which reviewer this routes to, what this team means by "done", which of two conflicting documents is authoritative, how much risk this company tolerates. That is not a fact in a repository. It has to be inferred from how the organization behaves, then stored somewhere that is not the model.</p>
+      <p>The account also predicts that as windows grow, surrounding infrastructure should taper. Windows have grown by orders of magnitude. The infrastructure around them has grown faster. In July 2026, MCP's largest revision made the core protocol <em>more</em> stateless so servers could run on serverless and edge, and moved long-running Tasks into an extension.<sup class="fn"><a href="#ref-2" role="doc-noteref" aria-label="Reference 2">2</a></sup> If the surrounding machinery existed to give models memory, the shared protocol is where you would put that memory. Instead the protocol shed it. Memory went up into platforms and products.</p>
+      <p>Audit trails, permission models for which agent may act on whose authority, approval paths for changing a system prompt: none of these compensate for a finite context window. A perfectly stateful model with an unlimited window would need them just as much. Statelessness explains the mechanism, not the content.</p>
 
       <h3>The Residual</h3>
-      <p>Models, workflows, distribution, and statelessness each explain part of the landscape. None explain why every player, whether a model company, a workflow company, or a distribution company, converges on the same set of capabilities, or why the thing being assembled is so consistently organization-specific judgment rather than organization-specific facts.</p>
-      <p>That residual is the claim of this essay. Treat the product decisions below as <em>observed</em>, the reading of them as <em>interpreted</em>, and the forecasts in section 7 as <em>predicted</em>. The lens is sufficient to organize the convergence. It is not yet shown to be necessary; competitive mirroring and procurement checklists can produce similar surfaces. What the lens has to earn is that the content of those surfaces is judgment, not generic RAG with SSO.</p>
+      <p>Models, workflows, distribution, and statelessness each explain part of the landscape. None explain why every player converges on the same capabilities, or why what is being assembled is organization-specific judgment rather than organization-specific facts.</p>
+      <p>That residual is the claim of this essay. Product decisions below are <em>observed</em>; the reading of them is <em>interpreted</em>; forecasts in section 7 are <em>predicted</em>. The lens organizes the convergence. It is not yet shown to be necessary: competitive mirroring and procurement checklists can produce similar surfaces. What it has to earn is that the content of those surfaces is judgment, not generic RAG with SSO.</p>
 
       <hr class="post-hr" />
 
@@ -109,11 +120,11 @@
 
       <h3>Definition</h3>
       <p><strong>Organizational cognition</strong> is the collective capacity of an organization to perceive information, make decisions, coordinate action, and continuously learn, as expressed through patterns that currently live mainly in human interaction, not in formal artifacts.</p>
-      <p>Every clause matters. It is collective, not individual IQ. It requires all four functions: perception (what gets noticed), decision (what gets chosen), coordination (how work aligns), learning (whether the organization improves). And the boundary is crucial: if something can be written down and executed by someone who has never worked at the company, it is knowledge. If it requires unwritten norms or tacit judgment to execute, it is cognition.</p>
+      <p>Collective, not individual IQ. Four functions: perception (what gets noticed), decision (what gets chosen), coordination (how work aligns), learning (whether the organization improves). Boundary: if it can be written down and executed by someone who has never worked at the company, it is knowledge. If it requires unwritten norms or tacit judgment, it is cognition.</p>
 
       <h3>What Is New Is the Substrate</h3>
-      <p>The phenomenon is not new. Organizational science has described pieces of it for decades: routines and decision rules, tacit knowledge, sensemaking, distributed cognition. "Institutional knowledge" comes closest in common speech, but overemphasizes knowing and underemphasizes processing. Culture captures risk tolerance and communication patterns, not approval paths or trade-off heuristics.</p>
-      <p>What is new is a technological substrate that can accumulate, govern, and productize those patterns at scale. Until recently, organizational cognition lived almost entirely in people. There was little to build for it as a system of record, so product language never settled on a name. AI changes that.</p>
+      <p>The phenomenon is not new. Organizational science has described pieces of it for decades: routines and decision rules, tacit knowledge, sensemaking, distributed cognition. "Institutional knowledge" overemphasizes knowing and underemphasizes processing. Culture captures risk tolerance and communication patterns, not approval paths or trade-off heuristics.</p>
+      <p>What is new is a substrate that can accumulate, govern, and productize those patterns at scale. Until recently, organizational cognition lived almost entirely in people. There was little to build as a system of record, so product language never settled on a name.</p>
 
       <h3>What It Is Not</h3>
       <table>
@@ -121,27 +132,33 @@
           <tr><th>Concept</th><th>Distinction</th></tr>
         </thead>
         <tbody>
-          <tr><td><strong>Knowledge</strong></td><td>Knowledge is <em>what</em> is known. Cognition is <em>how</em> it is used to decide when facts conflict.</td></tr>
+          <tr><td><strong>Knowledge</strong></td><td><em>What</em> is known. Cognition is <em>how</em> it is used when facts conflict.</td></tr>
           <tr><td><strong>Memory (storage)</strong></td><td>Raw retention is inert. Deciding what to retain and surface is cognitive.</td></tr>
           <tr><td><strong>Intelligence</strong></td><td>Raw capability. Cognition is applied capability in a specific context.</td></tr>
           <tr><td><strong>Workflow</strong></td><td>A defined sequence. Cognition chooses which sequence, when to deviate, how to resolve ambiguity.</td></tr>
           <tr><td><strong>Ontology</strong></td><td>Entities and relationships. Cognition includes the processes that create, maintain, and act on them.</td></tr>
-          <tr><td><strong>Documentation</strong></td><td>Explicit. Organizational cognition is largely implicit. Confluence does not reconstruct how decisions actually get made.</td></tr>
+          <tr><td><strong>Documentation</strong></td><td>Explicit. Organizational cognition is largely implicit. Confluence does not reconstruct how decisions get made.</td></tr>
         </tbody>
       </table>
       <p><strong>The export test.</strong> If you can export it as a file, import it into another organization, and it produces the same decisions there, it is data, not organizational cognition.</p>
-      <p>Externalization is not all-or-nothing. Style guides, runbooks, and escalation matrices capture thin static slices of judgment and are genuinely useful. What they do not carry is the live process: which rule wins when two conflict, noticing that a rule is stale, breaking it once and being right. The artifact is data. The ongoing activity of authoring, revising, and knowing when to deviate is cognition. That boundary is what saves <code>.cursorrules</code> and <code>AGENTS.md</code> from being counterexamples later.</p>
+
+      <figure class="post-figure">
+        <img src="infographics/02-export-test.jpg" alt="Export test flowchart: export a file into another organization; same decisions means data; different decisions means cognition." width="672" height="540" loading="lazy" decoding="async" />
+        <figcaption>Style guides and runbooks are thin static slices. Useful — not the live process.</figcaption>
+      </figure>
+
+      <p>Externalization is not all-or-nothing. Style guides, runbooks, and escalation matrices capture thin static slices of judgment. What they do not carry is the live process: which rule wins when two conflict, noticing that a rule is stale, breaking it once and being right. The artifact is data. Authoring, revising, and knowing when to deviate is cognition.</p>
 
       <hr class="post-hr" />
 
       <h2>4. A Taxonomy</h2>
-      <p>Four functions, two control surfaces. Products are built against these separately; that is why they show up as six product dimensions rather than one blob. Memory is perception across time: what is kept and re-surfaced, not raw storage. Reasoning is decide. Coordination and Learning keep their names. Delegation and Governance are not extra functions; they distribute and audit the authority to perform the four.</p>
+      <p>Four functions, two control surfaces. Products are built against these separately, which is why they show up as six dimensions. Memory is perception across time: what is kept and re-surfaced. Reasoning is decide. Coordination and Learning keep their names. Delegation and Governance are not extra functions; they distribute and audit the authority to perform the four.</p>
       <table>
         <thead>
           <tr><th>Layer</th><th>Dimension</th><th>Question</th></tr>
         </thead>
         <tbody>
-          <tr><td rowspan="4"><strong>Functions</strong></td><td><strong>Memory</strong></td><td>What is worth keeping, what gets surfaced to whom, what is allowed to fall away at the moment of decision, not as an inert archive.</td></tr>
+          <tr><td rowspan="4"><strong>Functions</strong></td><td><strong>Memory</strong></td><td>What is worth keeping, what gets surfaced to whom, what is allowed to fall away at the moment of decision.</td></tr>
           <tr><td><strong>Reasoning</strong></td><td>How information becomes a decision: heuristics, trade-offs, risk thresholds, escalation criteria.</td></tr>
           <tr><td><strong>Coordination</strong></td><td>How work is decomposed, assigned, sequenced, and marked done.</td></tr>
           <tr><td><strong>Learning</strong></td><td>Whether outcomes update memory, reasoning, and coordination over time.</td></tr>
@@ -149,40 +166,46 @@
           <tr><td><strong>Governance</strong></td><td>Who may change the other five, how changes are reviewed, and whether the system stays aligned and auditable.</td></tr>
         </tbody>
       </table>
-      <p>Memory here is not storage. Two organizations with identical archives can differ entirely on curation and deployment of past context. That difference is cognitive. Governance is the difference between "the AI learned from how we work" and "the AI makes decisions we cannot explain or override."</p>
+      <p>Two organizations with identical archives can differ entirely on what past context gets curated and deployed. That difference is cognitive. Governance is the difference between "the AI learned from how we work" and "the AI makes decisions we cannot explain or override."</p>
 
       <hr class="post-hr" />
 
       <h2>5. Three Cases</h2>
-      <p>If the lens is useful, it should make sense of product decisions that look unrelated under other frameworks. Three cases carry the argument; the rest of the field rhymes.</p>
+      <p>If the lens is useful, it should make sense of product decisions that look unrelated under other frameworks.</p>
 
       <h3>The free pipe: MCP and the foundations</h3>
       <p>Anthropic's MCP is an open protocol for connecting AI to the systems where organizational life is documented, discussed, and executed. In December 2025 Anthropic, Block, and OpenAI co-founded the Linux Foundation's Agentic AI Foundation, contributing MCP, goose, and <code>AGENTS.md</code>, with backing from Google, Microsoft, AWS, Cloudflare, and Bloomberg.<sup class="fn"><a href="#ref-3" role="doc-noteref" aria-label="Reference 3">3</a></sup> Google had already donated A2A, its agent-to-agent protocol, to a separate Linux Foundation project in June 2025; by its first anniversary it had over 150 supporting organizations and native support across major clouds.<sup class="fn"><a href="#ref-10" role="doc-noteref" aria-label="Reference 10">10</a><a href="#ref-11" role="doc-noteref" aria-label="Reference 11">11</a></sup></p>
-      <p>Handing a bet to a foundation that includes your competitors is only rational if the bet was never on owning the interface. A connector standard controlled by one lab is worth less than one everyone trusts. That is a strange concession about a product feature, and an obvious one about plumbing. <em>Interpreted:</em> if organizational cognition is the asset, the pipe should be free, and whoever accumulates the most context through it wins anyway.</p>
+      <p>Handing a bet to a foundation that includes your competitors is only rational if the bet was never on owning the interface. A connector standard controlled by one lab is worth less than one everyone trusts. Strange concession about a product feature; obvious about plumbing. <em>Interpreted:</em> if organizational cognition is the asset, the pipe should be free, and whoever accumulates the most context through it wins anyway.</p>
       <p>The July 2026 MCP revision reinforces the split: a more stateless core for scale; Tasks and long-running work pushed to extensions; memory and policy remaining product-layer concerns.<sup class="fn"><a href="#ref-2" role="doc-noteref" aria-label="Reference 2">2</a></sup> Interfaces standardize. Accumulation stays proprietary.</p>
 
       <h3>The file versus the loop: Cursor and <code>AGENTS.md</code></h3>
       <p><code>.cursorrules</code> encodes team judgment (style, architecture, library choices, testing expectations) into a coding agent. These are not facts. Two teams with the same requirements and different rules produce different software.</p>
+
+      <figure class="post-figure">
+        <img src="infographics/03-file-vs-loop.jpg" alt="Left: AGENTS.md file as data snapshot. Right: cognition loop of write, review, override, delete or revise." width="682" height="600" loading="lazy" decoding="async" />
+        <figcaption>Same syntax across agents. Different software. The container was never the value.</figcaption>
+      </figure>
+
       <p>By the letter of the export test, a plain text file looks like a counterexample. Send a team's file to another team and you have sent the rules without the reasons: which lines are load-bearing, which were written after an outage, when a rule should be suspended. Drop one team's file into another repository and you get compliance with a snapshot, not that team's code. What does not travel is the loop that produced the snapshot: friction, review, override, later deletion.</p>
-      <p>The file is data. The loop is cognition. The industry then ran the experiment: <code>AGENTS.md</code>, published by OpenAI and handed to the Agentic AI Foundation, is now read natively by essentially every serious coding agent.<sup class="fn"><a href="#ref-3" role="doc-noteref" aria-label="Reference 3">3</a><a href="#ref-14" role="doc-noteref" aria-label="Reference 14">14</a></sup> Tens of thousands of repositories converged on one syntax and continued producing different software. If the artifact were the asset, standardizing it would have flattened teams. It did not. Same move as MCP and A2A, one layer down: nobody defends the container, because the container was never where the value was.</p>
+      <p>The file is data. The loop is cognition. The industry then ran the experiment: <code>AGENTS.md</code>, published by OpenAI and handed to the Agentic AI Foundation, is now read natively by essentially every serious coding agent.<sup class="fn"><a href="#ref-3" role="doc-noteref" aria-label="Reference 3">3</a><a href="#ref-14" role="doc-noteref" aria-label="Reference 14">14</a></sup> Tens of thousands of repositories converged on one syntax and continued producing different software. If the artifact were the asset, standardizing it would have flattened teams. It did not. Same move as MCP and A2A, one layer down: nobody defends the container.</p>
 
       <h3>The governance tell: Microsoft Work IQ and agent identity</h3>
       <p>Microsoft's entry point is the Graph (email, documents, meetings, Teams), already a partial representation of who talks to whom and what documents matter. At Build in June 2026 it shipped Work IQ as a named intelligence layer over Microsoft 365, framed as Data, Memory, and Inference.<sup class="fn"><a href="#ref-5" role="doc-noteref" aria-label="Reference 5">5</a></sup> Alongside it: admin control over which MCP servers agents may reach through Work IQ in Copilot Studio,<sup class="fn"><a href="#ref-6" role="doc-noteref" aria-label="Reference 6">6</a></sup> and Entra Agent ID, generally available since April 2026, giving agents first-class directory identities rather than borrowed human credentials.<sup class="fn"><a href="#ref-7" role="doc-noteref" aria-label="Reference 7">7</a></sup></p>
-      <p>Naming Data, Memory, and Inference is convergent evidence for the taxonomy, not proof of it. Naming is cheap. What is not cheap is the shape of the governance products. Identity for non-human actors and admin control over which tools they may call are features you build once agents act on real authority and somebody has to answer for it. Non-human identities already outnumber human ones by large, method-dependent ratios, and most organizations report no reliable view of what production agents are doing.<sup class="fn"><a href="#ref-8" role="doc-noteref" aria-label="Reference 8">8</a></sup> The exact ratios disagree. The direction does not.</p>
+      <p>Naming Data, Memory, and Inference is convergent evidence for the taxonomy, not proof of it. Naming is cheap. What is not cheap is the shape of the governance products. Identity for non-human actors and admin control over which tools they may call are features you build once agents act on real authority and somebody has to answer for it. Non-human identities already outnumber human ones by large, method-dependent ratios, and most organizations report no reliable view of what production agents are doing.<sup class="fn"><a href="#ref-8" role="doc-noteref" aria-label="Reference 8">8</a></sup> Exact ratios disagree. Direction does not.</p>
 
       <h3>The rest of the field</h3>
-      <p>The same pattern repeats with different entry points. OpenAI's Workspace Agents replaced Custom GPTs for business accounts: team-owned, cloud-running, mid-conversation correctable, with per-user and per-agent memory deliberately not pooled into one company brain.<sup class="fn"><a href="#ref-4" role="doc-noteref" aria-label="Reference 4">4</a></sup> Google frames Workspace as information-rich but context-poor and ships agent sessions and memory banks;<sup class="fn"><a href="#ref-9" role="doc-noteref" aria-label="Reference 9">9</a></sup> it donates A2A rather than selling it.<sup class="fn"><a href="#ref-10" role="doc-noteref" aria-label="Reference 10">10</a><a href="#ref-11" role="doc-noteref" aria-label="Reference 11">11</a></sup> Palantir treats the ontology as a control plane for who authorized an action, what it cost, and whether the output can be trusted, with demand growing and valuation still contested.<sup class="fn"><a href="#ref-12" role="doc-noteref" aria-label="Reference 12">12</a><a href="#ref-13" role="doc-noteref" aria-label="Reference 13">13</a></sup> Glean's permissions-aware graph encodes who may know what, not only which document exists; its valuation rests on accumulated context without a frontier model or Office-scale distribution to hide behind.<sup class="fn"><a href="#ref-15" role="doc-noteref" aria-label="Reference 15">15</a></sup> Salesforce ships Slackbot as a general-availability agent into the product where work is already discussed.<sup class="fn"><a href="#ref-1" role="doc-noteref" aria-label="Reference 1">1</a><a href="#ref-16" role="doc-noteref" aria-label="Reference 16">16</a></sup></p>
-      <p>Block's Buzz attacks the moat rather than digging one. Agents are members with portable cryptographic identities so accumulated context might belong to the organization rather than the vendor.<sup class="fn"><a href="#ref-17" role="doc-noteref" aria-label="Reference 17">17</a><a href="#ref-18" role="doc-noteref" aria-label="Reference 18">18</a></sup> Buzz is early. It is also the first serious attempt to build the thing that would collapse switching costs. It is the sharpest real-world preview of the falsifier in section 8.</p>
-      <p>Every roadmap makes sense if organizations generate decision-relevant patterns not captured in formal docs; those patterns can be externalized through continuous human/AI interaction; once externalized they become a durable asset; the asset compounds; switching providers means losing or rebuilding it. Read that way, Slack is less an assistant product than a bid on the coordination layer: who asked whom, what "done" sounded like. Without those assumptions, MCP, Projects, ontologies, and agent identity look like unnecessary complexity. With them, the products are not solving for data access. They are solving for context accumulation.</p>
+      <p>Same pattern, different entry points. OpenAI's Workspace Agents replaced Custom GPTs for business accounts: team-owned, cloud-running, mid-conversation correctable, with per-user and per-agent memory deliberately not pooled into one company brain.<sup class="fn"><a href="#ref-4" role="doc-noteref" aria-label="Reference 4">4</a></sup> Google frames Workspace as information-rich but context-poor and ships agent sessions and memory banks;<sup class="fn"><a href="#ref-9" role="doc-noteref" aria-label="Reference 9">9</a></sup> it donates A2A rather than selling it.<sup class="fn"><a href="#ref-10" role="doc-noteref" aria-label="Reference 10">10</a><a href="#ref-11" role="doc-noteref" aria-label="Reference 11">11</a></sup> Palantir treats the ontology as a control plane for who authorized an action, what it cost, and whether the output can be trusted, with demand growing and valuation still contested.<sup class="fn"><a href="#ref-12" role="doc-noteref" aria-label="Reference 12">12</a><a href="#ref-13" role="doc-noteref" aria-label="Reference 13">13</a></sup> Glean's permissions-aware graph encodes who may know what, not only which document exists; its valuation rests on accumulated context without a frontier model or Office-scale distribution to hide behind.<sup class="fn"><a href="#ref-15" role="doc-noteref" aria-label="Reference 15">15</a></sup> Salesforce ships Slackbot into the product where work is already discussed.<sup class="fn"><a href="#ref-1" role="doc-noteref" aria-label="Reference 1">1</a><a href="#ref-16" role="doc-noteref" aria-label="Reference 16">16</a></sup></p>
+      <p>Block's Buzz attacks the moat rather than digging one. Agents are members with portable cryptographic identities so accumulated context might belong to the organization rather than the vendor.<sup class="fn"><a href="#ref-17" role="doc-noteref" aria-label="Reference 17">17</a><a href="#ref-18" role="doc-noteref" aria-label="Reference 18">18</a></sup> Early, and the first serious attempt to collapse switching costs: a preview of the falsifier in section 8.</p>
+      <p>Every roadmap makes sense if organizations generate decision-relevant patterns not captured in formal docs; those patterns can be externalized through continuous human/AI interaction; once externalized they become a durable asset; the asset compounds; switching providers means losing or rebuilding it. Without those assumptions, MCP, Projects, ontologies, and agent identity look like unnecessary complexity. With them, the products are solving for context accumulation, not data access.</p>
 
       <hr class="post-hr" />
 
       <h2>6. What History Suggests</h2>
       <p>Major computing revolutions externalized something that previously lived only in human minds: writing (memory), print (knowledge at scale), spreadsheets (calculation), databases (structured records), cloud (infrastructure). Each created value not only by making the old thing cheaper, but by enabling work that was previously impossible.</p>
-      <p>If AI is externalizing organizational cognition (how organizations perceive, decide, coordinate, delegate, learn, and govern), then the current moment is less about chatbots and benchmarks than about a new enterprise infrastructure layer, closer to what databases did for records than to what a better calculator did for arithmetic.</p>
-      <p>The analogy cuts against pure lock-in, and that should be said plainly. Every externalization on that list ended in standardization: alphabets, formula syntax, SQL, containers. Substrate became portable; whoever bet only on lock-in eventually lost. That history supports portability standards as a battleground. It undercuts the idea that switching costs rise forever.</p>
-      <p>Both can be true in sequence. Earlier externalizations standardized quickly because the content already had a formal shape (double-entry bookkeeping before VisiCalc; relational algebra before SQL). Organizational cognition has no prior shared formalism. There is no agreed representation of what an approval norm or a risk threshold <em>is</em>. Until there is a shared semantics, an export format is a container with nothing standard inside it.</p>
-      <p>So the honest prediction is narrower than "lock-in wins." Switching costs rise before a shared representation exists, and fall once one arrives. The open questions are how long that period lasts and how it ends. My guess is longer than spreadsheets or SQL, because the substrate is tacit judgment and governance has to standardize before content can. But lock-in as a permanent condition has no precedent on that list.</p>
+      <p>If AI is externalizing organizational cognition (how organizations perceive, decide, coordinate, delegate, learn, and govern), the current moment is closer to what databases did for records than to what a better calculator did for arithmetic.</p>
+      <p>The analogy cuts against pure lock-in. Every externalization on that list ended in standardization: alphabets, formula syntax, SQL, containers. Substrate became portable; whoever bet only on lock-in eventually lost. Portability standards are a battleground. Switching costs do not rise forever.</p>
+      <p>Earlier externalizations standardized quickly because the content already had a formal shape (double-entry bookkeeping before VisiCalc; relational algebra before SQL). Organizational cognition has no prior shared formalism. There is no agreed representation of what an approval norm or a risk threshold <em>is</em>. Until there is a shared semantics, an export format is a container with nothing standard inside it.</p>
+      <p>Prediction: switching costs rise before a shared representation exists, and fall once one arrives. My guess is the period lasts longer than for spreadsheets or SQL, because the substrate is tacit judgment and governance has to standardize before content can. Lock-in as a permanent condition has no precedent on that list.</p>
 
       <hr class="post-hr" />
 
@@ -200,57 +223,55 @@
       <h3>Interpreted</h3>
       <ul>
         <li>These mechanisms serve the same purpose despite different architectures: accumulate organization-specific judgment, not only organization-specific documents.</li>
-        <li>The industry is treating interfaces as commodity plumbing and accumulation as the prize, including after MCP simplified its core, when memory and policy remained product-layer concerns (section 5) while the surrounding infrastructure kept expanding faster than context windows (section 2).</li>
-        <li>Standardizing the judgment-file container did not equalize team outputs; the loop that writes and revises the file remains local. That is the file-versus-loop claim from section 5.</li>
-        <li>Investment in this layer is independent of model architecture; it solves a different problem than intelligence.</li>
+        <li>Interfaces are commodity plumbing; accumulation is the prize. After MCP simplified its core, memory and policy remained product-layer concerns (section 5) while surrounding infrastructure expanded faster than context windows (section 2).</li>
+        <li>Standardizing the judgment-file container did not equalize team outputs; the loop that writes and revises the file remains local (section 5).</li>
+        <li>Investment in this layer is independent of model architecture.</li>
       </ul>
 
       <h3>Predicted</h3>
       <ol>
-        <li>Enterprise AI procurement will increasingly score platforms on context accumulation and persistence, not only model quality.</li>
-        <li>Switching costs between AI platforms will rise before they fall. They rise while cognitive assets lack a shared representation, and fall once one emerges.</li>
-        <li>New roles will appear: cognitive architects, AI governance leads, context engineers.</li>
+        <li>Enterprise AI procurement will score platforms on context accumulation and persistence, not only model quality.</li>
+        <li>Switching costs between AI platforms will rise before they fall: up while cognitive assets lack a shared representation, down once one emerges.</li>
         <li>Standards for cognitive portability (export, version control, merge) will become a competitive battleground.</li>
-        <li>The most valuable platforms will be those that accumulate organizational cognition fastest, not those with the highest benchmark scores.</li>
+        <li>Platform value will track rate of cognition accumulation more than benchmark scores.</li>
       </ol>
 
       <hr class="post-hr" />
 
       <h2>8. This Framework Is Wrong If&hellip;</h2>
-      <p>A framework that cannot be disproven is not a framework. It is a vibe. Any one of the following is enough to abandon the thesis.</p>
-      <p><strong>Persistent organizational context does not produce measurably better decisions.</strong> If platforms with memory, connectors, and custom instructions produce the same decision quality as a stateless model handed the same documents, accumulation buys nothing and the product convergence is wasted effort. This tests the mechanism. It can be run today, on a single team, with a held-out set of real decisions.</p>
+      <p>Any one of the following is enough to abandon the thesis.</p>
+      <p><strong>Persistent organizational context does not produce measurably better decisions.</strong> If platforms with memory, connectors, and custom instructions produce the same decision quality as a stateless model handed the same documents, accumulation buys nothing. Runnable today on a single team with a held-out set of real decisions.</p>
       <p><strong>Enterprises switch AI providers without meaningful organizational cost.</strong> The sharpest test. If a large enterprise replaces its primary AI platform after two years of heavy use and the transition is mainly a data migration, comparable to switching cloud or database vendors, then organizational cognition is not a durable asset. What would confirm the thesis is a switch that costs months of degraded decision quality that no data export prevents.</p>
       <p><strong>A stateless model with superior reasoning eliminates the need for accumulated context.</strong> If a future model produces equivalent or better organizational decisions given only current documents and a prompt, with no learned history of how the organization behaves, then organizational cognition is a transitional artifact of weak models, not a structural layer.</p>
-      <p>The second is the one that would change my mind fastest. The first would say the mechanism does not work. The third would say it works but does not last. Any of the three, observed clearly, is enough.</p>
+      <p>The second would change my mind fastest.</p>
 
       <hr class="post-hr" />
 
       <h2>9. Limits</h2>
-      <p>This essay shows product and standards convergence, and offers a lens that makes that convergence less arbitrary. It does not show that accumulated organizational context improves decision quality. That is the load-bearing empirical claim, and it remains unproven here. Without that lift, "organizational cognition" could still be a useful marketing story for permissions-aware retrieval, session state, and compliance UI.</p>
-      <p>The lens is also underdetermined. Competitive mirroring, enterprise security requirements, and procurement checklists can produce similar roadmaps without anyone intending to externalize tacit judgment. Convergence is evidence that something is shared; it is not proof that the shared thing is this category.</p>
-      <p>Finally, figures that disagree across sources (non-human identity ratios, platform valuations) are cited with that disagreement intact. Dated product claims depend on the primary sources in section 12. Re-check them before treating any single number as settled.</p>
+      <p>This essay shows product and standards convergence and offers a lens for it. It does not show that accumulated organizational context improves decision quality. That is the load-bearing empirical claim, and it remains unproven here. Without that lift, "organizational cognition" could still be a marketing story for permissions-aware retrieval, session state, and compliance UI.</p>
+      <p>The lens is also underdetermined. Competitive mirroring, enterprise security requirements, and procurement checklists can produce similar roadmaps without anyone intending to externalize tacit judgment. Convergence is evidence that something is shared, not proof that the shared thing is this category.</p>
+      <p>Figures that disagree across sources (non-human identity ratios, platform valuations) are cited with that disagreement intact. Dated product claims depend on the primary sources in section 12.</p>
 
       <hr class="post-hr" />
 
       <h2>10. Implications</h2>
-      <p><strong>For buyers.</strong> Evaluate export and portability of <em>judgment history</em> (agent memory, override logs, instruction revision history, who authorized what), not only model tier and seat price. Ask what degrades for six months if you leave. If the answer is "nothing structural," you are buying a tool. If the answer is "how we decide," you are choosing a cognitive substrate.</p>
+      <p><strong>For buyers.</strong> Evaluate export and portability of <em>judgment history</em> (agent memory, override logs, instruction revision history, who authorized what), not only model tier and seat price. Ask what degrades for six months if you leave. If "nothing structural," you are buying a tool. If "how we decide," you are choosing a cognitive substrate.</p>
       <p><strong>For builders.</strong> Do not bet the company on owning the pipe. Instrument the loop: when rules are written, revised, overridden, and deleted; when agents are corrected mid-flight; when postmortems change future behavior. That loop is the product surface that compounds. Interfaces will be standardized out from under you either way.</p>
-      <p><strong>For leaders.</strong> Treat agent memory and decision trails as candidates for a system of record, with ownership, access control, audit, and decay, not as chat logs that happen to persist. Decide who owns organizational cognition before a vendor's terms of service decides for you. Actively manage freshness: memory without learning is residue, and residue makes confident wrong decisions.</p>
+      <p><strong>For leaders.</strong> Treat agent memory and decision trails as candidates for a system of record, with ownership, access control, audit, and decay, not as chat logs that happen to persist. Decide who owns organizational cognition before a vendor's terms of service decides for you. Memory without learning is residue, and residue makes confident wrong decisions.</p>
 
       <hr class="post-hr" />
 
       <h2>11. Open Questions</h2>
-      <p><strong>Who owns it?</strong> When decision patterns are externalized into a platform, rights sit awkwardly among the enterprise, the vendor, and the employees whose interactions produced them. This may become a defining IP question of the decade.</p>
+      <p><strong>Who owns it?</strong> When decision patterns are externalized into a platform, rights sit awkwardly among the enterprise, the vendor, and the employees whose interactions produced them.</p>
       <p><strong>Can it be exported?</strong> 2026 answered a narrow version: interfaces standardized (MCP, A2A, <code>AGENTS.md</code>); accumulation did not. There is no common export for Work IQ memory, Gemini Memory Bank, workspace-agent history, or Glean's graph. That may be sequencing, or it may be the answer.</p>
-      <p><strong>Can it be version-controlled and merged?</strong> Organizations evolve. Can cognition be branched, rolled back, and reconciled in a merger the way code and ERP systems can, or does it only accumulate as an increasingly stale picture of how the company used to work?</p>
-      <p><strong>Can it decay?</strong> If interaction stops, does the asset persist, degrade, or actively mislead? Memory without learning is not memory. It is residue.</p>
-      <p><strong>Can it become a system of record?</strong> Databases for data. CRMs for relationships. Could an AI platform become the authoritative source for how the organization decides? If so, its place in enterprise architecture is not "the chatbot we use."</p>
-      <p>These questions do not have answers today. If organizational cognition is the durable asset this framework suggests, they will be among the most consequential questions in enterprise technology. They will be answered not by building the smartest model, but by building the best infrastructure for how organizations think.</p>
+      <p><strong>Can it be version-controlled and merged?</strong> Can cognition be branched, rolled back, and reconciled in a merger the way code and ERP systems can, or does it only accumulate as a stale picture of how the company used to work?</p>
+      <p><strong>Can it decay?</strong> If interaction stops, does the asset persist, degrade, or actively mislead? Memory without learning is residue.</p>
+      <p><strong>Can it become a system of record?</strong> Databases for data. CRMs for relationships. Could an AI platform become the authoritative source for how the organization decides?</p>
 
       <hr class="post-hr" />
 
       <h2>12. References</h2>
-      <p>Every figure and dated claim in sections 1, 2, 5, and 7 traces to one of the following. Where sources disagree, the disagreement is noted rather than resolved in the prose. Undated architectural claims about products are drawn from the vendors' own documentation.</p>
+      <p>Every figure and dated claim in sections 1, 2, 5, and 7 traces to one of the following. Where sources disagree, the disagreement is noted rather than resolved. Undated architectural claims are from the vendors' own documentation.</p>
       <ol class="references">
         <li id="ref-1"><span class="ref-pub">TechCrunch.</span> <a href="https://techcrunch.com/2026/03/31/salesforce-announces-an-ai-heavy-makeover-for-slack-with-30-new-features/" target="_blank" rel="noopener">Salesforce announces an AI-heavy makeover for Slack, with 30 new features (31 March 2026)</a></li>
         <li id="ref-2"><span class="ref-pub">Model Context Protocol Blog.</span> <a href="https://blog.modelcontextprotocol.io/posts/2026-07-28/" target="_blank" rel="noopener">The 2026-07-28 Specification (28 July 2026)</a></li>

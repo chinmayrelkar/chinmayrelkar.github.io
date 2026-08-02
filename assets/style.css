@@ -1136,6 +1136,34 @@ body:has(.post) .reading-progress {
 
 .references a:hover { text-decoration: underline; }
 
+/* Essay figures — static images exported from tldraw offline. */
+.post-figure {
+  margin: 1.85rem 0 2.15rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+
+.post-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  border-radius: var(--radius-card);
+  border: 1px solid color-mix(in srgb, var(--rule) 88%, var(--accent));
+  background: color-mix(in srgb, var(--bg-card) 90%, var(--bg));
+  box-shadow: 0 1px 0 color-mix(in srgb, #fff 6%, transparent) inset;
+}
+
+.post-figure figcaption {
+  margin: 0.85rem 0 0;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: var(--ink-muted);
+  text-align: center;
+  text-wrap: balance;
+}
+
 .post-hr,
 .post-rule {
   border: none;

@@ -13,7 +13,8 @@ Plain HTML, CSS, and JS — no build step and no framework.
   `light-dark()` over a `color-scheme` that `data-theme` overrides
 - `assets/script.js` — theme toggle, active-section nav highlighting, the Writing
   feed, and post heading numbering, dividers, breadcrumb and reading progress
-- `assets/og-image.png` — Open Graph / Twitter card image
+- `assets/og-image.png` — default Open Graph / Twitter card image
+- `assets/og-organizational-cognition.jpg` — OG/Twitter preview for the Organizational Cognition essay (1200×630)
 
 ## Type scale
 
