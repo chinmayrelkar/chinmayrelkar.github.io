@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f4f8f1"/>
+      <stop offset="55%" stop-color="#eef4ea"/>
+      <stop offset="100%" stop-color="#e5efe0"/>
+    </linearGradient>
+    <linearGradient id="ringFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d8f5e2"/>
+      <stop offset="100%" stop-color="#b6ebc8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Soft accent glows -->
+  <circle cx="980" cy="300" r="260" fill="#159a4a" opacity="0.07"/>
+  <circle cx="180" cy="520" r="180" fill="#159a4a" opacity="0.05"/>
+
+  <!-- Bottom brand bar -->
+  <rect x="0" y="594" width="1200" height="36" fill="#159a4a"/>
+
+  <!-- Left content -->
+  <text x="72" y="120" font-family="Google Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="2.4" fill="#159a4a">PRESENTATION · AUG 2026</text>
+
+  <text x="72" y="210" font-family="Google Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="58" font-weight="700" fill="#121612" letter-spacing="-1.2">The Evolution of</text>
+  <text x="72" y="278" font-family="Google Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="58" font-weight="700" fill="#121612" letter-spacing="-1.2">the Agent Harness</text>
+
+  <text x="72" y="340" font-family="Google Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="26" font-weight="500" fill="#4d5c50">From prompt-only loops (2022) to Model + Harness</text>
+  <text x="72" y="376" font-family="Google Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="26" font-weight="500" fill="#4d5c50">as the unit of capability (2026).</text>
+
+  <!-- Formula chips -->
+  <g font-family="Google Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="22" font-weight="700">
+    <rect x="72" y="420" width="100" height="48" rx="24" fill="#121612"/>
+    <text x="122" y="451" text-anchor="middle" fill="#f2f7ef">Agent</text>
+
+    <text x="192" y="451" text-anchor="middle" fill="#4d5c50" font-size="28">=</text>
+
+    <rect x="214" y="420" width="100" height="48" rx="24" fill="#121612"/>
+    <text x="264" y="451" text-anchor="middle" fill="#f2f7ef">Model</text>
+
+    <text x="336" y="451" text-anchor="middle" fill="#4d5c50" font-size="28">+</text>
+
+    <rect x="358" y="420" width="118" height="48" rx="24" fill="#159a4a"/>
+    <text x="417" y="451" text-anchor="middle" fill="#ffffff">Harness</text>
+  </g>
+
+  <!-- Year rail -->
+  <g font-family="Google Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#159a4a">
+    <circle cx="88" cy="530" r="7" fill="none" stroke="#159a4a" stroke-width="3"/>
+    <text x="104" y="536">2022</text>
+    <line x1="156" y1="530" x2="196" y2="530" stroke="#c9d6c4" stroke-width="2"/>
+    <circle cx="214" cy="530" r="7" fill="none" stroke="#159a4a" stroke-width="3"/>
+    <text x="230" y="536">2023</text>
+    <line x1="282" y1="530" x2="322" y2="530" stroke="#c9d6c4" stroke-width="2"/>
+    <circle cx="340" cy="530" r="7" fill="none" stroke="#159a4a" stroke-width="3"/>
+    <text x="356" y="536">2024</text>
+    <line x1="408" y1="530" x2="448" y2="530" stroke="#c9d6c4" stroke-width="2"/>
+    <circle cx="466" cy="530" r="7" fill="none" stroke="#159a4a" stroke-width="3"/>
+    <text x="482" y="536">2025</text>
+    <line x1="534" y1="530" x2="574" y2="530" stroke="#c9d6c4" stroke-width="2"/>
+    <circle cx="592" cy="530" r="8" fill="#159a4a"/>
+    <text x="610" y="536">2026</text>
+  </g>
+
+  <!-- Concentric onion (right side) -->
+  <g transform="translate(930 300)">
+    <circle r="168" fill="#e8f7ee" stroke="#5eef8a" stroke-width="3" opacity="0.95"/>
+    <circle r="132" fill="#d4f3df" stroke="#3dd46f" stroke-width="3"/>
+    <circle r="96" fill="#b9ebc8" stroke="#22b857" stroke-width="3"/>
+    <circle r="62" fill="#8fe0a8" stroke="#159a4a" stroke-width="3"/>
+    <circle r="34" fill="#159a4a"/>
+    <text y="8" text-anchor="middle" font-family="Google Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="800" fill="#ffffff">Model</text>
+  </g>
+
+  <!-- Footer on green bar -->
+  <text x="72" y="618" font-family="Google Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#ffffff">Chinmay Relkar · chinmayrelkar.github.io</text>
+  <text x="1128" y="618" text-anchor="end" font-family="Google Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#ffffff">Deep dive · ~25 min</text>
+</svg>
