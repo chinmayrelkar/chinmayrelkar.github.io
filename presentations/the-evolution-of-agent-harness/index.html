@@ -1,0 +1,3385 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-D6ZMQF83JY"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-D6ZMQF83JY');
+</script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Evolution of the Agent Harness &middot; Chinmay Relkar</title>
+<meta name="description" content="A deep dive on how the agent harness evolved from prompting-era loops (2022) into a full runtime with tools, context machinery, subagents, and OS sandboxes (2026)." />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Chinmay Relkar" />
+<meta property="og:url" content="https://chinmayrelkar.github.io/presentations/the-evolution-of-agent-harness/" />
+<meta property="og:title" content="The Evolution of the Agent Harness" />
+<meta property="og:description" content="From prompting-era loops (2022) to Model + Harness as the unit of capability (2026). A self-contained deep dive deck." />
+<meta property="og:image" content="https://chinmayrelkar.github.io/assets/og-image.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="The Evolution of the Agent Harness" />
+<meta name="twitter:description" content="From prompting-era loops (2022) to Model + Harness as the unit of capability (2026)." />
+<meta name="twitter:image" content="https://chinmayrelkar.github.io/assets/og-image.png" />
+<meta name="color-scheme" content="light dark" />
+<meta name="theme-color" content="#f6f8f3" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#14170f" media="(prefers-color-scheme: dark)" />
+<link rel="canonical" href="https://chinmayrelkar.github.io/presentations/the-evolution-of-agent-harness/" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231f9d55'/%3E%3Ctext x='32' y='42' font-family='Arial,sans-serif' font-weight='700' font-size='26' fill='%23ffffff' text-anchor='middle'%3ECR%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap" rel="stylesheet">
+<style>
+/* ── Design tokens from chinmayrelkar.github.io ─────────────────────────── */
+:root {
+  color-scheme: light dark;
+
+  --bg: light-dark(#eef4ea, #0c100b);
+  --bg-card: light-dark(#fbfdf9, #161c13);
+  --ink: light-dark(#121612, #f2f7ef);
+  --ink-muted: light-dark(#4d5c50, #9aab98);
+  --rule: light-dark(#c9d6c4, #2a3327);
+  --accent: light-dark(#159a4a, #5eef8a);
+  --accent-ink: light-dark(#ffffff, #0e2415);
+
+  --font: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  --fs-title: 2.625rem;
+  --fs-h1: 2.104rem;
+  --fs-h2: 1.757rem;
+  --fs-h3: 1.41rem;
+  --fs-body: 1.0625rem;
+
+  --radius-card: 1.25rem;
+  --radius-pill: 999px;
+  --glass: color-mix(in srgb, var(--bg-card) 78%, transparent);
+  --shadow-soft: 0 10px 40px color-mix(in srgb, var(--ink) 10%, transparent);
+
+  --header-h: 4.1rem;
+  --slide-pad: clamp(1.25rem, 3vw, 2.5rem);
+  /* Stage width: expand on larger viewports instead of a 920px island */
+  --stage: min(1100px, calc(100vw - 2.5rem));
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --stage: min(1280px, calc(100vw - 3rem));
+    --slide-pad: clamp(1.5rem, 2.2vw, 2.75rem);
+  }
+}
+
+@media (min-width: 1600px) {
+  :root {
+    --stage: min(1440px, calc(100vw - 4rem));
+  }
+}
+
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
+
+* { box-sizing: border-box; }
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -3rem;
+  background: var(--accent);
+  color: var(--accent-ink);
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  z-index: 100;
+  transition: top 0.15s ease;
+}
+.skip-link:focus { top: 1rem; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(ellipse 90% 55% at 8% -15%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 58%),
+    radial-gradient(ellipse 70% 45% at 100% 5%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 52%),
+    radial-gradient(ellipse 55% 35% at 50% 110%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 50%);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: var(--fs-body);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
+  color: var(--ink);
+}
+
+a { color: inherit; text-decoration: none; }
+ul { margin: 0; padding: 0; list-style: none; }
+
+/* ── Theme toggle ───────────────────────────────────────────────────────── */
+#theme-toggle {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 80;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-ink);
+  background: var(--accent);
+  border: none;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--accent) 22%, transparent),
+    0 12px 32px color-mix(in srgb, var(--accent) 35%, transparent);
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+#theme-toggle:hover,
+#theme-toggle:focus-visible {
+  transform: translateY(-3px) scale(1.04);
+  box-shadow:
+    0 0 0 5px color-mix(in srgb, var(--accent) 28%, transparent),
+    0 16px 40px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+#theme-toggle svg {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  transition: opacity 0.25s ease, transform 0.3s ease;
+}
+.icon-moon { opacity: 0; transform: scale(0.5) rotate(-40deg); }
+:root[data-theme="dark"] .icon-sun { opacity: 0; transform: scale(0.5) rotate(40deg); }
+:root[data-theme="dark"] .icon-moon { opacity: 1; transform: scale(1) rotate(0deg); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .icon-sun { opacity: 0; transform: scale(0.5) rotate(40deg); }
+  :root:not([data-theme]) .icon-moon { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+/* ── Sticky header ──────────────────────────────────────────────────────── */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  padding: 0.65rem 1rem 0;
+  pointer-events: none;
+}
+.site-header-inner {
+  max-width: var(--stage);
+  height: 3rem;
+  margin: 0 auto;
+  padding: 0 1.15rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  font-size: 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--rule) 90%, var(--accent));
+  border-radius: var(--radius-pill);
+  background: var(--glass);
+  backdrop-filter: blur(18px) saturate(1.2);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, #fff 8%, transparent) inset,
+    var(--shadow-soft);
+  pointer-events: auto;
+}
+.site-wordmark {
+  flex: none;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  transition: color 0.15s ease;
+}
+.site-wordmark:hover { color: var(--accent); }
+
+.crumb {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.crumb-context,
+.crumb-position {
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  overflow: hidden;
+}
+.crumb-root,
+.crumb-title,
+.crumb-h1 {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.crumb-root::before,
+.crumb-title::before,
+.crumb-h1::before {
+  content: "\203A";
+  margin: 0 0.5rem;
+  color: color-mix(in srgb, var(--ink-muted) 75%, transparent);
+}
+.crumb-root { flex: none; transition: color 0.15s ease; }
+.crumb-root:hover { color: var(--accent); }
+.crumb-title { flex: 0 4 auto; }
+.crumb-h1 { flex: 0 1 auto; color: var(--accent); font-weight: 500; }
+.crumb-h1:empty { display: none; }
+.crumb-h1:empty::before { content: none; }
+
+/* ── Deck stage ─────────────────────────────────────────────────────────── */
+/*
+  Layout contract (every slide):
+  1. Slide card fills the full stage under the header / above controls.
+  2. Eyebrow (or title-slide meta) is top-center.
+  3. Title (h1/h2) sits directly under it, also centered.
+  4. Remaining body is vertically + horizontally centered in the free space.
+*/
+.deck {
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  padding: calc(var(--header-h) + 0.65rem) 1.25rem 5.1rem;
+  box-sizing: border-box;
+}
+
+.slide {
+  display: none;
+  width: var(--stage);
+  height: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  padding: var(--slide-pad);
+  border-radius: calc(var(--radius-card) + 0.25rem);
+  border: 1px solid color-mix(in srgb, var(--rule) 85%, var(--accent));
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--bg-card) 96%, var(--accent)) 0%,
+      var(--bg-card) 38%,
+      var(--bg-card) 100%
+    );
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--accent) 10%, transparent),
+    0 30px 90px color-mix(in srgb, var(--ink) 12%, transparent),
+    0 2px 0 color-mix(in srgb, #fff 6%, transparent) inset;
+  position: relative;
+}
+
+.slide.active {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  animation: slide-in 0.28s ease both;
+}
+
+/* Header band: section pill + title: always top of the card */
+.slide-head {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 0.35rem;
+}
+
+.slide-head .eyebrow,
+.slide-head .slide-meta {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.slide-head .slide-meta {
+  justify-content: center;
+  margin-bottom: 0.85rem;
+}
+
+.slide-head .eyebrow {
+  margin-bottom: 0.75rem;
+}
+
+.slide-head h1,
+.slide-head h2 {
+  margin: 0;
+  max-width: min(28ch, 100%);
+  text-align: center;
+}
+
+.slide-head h1 {
+  max-width: min(16ch, 100%);
+}
+
+/* Body: fills leftover height and centers its content.
+   safe center: short slides sit mid-card; tall slides start from the top when scrolling.
+   All text/list blocks share one column width so left edges align. */
+.slide-body {
+  --prose-w: min(38rem, 100%);
+  --wide-w: min(58rem, 100%);
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: safe center;
+  align-items: center;
+  width: 100%;
+  overflow-y: auto;
+  padding: 0.5rem 0 0.25rem;
+  text-align: left;
+}
+
+/* Default: every direct child is a centered column with the same width */
+.slide-body > * {
+  box-sizing: border-box;
+  width: var(--prose-w);
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+
+.slide-body > p,
+.slide-body > .lead,
+.slide-body > .muted,
+.slide-body > .kicker,
+.slide-body > .pull,
+.slide-body > .thesis-close,
+.slide-body > .dek,
+.slide-body > .diagram-caption {
+  text-align: left;
+}
+
+.slide-body > .pull,
+.slide-body > .thesis-close,
+.slide-body > .dek {
+  width: var(--prose-w);
+}
+
+.slide-body > .bullet-list,
+.slide-body > .num-list {
+  width: var(--prose-w);
+  padding-left: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Wide layouts: larger column, still centered */
+.slide-body > .split,
+.slide-body > .grid-2,
+.slide-body > .grid-3,
+.slide-body > .grid-4,
+.slide-body > .stat-row,
+.slide-body > .toc,
+.slide-body > .diagram,
+.slide-body > .chain,
+.slide-body > .locus,
+.slide-body > .shift-row,
+.slide-body > .stack,
+.slide-body > .grow,
+.slide-body > .onion-rail,
+.slide-body > .era-mark,
+.slide-body > .timeline,
+.slide-body > table,
+.slide-body > .sources,
+.slide-body > .formula,
+.slide-body > .anatomy-map,
+.slide-body > .flow,
+.slide-body > .nxm,
+.slide-body > .tree,
+.slide-body > .ctx-meter,
+.slide-body > .chain {
+  width: var(--wide-w);
+  max-width: 100%;
+}
+
+/* Pattern arc + onion growth: use full stage width */
+.slide-body > .chain,
+.slide-body > .onion-rail {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Vertical rhythm inside the shared prose column */
+.slide-body > * + * {
+  margin-top: 0.85rem;
+}
+.slide-body > p {
+  margin-bottom: 0;
+}
+.slide-body > .lead {
+  margin-bottom: 0;
+  font-size: 1.08rem;
+  font-weight: 500;
+}
+
+.slide::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 10rem;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 90% at 0% 0%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 70%),
+    radial-gradient(ellipse 50% 80% at 100% 10%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 65%);
+  opacity: 0.9;
+}
+.slide > *,
+.slide-head,
+.slide-body,
+.slide-body > * { position: relative; z-index: 1; }
+
+@keyframes slide-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .slide.active { animation: none; }
+}
+
+/* ── Typography inside slides ───────────────────────────────────────────── */
+.eyebrow {
+  display: inline-flex;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin: 0;
+  padding: 0.38rem 0.75rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.slide-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0 0 1.1rem;
+  font-size: 0;
+}
+.slide-meta span {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--accent);
+  padding: 0.38rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.slide h1 {
+  font-weight: 800;
+  font-size: clamp(2.1rem, 4.2vw, 3.35rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+  margin: 0;
+}
+
+.slide h2 {
+  font-weight: 800;
+  font-size: clamp(1.45rem, 2.4vw, 1.95rem);
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  color: var(--ink);
+  text-wrap: balance;
+  margin: 0;
+}
+
+.slide h3 {
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+  color: var(--ink);
+  margin: 0 0 0.45rem;
+}
+
+.dek {
+  font-size: clamp(1.05rem, 1.5vw, 1.22rem);
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--ink);
+  text-wrap: pretty;
+  margin: 0 0 0;
+  padding: 0.95rem 1.1rem 0.95rem 1.2rem;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 14px 14px 0;
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.slide p {
+  margin: 0 0 0.85rem;
+  line-height: 1.65;
+  text-wrap: pretty;
+  color: var(--ink);
+}
+.slide p:last-child { margin-bottom: 0; }
+
+.muted { color: var(--ink-muted); }
+.lead { font-size: 1.08rem; font-weight: 500; }
+
+.formula {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem 0.75rem;
+  margin: 1.25rem 0 0;
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.formula .chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid color-mix(in srgb, var(--rule) 85%, var(--accent));
+  background: color-mix(in srgb, var(--bg) 55%, var(--bg-card));
+}
+.formula .chip.accent {
+  color: var(--accent-ink);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.formula .op { color: var(--ink-muted); font-weight: 600; }
+
+/* ── Cards / grids ──────────────────────────────────────────────────────── */
+.card {
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--bg-card) 96%, var(--accent)) 0%,
+      var(--bg-card) 40%,
+      var(--bg-card) 100%
+    );
+  border: 1px solid color-mix(in srgb, var(--rule) 85%, var(--accent));
+  border-radius: 1rem;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--accent) 8%, transparent),
+    0 8px 24px color-mix(in srgb, var(--ink) 6%, transparent);
+  padding: 1.05rem 1.15rem;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem;
+  margin-top: 1rem;
+}
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
+  margin-top: 1rem;
+}
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.85rem;
+  margin-top: 1rem;
+}
+@media (min-width: 1000px) {
+  .grid-4 { grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+  .grid-4 .card { padding: 0.95rem 1rem; }
+}
+
+.card h3 { margin-bottom: 0.35rem; }
+.card p { margin: 0; font-size: 1rem; line-height: 1.45; color: var(--ink-muted); }
+.card .tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.4rem;
+}
+
+/* ── Lists ──────────────────────────────────────────────────────────────── */
+.bullet-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.bullet-list > li {
+  position: relative;
+  padding-left: 1.2rem;
+  margin-bottom: 0.55rem;
+  line-height: 1.55;
+  text-align: left;
+}
+.bullet-list > li:last-child { margin-bottom: 0; }
+.bullet-list > li::before {
+  content: "";
+  position: absolute;
+  left: 0.15rem;
+  top: 0.6em;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.bullet-list strong { color: var(--ink); font-weight: 700; }
+
+.num-list {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  counter-reset: n;
+}
+.num-list > li {
+  counter-increment: n;
+  position: relative;
+  padding-left: 1.7rem;
+  margin-bottom: 0.55rem;
+  line-height: 1.55;
+}
+.num-list > li::before {
+  content: counter(n);
+  position: absolute;
+  left: 0;
+  top: 0.1em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Timeline ───────────────────────────────────────────────────────────── */
+.timeline {
+  border-left: 2px solid var(--rule);
+  padding-left: 1.35rem;
+  margin: 0.75rem 0 0 0.15rem;
+}
+.tl-item {
+  position: relative;
+  padding: 0 0 1rem;
+}
+.tl-item:last-child { padding-bottom: 0; }
+.tl-item::before {
+  content: "";
+  position: absolute;
+  left: -1.6rem;
+  top: 0.45rem;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.tl-date {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.15rem;
+}
+.tl-item h3 { margin: 0 0 0.2rem; font-size: 1.05rem; }
+.tl-item p { margin: 0; font-size: 0.95rem; color: var(--ink-muted); }
+
+/* ── Stats ──────────────────────────────────────────────────────────────── */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
+  margin-top: 1.1rem;
+}
+.stat {
+  padding: 1rem 1.1rem;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--rule) 85%, var(--accent));
+  background: color-mix(in srgb, var(--bg) 50%, var(--bg-card));
+}
+.stat .num {
+  display: block;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--accent);
+  line-height: 1.1;
+  margin-bottom: 0.3rem;
+}
+.stat .label {
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  line-height: 1.4;
+}
+
+/* ── Quote ──────────────────────────────────────────────────────────────── */
+.pull {
+  margin: 0;
+  padding: 1rem 1.15rem;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 12px 12px 0;
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.pull cite {
+  display: block;
+  margin-top: 0.55rem;
+  font-size: 0.8rem;
+  font-style: normal;
+  font-weight: 600;
+  color: var(--ink-muted);
+  letter-spacing: 0.02em;
+}
+
+/* ── Agenda / TOC ───────────────────────────────────────────────────────── */
+.toc {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.65rem;
+  margin: 0;
+  width: 100%;
+  max-width: 56rem;
+}
+.toc a {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  padding: 0.9rem 0.95rem;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--rule) 85%, var(--accent));
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--bg-card) 96%, var(--accent)) 0%,
+      color-mix(in srgb, var(--bg) 40%, var(--bg-card)) 100%
+    );
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 6%, transparent);
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+  cursor: pointer;
+  min-height: 4.4rem;
+}
+.toc a:hover {
+  background: color-mix(in srgb, var(--accent) 10%, var(--bg-card));
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--rule));
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--accent) 12%, transparent),
+    0 10px 28px color-mix(in srgb, var(--ink) 10%, transparent);
+}
+.toc a:hover .t { color: var(--accent); }
+.toc .n {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.85rem;
+  height: 1.85rem;
+  padding: 0 0.35rem;
+  border-radius: 8px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--accent-ink);
+  background: var(--accent);
+  font-variant-numeric: tabular-nums;
+  margin-top: 0.05rem;
+}
+.toc .t {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.35;
+  text-align: left;
+  padding-top: 0.2rem;
+  transition: color 0.15s ease;
+}
+
+/* ── Anatomy map (layered harness) ──────────────────────────────────────── */
+.anatomy-map {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  width: 100%;
+  max-width: 52rem;
+  margin: 0 auto;
+}
+.anatomy-band {
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--rule) 85%, var(--accent));
+  background: color-mix(in srgb, var(--bg) 40%, var(--bg-card));
+  padding: 0.85rem 1rem 1rem;
+}
+.anatomy-band-label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.7rem;
+}
+.anatomy-band-label strong {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.anatomy-band-label span {
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+  text-align: right;
+}
+.anatomy-band.model {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem 1.15rem;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  box-shadow: 0 10px 32px color-mix(in srgb, var(--accent) 28%, transparent);
+}
+.anatomy-band.model .model-name {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.anatomy-band.model .model-note {
+  font-size: 0.85rem;
+  font-weight: 500;
+  opacity: 0.9;
+}
+.anatomy-band.harness {
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--bg-card) 94%, var(--accent)) 0%,
+      color-mix(in srgb, var(--bg) 35%, var(--bg-card)) 100%
+    );
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--rule));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 10%, transparent);
+}
+.anatomy-band.optional {
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--ink-muted) 45%, var(--rule));
+  background: color-mix(in srgb, var(--bg) 55%, transparent);
+}
+.anatomy-band.optional .anatomy-band-label strong {
+  color: var(--ink-muted);
+}
+.anatomy-chips {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+.anatomy-chip {
+  padding: 0.7rem 0.75rem;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--rule) 80%, var(--accent));
+  background: color-mix(in srgb, var(--bg-card) 88%, var(--bg));
+  text-align: left;
+}
+.anatomy-chip h3 {
+  margin: 0 0 0.3rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.anatomy-chip p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--ink-muted);
+}
+.anatomy-band.optional .anatomy-chip {
+  border-style: dashed;
+  background: transparent;
+}
+.anatomy-band.optional .anatomy-chip h3 { color: var(--ink-muted); }
+
+@media (min-width: 1100px) {
+  .anatomy-map { max-width: 58rem; gap: 0.65rem; }
+  .anatomy-chips { gap: 0.6rem; }
+  .anatomy-chip { padding: 0.8rem 0.85rem; }
+  .anatomy-chip h3 { font-size: 1.05rem; }
+  .anatomy-chip p { font-size: 0.95rem; }
+}
+
+/* ── Stack diagram ──────────────────────────────────────────────────────── */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-top: 0.9rem;
+}
+.stack-layer {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.7rem 0.95rem;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--rule) 85%, var(--accent));
+  background: color-mix(in srgb, var(--bg) 45%, var(--bg-card));
+}
+.stack-layer .layer-name {
+  flex: none;
+  min-width: 7.5rem;
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--accent);
+}
+.stack-layer .layer-desc {
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+  line-height: 1.4;
+}
+.stack-layer.core {
+  background: color-mix(in srgb, var(--accent) 14%, var(--bg-card));
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--rule));
+}
+.stack-layer.core .layer-name { color: var(--ink); }
+
+/* ── Table ──────────────────────────────────────────────────────────────── */
+.slide table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0.75rem 0 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--bg) 55%, var(--bg-card));
+}
+.slide th, .slide td {
+  text-align: left;
+  padding: 0.7rem 0.95rem;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+.slide th {
+  color: var(--accent);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+.slide tr:last-child td { border-bottom: none; }
+.slide td:first-child { font-weight: 700; }
+
+/* ── Code-ish ───────────────────────────────────────────────────────────── */
+code {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 0.86em;
+  color: light-dark(#0d6b38, #b6ffce);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+  border-radius: 6px;
+  padding: 0.08em 0.35em;
+}
+
+/* ── Controls / progress ────────────────────────────────────────────────── */
+.controls {
+  position: fixed;
+  left: 50%;
+  bottom: 1.35rem;
+  transform: translateX(-50%);
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.4rem 0.5rem 0.4rem 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--rule) 90%, var(--accent));
+  border-radius: var(--radius-pill);
+  background: var(--glass);
+  backdrop-filter: blur(16px) saturate(1.15);
+  box-shadow: var(--shadow-soft);
+}
+
+.progress-pipe {
+  position: relative;
+  width: min(220px, 28vw);
+  height: 0.7rem;
+  border-radius: 999px;
+  border: 2px solid var(--accent);
+  background: light-dark(
+    color-mix(in srgb, #ffffff 88%, var(--accent)),
+    color-mix(in srgb, #0a0f09 55%, var(--accent))
+  );
+  overflow: hidden;
+}
+.progress-bar {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 0%;
+  border-radius: 999px;
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--accent) 70%, #064e2a),
+      var(--accent) 40%,
+      color-mix(in srgb, var(--accent) 65%, #fff)
+    );
+  transition: width 0.2s ease;
+}
+
+.slide-count {
+  font-size: 0.78rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-muted);
+  min-width: 3.2rem;
+  text-align: center;
+}
+
+.nav-btn {
+  width: 2.2rem;
+  height: 2.2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  color: var(--accent);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.nav-btn:hover:not(:disabled) {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+.nav-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.nav-btn svg { width: 16px; height: 16px; }
+
+.hint {
+  font-size: 0.72rem;
+  color: var(--ink-muted);
+  margin-left: 0.15rem;
+  padding-right: 0.35rem;
+}
+
+/* ── Title slide special ────────────────────────────────────────────────── */
+.slide.title-slide .slide-head h1 { max-width: min(16ch, 100%); }
+.slide.title-slide .dek {
+  margin-top: 0;
+  margin-bottom: 0.85rem;
+  max-width: min(62ch, 100%);
+  text-align: left;
+}
+.kicker {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+  text-align: center;
+}
+.kicker strong { color: var(--ink); font-weight: 600; }
+
+/* ── Two-column content ─────────────────────────────────────────────────── */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-top: 0.85rem;
+  align-items: start;
+}
+
+/* ── Sources list ───────────────────────────────────────────────────────── */
+.sources {
+  columns: 2;
+  column-gap: 1.5rem;
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+.sources li {
+  break-inside: avoid;
+  margin-bottom: 0.55rem;
+  padding-left: 1.5rem;
+  position: relative;
+}
+.sources li::before {
+  content: attr(data-n) ".";
+  position: absolute;
+  left: 0;
+  font-weight: 600;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.9rem;
+}
+.sources a { color: var(--accent); }
+.sources a:hover { text-decoration: underline; }
+
+/* ── Through-line chain ─────────────────────────────────────────────────── */
+/* Full width of the stage; 3-col grid uses horizontal space instead of scrolling */
+.chain {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.45rem 0.5rem;
+  margin-top: 0;
+  width: 100%;
+}
+.chain-step {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.28rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--rule) 80%, transparent);
+  background: color-mix(in srgb, var(--bg) 40%, var(--bg-card));
+  min-height: 0;
+  min-width: 0;
+}
+.chain-step .when {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+  line-height: 1.2;
+}
+.chain-step .what {
+  font-size: 0.88rem;
+  line-height: 1.3;
+  color: var(--ink);
+  min-width: 0;
+}
+.chain-step .what .fail {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+  margin-bottom: 0.15rem;
+  line-height: 1.25;
+}
+.chain-step.endpoint {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 1rem;
+  background: color-mix(in srgb, var(--accent) 14%, var(--bg-card));
+  border: 2px solid var(--accent);
+  padding: 0.75rem 1rem;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 20%, transparent);
+}
+.chain-step.endpoint .when {
+  flex: 0 0 auto;
+  padding-top: 0.1rem;
+  font-size: 0.85rem;
+  color: var(--accent);
+}
+.chain-step.endpoint .what {
+  flex: 1 1 auto;
+  font-weight: 500;
+  font-size: 0.95rem;
+  min-width: 0;
+}
+.chain-step.endpoint .what .fail {
+  font-size: 0.85rem;
+  color: var(--ink);
+}
+
+/* ── Diagrams ───────────────────────────────────────────────────────────── */
+.diagram {
+  margin-top: 1rem;
+}
+.diagram-caption {
+  margin: 0.65rem 0 0;
+  font-size: 0.92rem;
+  color: var(--ink-muted);
+  text-align: center;
+  text-wrap: balance;
+}
+
+/* Horizontal evolution rail */
+.evo-rail {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.4rem;
+  margin-top: 1rem;
+  position: relative;
+}
+.evo-rail::before {
+  content: "";
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  top: 1.05rem;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--accent) 30%, var(--rule)),
+    var(--accent)
+  );
+  z-index: 0;
+}
+.evo-node {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.4rem;
+}
+.evo-dot {
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 2.5px solid var(--accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 16%, transparent);
+}
+.evo-node.hot .evo-dot {
+  background: var(--accent);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 28%, transparent);
+}
+.evo-year {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.evo-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--ink);
+  max-width: 9.5ch;
+}
+.evo-sub {
+  font-size: 0.7rem;
+  color: var(--ink-muted);
+  line-height: 1.25;
+  max-width: 12ch;
+}
+
+/* Concentric harness onion: same motif grows a ring each era */
+.onion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  flex: 0 0 auto;
+  min-width: 0;
+}
+.onion svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  overflow: visible;
+}
+.onion-lg { width: min(100%, 280px); }
+.onion-md { width: min(100%, 148px); }
+.onion-sm { width: 92px; }
+.onion-xs { width: 72px; }
+
+.onion .o-ring {
+  fill: color-mix(in srgb, var(--accent) 6%, var(--bg-card));
+  stroke: color-mix(in srgb, var(--accent) 28%, var(--rule));
+  stroke-width: 1.4;
+  opacity: 0.1;
+}
+.onion .o-core {
+  fill: color-mix(in srgb, var(--ink-muted) 55%, var(--accent));
+  stroke: color-mix(in srgb, var(--ink-muted) 40%, var(--accent));
+  opacity: 1;
+}
+.onion .o-label {
+  fill: var(--accent-ink);
+  font-family: inherit;
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: -0.02em;
+  opacity: 1;
+}
+.onion-sm .o-label,
+.onion-xs .o-label { font-size: 22px; }
+
+/* Progressive reveal by era class on the root .onion */
+.onion.era-2022 .o-loop,
+.onion.era-2023 .o-loop,
+.onion.era-2023 .o-tools,
+.onion.era-2024 .o-loop,
+.onion.era-2024 .o-tools,
+.onion.era-2024 .o-product,
+.onion.era-2025 .o-loop,
+.onion.era-2025 .o-tools,
+.onion.era-2025 .o-product,
+.onion.era-2025 .o-outer,
+.onion.era-2026 .o-loop,
+.onion.era-2026 .o-tools,
+.onion.era-2026 .o-product,
+.onion.era-2026 .o-outer,
+.onion.era-full .o-loop,
+.onion.era-full .o-tools,
+.onion.era-full .o-product,
+.onion.era-full .o-outer {
+  opacity: 1;
+}
+
+.onion.era-2022 .o-loop,
+.onion.era-2023 .o-tools,
+.onion.era-2024 .o-product,
+.onion.era-2025 .o-outer,
+.onion.era-2026 .o-outer {
+  stroke: var(--accent);
+  stroke-width: 2.4;
+  fill: color-mix(in srgb, var(--accent) 16%, var(--bg-card));
+}
+.onion.era-2026 .o-outer,
+.onion.era-full .o-outer {
+  fill: color-mix(in srgb, var(--accent) 12%, var(--bg-card));
+}
+.onion.era-full .o-loop,
+.onion.era-full .o-tools,
+.onion.era-full .o-product {
+  fill: color-mix(in srgb, var(--accent) 10%, var(--bg-card));
+  stroke: color-mix(in srgb, var(--accent) 50%, var(--rule));
+}
+.onion.era-full .o-core {
+  fill: var(--accent);
+  stroke: var(--accent);
+}
+
+.onion-cap {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--ink-muted);
+  text-align: center;
+  line-height: 1.25;
+  max-width: 11ch;
+}
+.onion-cap strong {
+  display: block;
+  color: var(--accent);
+  font-weight: 800;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Row of onions on the arc slide */
+.onion-rail {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.55rem;
+  margin-top: 1rem;
+  width: 100%;
+  align-items: start;
+}
+.onion-rail .onion {
+  padding: 0.55rem 0.35rem 0.65rem;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--rule) 85%, var(--accent));
+  background: color-mix(in srgb, var(--bg) 45%, var(--bg-card));
+}
+.onion-rail .onion.era-2026 {
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--rule));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+/* Inline mark on chapter slides: lead + growing circle */
+.era-mark {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  width: 100%;
+}
+.era-mark > .lead,
+.era-mark > p {
+  flex: 1 1 auto;
+  margin: 0;
+  min-width: 0;
+}
+.era-mark .onion {
+  flex: 0 0 auto;
+}
+
+.anatomy-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.75rem;
+  justify-content: center;
+  margin-top: 0.85rem;
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+  max-width: 20rem;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+.anatomy-legend span strong {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* Definition split: keep diagram column from crushing the rings */
+.slide-body > .split {
+  align-items: center;
+}
+.slide-body > .split > .diagram {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  flex-shrink: 0;
+}
+
+/* Back-compat alias used by older media queries */
+.anatomy-diagram {
+  display: block;
+  width: min(100%, 280px);
+  height: auto;
+  aspect-ratio: 1 / 1;
+}
+
+/* ReAct cycle */
+.loop-diagram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  margin-top: 1.1rem;
+  padding: 1rem 0.75rem;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--rule) 85%, var(--accent));
+  background: color-mix(in srgb, var(--bg) 50%, var(--bg-card));
+}
+.loop-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  min-width: 5.5rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--rule));
+  background: var(--bg-card);
+  text-align: center;
+}
+.loop-node .ln {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.loop-node .lt {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.loop-arrow {
+  color: var(--accent);
+  font-weight: 800;
+  font-size: 1.1rem;
+  flex: none;
+}
+.loop-return {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+.loop-return span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-pill);
+  border: 1px dashed color-mix(in srgb, var(--accent) 45%, var(--rule));
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+/* Flow stages (tool evolution, context pipeline) */
+.flow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.45rem;
+  margin-top: 1rem;
+  align-items: stretch;
+}
+.flow-3 { grid-template-columns: repeat(3, 1fr); }
+.flow-step {
+  position: relative;
+  padding: 0.85rem 0.75rem;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--rule) 85%, var(--accent));
+  background: color-mix(in srgb, var(--bg) 45%, var(--bg-card));
+  text-align: center;
+}
+.flow-step .fy {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.35rem;
+}
+.flow-step .ft {
+  display: block;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0.3rem;
+  line-height: 1.3;
+}
+.flow-step .fd {
+  display: block;
+  font-size: 0.92rem;
+  color: var(--ink-muted);
+  line-height: 1.4;
+}
+.flow-step.now {
+  background: color-mix(in srgb, var(--accent) 14%, var(--bg-card));
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--rule));
+}
+
+/* N×M vs standard */
+.nxm {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0.75rem;
+  align-items: center;
+  margin-top: 1rem;
+}
+.nxm-panel {
+  padding: 0.9rem;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--rule) 85%, var(--accent));
+  background: color-mix(in srgb, var(--bg) 45%, var(--bg-card));
+}
+.nxm-panel h3 { margin: 0 0 0.55rem; font-size: 0.95rem; }
+.nxm-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.3rem;
+}
+.nxm-cell {
+  height: 1.35rem;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--ink-muted) 22%, transparent);
+  border: 1px solid color-mix(in srgb, var(--rule) 90%, transparent);
+}
+.nxm-cell.on {
+  background: color-mix(in srgb, var(--accent) 35%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--rule));
+}
+.nxm-bus {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0;
+}
+.nxm-bus .bus-line {
+  width: 3px;
+  height: 3.5rem;
+  border-radius: 2px;
+  background: var(--accent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+.nxm-bus .bus-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.nxm-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.nxm-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.nxm-pill {
+  flex: 1;
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.35rem 0.4rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--rule));
+  background: color-mix(in srgb, var(--accent) 10%, var(--bg-card));
+  color: var(--ink);
+}
+
+/* Subagent tree */
+.tree {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  justify-items: center;
+}
+.tree-root {
+  padding: 0.7rem 1.2rem;
+  border-radius: 12px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 800;
+  font-size: 0.95rem;
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+.tree-stem {
+  width: 2px;
+  height: 0.7rem;
+  background: color-mix(in srgb, var(--accent) 55%, var(--rule));
+}
+.tree-branch {
+  width: min(100%, 520px);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.55rem;
+  position: relative;
+  padding-top: 0.55rem;
+}
+.tree-branch::before {
+  content: "";
+  position: absolute;
+  left: 16%;
+  right: 16%;
+  top: 0;
+  height: 2px;
+  background: color-mix(in srgb, var(--accent) 45%, var(--rule));
+}
+.tree-leaf {
+  position: relative;
+  padding: 0.7rem 0.65rem;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--rule) 85%, var(--accent));
+  background: color-mix(in srgb, var(--bg) 45%, var(--bg-card));
+  text-align: center;
+}
+.tree-leaf::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -0.55rem;
+  width: 2px;
+  height: 0.55rem;
+  background: color-mix(in srgb, var(--accent) 45%, var(--rule));
+  transform: translateX(-50%);
+}
+.tree-leaf .tl-name {
+  display: block;
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: 0.2rem;
+}
+.tree-leaf .tl-meta {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--ink-muted);
+  line-height: 1.3;
+}
+
+/* Context window meter */
+.ctx-meter {
+  margin-top: 1rem;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--rule) 85%, var(--accent));
+  background: color-mix(in srgb, var(--bg) 45%, var(--bg-card));
+}
+.ctx-track {
+  position: relative;
+  height: 1.5rem;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--rule) 60%, transparent);
+  overflow: hidden;
+  display: flex;
+}
+.ctx-seg {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+}
+.ctx-seg.hist { width: 42%; background: color-mix(in srgb, var(--ink-muted) 55%, var(--accent)); }
+.ctx-seg.tools { width: 28%; background: color-mix(in srgb, var(--accent) 70%, #0d6b38); }
+.ctx-seg.room { width: 15%; background: color-mix(in srgb, var(--accent) 25%, transparent); color: var(--ink-muted); }
+.ctx-seg.danger { width: 15%; background: color-mix(in srgb, var(--accent) 18%, #8b4513); }
+.ctx-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 1rem;
+  margin-top: 0.65rem;
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+}
+.ctx-legend i {
+  display: inline-block;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 2px;
+  margin-right: 0.3rem;
+  vertical-align: middle;
+}
+
+/* Growth: intelligence outward */
+.grow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.55rem;
+  margin-top: 1rem;
+}
+.grow-col {
+  padding: 0.85rem 0.7rem;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--rule) 85%, var(--accent));
+  background: color-mix(in srgb, var(--bg) 45%, var(--bg-card));
+  text-align: center;
+}
+.grow-col .gy {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.55rem;
+}
+.grow-stack {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.25rem;
+  min-height: 7.5rem;
+  justify-content: flex-start;
+}
+.grow-bar {
+  border-radius: 6px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.35rem 0.4rem;
+  color: var(--accent-ink);
+}
+.grow-bar.model { background: color-mix(in srgb, var(--ink-muted) 70%, var(--accent)); }
+.grow-bar.harness { background: var(--accent); }
+.grow-col.era-1 .grow-bar.model { flex: 0 0 4.2rem; }
+.grow-col.era-1 .grow-bar.harness { flex: 0 0 1.1rem; opacity: 0.7; }
+.grow-col.era-2 .grow-bar.model { flex: 0 0 3.2rem; }
+.grow-col.era-2 .grow-bar.harness { flex: 0 0 2.6rem; }
+.grow-col.era-3 .grow-bar.model { flex: 0 0 2.4rem; }
+.grow-col.era-3 .grow-bar.harness { flex: 0 0 4.2rem; }
+
+/* Thesis: locus of intelligence */
+.locus {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem;
+  margin-top: 0.95rem;
+}
+.locus-panel {
+  padding: 1rem 1.1rem;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--rule) 85%, var(--accent));
+  background: color-mix(in srgb, var(--bg) 45%, var(--bg-card));
+  min-height: 0;
+}
+.locus-panel.outer {
+  background: color-mix(in srgb, var(--accent) 10%, var(--bg-card));
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--rule));
+}
+.locus-kicker {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.35rem;
+}
+.locus-panel h3 {
+  margin: 0 0 0.65rem;
+  font-size: 1.05rem;
+}
+.locus-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.locus-list li {
+  position: relative;
+  padding: 0.35rem 0 0.35rem 1.15rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--ink);
+  border-bottom: 1px solid color-mix(in srgb, var(--rule) 70%, transparent);
+}
+.locus-list li:last-child { border-bottom: none; }
+.locus-list li::before {
+  content: "";
+  position: absolute;
+  left: 0.1rem;
+  top: 0.7em;
+  width: 0.38rem;
+  height: 0.38rem;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.locus-panel:not(.outer) .locus-list li::before {
+  background: color-mix(in srgb, var(--ink-muted) 70%, var(--accent));
+}
+.locus-list li strong {
+  font-weight: 700;
+}
+.locus-list li span {
+  display: block;
+  font-size: 0.92rem;
+  color: var(--ink-muted);
+  margin-top: 0.15rem;
+  line-height: 1.4;
+}
+.shift-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+}
+.shift-item {
+  padding: 0.75rem 0.8rem;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--rule) 85%, var(--accent));
+  background: color-mix(in srgb, var(--bg) 40%, var(--bg-card));
+  text-align: left;
+}
+.shift-item .from {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+  text-decoration: line-through;
+  text-decoration-color: color-mix(in srgb, var(--ink-muted) 55%, transparent);
+  margin-bottom: 0.25rem;
+  line-height: 1.35;
+}
+.shift-item .to {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.35;
+}
+.shift-item .to em {
+  font-style: normal;
+  color: var(--accent);
+}
+.thesis-close {
+  margin: 0.95rem 0 0;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  border-left: 3px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 12%, transparent);
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+.thesis-close strong { font-weight: 700; color: var(--ink); }
+
+/* ── Wide desktop: fill the stage, denser multi-column layouts ───────────── */
+@media (min-width: 1100px) {
+  .deck {
+    padding: calc(var(--header-h) + 0.75rem) 1.5rem 5rem;
+  }
+
+  .slide-head h1 { max-width: min(18ch, 100%); }
+  .slide-head h2 { max-width: min(32ch, 100%); }
+  .slide.title-slide .dek { max-width: min(68ch, 100%); }
+
+  .split {
+    grid-template-columns: 1.15fr 0.95fr;
+    gap: 1.75rem 2.25rem;
+    align-items: center;
+  }
+
+  .toc {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    max-width: 60rem;
+  }
+  .toc a {
+    min-height: 4.75rem;
+    padding: 1rem 1.05rem;
+  }
+  .toc .t { font-size: 1rem; }
+
+  .evo-rail { gap: 0.55rem; margin-top: 1.15rem; }
+  .evo-label { max-width: none; font-size: 0.86rem; }
+  .evo-sub { max-width: 16ch; font-size: 0.74rem; }
+
+  .onion-lg { width: min(100%, 320px); }
+  .onion-md { width: min(100%, 160px); }
+  .onion-rail { gap: 0.65rem; }
+
+  .loop-diagram {
+    gap: 0.55rem;
+    padding: 1.15rem 1rem;
+  }
+  .loop-node { min-width: 6.5rem; padding: 0.85rem 1rem; }
+
+  .flow { gap: 0.6rem; }
+  .flow-step { padding: 0.95rem 0.85rem; }
+
+  .nxm { gap: 1.1rem; }
+  .tree-branch { width: min(100%, 720px); gap: 0.75rem; }
+  .tree-root { padding: 0.8rem 1.5rem; font-size: 1rem; }
+
+  .chain {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem 0.6rem;
+  }
+  .chain-step {
+    padding: 0.6rem 0.7rem;
+  }
+  .chain-step .when { font-size: 0.78rem; }
+  .chain-step .what { font-size: 0.92rem; }
+  .chain-step .what .fail { font-size: 0.82rem; }
+  .chain-step.endpoint {
+    flex-direction: row;
+    gap: 1.15rem;
+  }
+  .chain-step.endpoint .what { font-size: 1rem; }
+
+  .locus { gap: 1.1rem; }
+  .locus-panel { padding: 1.15rem 1.25rem; }
+  .locus-list li { font-size: 1.02rem; }
+
+  .shift-row { gap: 0.65rem; }
+
+  .sources {
+    columns: 3;
+    column-gap: 1.75rem;
+    font-size: 0.98rem;
+  }
+
+  .stack { max-width: none; }
+  .stack-layer {
+    padding: 0.8rem 1.1rem;
+    gap: 1.1rem;
+  }
+  .stack-layer .layer-name { min-width: 9rem; font-size: 0.98rem; }
+  .stack-layer .layer-desc { font-size: 0.95rem; }
+
+  .stat-row { gap: 1rem; }
+  .stat .num { font-size: clamp(1.55rem, 2.2vw, 2.1rem); }
+
+  .progress-pipe { width: min(320px, 30vw); }
+}
+
+@media (min-width: 1400px) {
+  .split {
+    grid-template-columns: 1.2fr 1fr;
+    gap: 2rem 2.75rem;
+  }
+
+  .toc {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.85rem;
+    max-width: 64rem;
+  }
+
+  .grid-3 { gap: 1rem; }
+  .grid-2 { gap: 1.1rem; }
+
+  .onion-lg { width: min(100%, 360px); }
+  .onion-md { width: min(100%, 168px); }
+
+  .tree-branch { width: min(100%, 860px); }
+
+  .chain {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.55rem 0.65rem;
+  }
+  .chain-step.endpoint {
+    grid-column: 1 / -1;
+  }
+  .chain-step .what { font-size: 0.95rem; }
+  .chain-step .what .fail { font-size: 0.85rem; }
+
+  .sources { columns: 3; column-gap: 2rem; font-size: 1rem; }
+
+  /* Title: lead + rail use full width */
+  .slide.title-slide .diagram .evo-rail {
+    margin-top: 1.35rem;
+  }
+}
+
+/* Dense but not cramped mid-width */
+@media (min-width: 900px) and (max-width: 1099px) {
+  :root { --stage: min(1000px, calc(100vw - 2rem)); }
+  .grid-4 { grid-template-columns: repeat(4, 1fr); }
+  .evo-label { max-width: 11ch; }
+  .chain { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 720px) {
+  :root { --stage: calc(100vw - 1.25rem); }
+  .grid-2, .grid-3, .grid-4, .split, .stat-row { grid-template-columns: 1fr; }
+  .toc { grid-template-columns: 1fr 1fr; gap: 0.5rem; max-width: none; }
+  .toc a { min-height: 0; padding: 0.75rem 0.8rem; }
+  .anatomy-chips { grid-template-columns: 1fr 1fr; }
+  .anatomy-band.model { flex-direction: column; gap: 0.25rem; text-align: center; }
+  .sources { columns: 1; }
+  .stack-layer { flex-direction: column; align-items: flex-start; gap: 0.25rem; }
+  .stack-layer .layer-name { min-width: 0; }
+  .chain { grid-template-columns: 1fr; }
+  .chain-step { flex-direction: column; }
+  .chain-step.endpoint {
+    grid-column: auto;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .evo-rail { grid-template-columns: 1fr 1fr; gap: 0.85rem 0.5rem; }
+  .evo-rail::before { display: none; }
+  .flow, .flow-3 { grid-template-columns: 1fr 1fr; }
+  .nxm { grid-template-columns: 1fr; }
+  .nxm-bus { flex-direction: row; }
+  .nxm-bus .bus-line { width: 2.5rem; height: 3px; }
+  .tree-branch { grid-template-columns: 1fr; }
+  .tree-branch::before, .tree-leaf::before { display: none; }
+  .onion-rail { grid-template-columns: repeat(2, 1fr); }
+  .onion-rail .onion:last-child { grid-column: 1 / -1; max-width: 168px; margin-inline: auto; }
+  .era-mark { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+  .era-mark .onion { align-self: flex-end; }
+  .locus { grid-template-columns: 1fr; }
+  .shift-row { grid-template-columns: 1fr 1fr; }
+  .loop-arrow { transform: rotate(90deg); }
+  .controls { left: 0.75rem; right: 4.5rem; transform: none; width: auto; justify-content: space-between; }
+  .progress-pipe { width: 80px; flex: 1; }
+  .hint { display: none; }
+  .site-header-inner {
+    height: auto;
+    min-height: 3rem;
+    border-radius: 1.1rem;
+    padding: 0.55rem 0.85rem;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.15rem;
+  }
+  .crumb { flex-direction: column; }
+  .crumb-root::before { content: none; }
+  #theme-toggle { width: 46px; height: 46px; right: 1rem; bottom: 1rem; }
+  .deck {
+    padding: calc(var(--header-h) + 1.35rem) 0.65rem 5.1rem;
+    align-items: stretch;
+  }
+  .slide {
+    height: 100%;
+    max-height: 100%;
+    padding: 1.15rem 1rem 1.25rem;
+  }
+  .slide-head h1 { max-width: none; font-size: clamp(1.85rem, 8vw, 2.4rem); }
+  .slide-head h2 { max-width: none; }
+  .slide-body { --prose-w: 100%; --wide-w: 100%; }
+}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#deck">Skip to presentation</a>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="site-wordmark" href="../../index.html">Chinmay Relkar</a>
+    <nav class="crumb" aria-label="Breadcrumb">
+      <span class="crumb-context">
+        <a class="crumb-root" href="../../index.html">Home</a>
+        <a class="crumb-title" href="#s0">Agent Harness</a>
+      </span>
+      <span class="crumb-position" aria-hidden="true">
+        <span class="crumb-h1" id="crumb-section"></span>
+      </span>
+    </nav>
+  </div>
+</header>
+
+<button id="theme-toggle" type="button" aria-label="Switch between light and dark mode">
+  <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1.5" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22.5"/><line x1="1.5" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22.5" y2="12"/><line x1="4.6" y1="4.6" x2="6.3" y2="6.3"/><line x1="17.7" y1="17.7" x2="19.4" y2="19.4"/><line x1="4.6" y1="19.4" x2="6.3" y2="17.7"/><line x1="17.7" y1="6.3" x2="19.4" y2="4.6"/></g></svg>
+  <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.7 14.9A8.5 8.5 0 0 1 9.1 3.3a8.5 8.5 0 1 0 11.6 11.6Z"/></svg>
+</button>
+
+<main id="deck" class="deck" aria-live="polite">
+
+<section class="slide title-slide active" id="s0" data-title="Title">
+    <p class="slide-meta"><span>Deep Dive</span><span>August 2026</span><span>~25 min</span></p>
+    <h1>The Evolution of the Agent Harness</h1>
+    <p class="dek">A four-year story: each harness layer fixed the failure the last one exposed. From a prompt-only loop (2022) to Model + Harness as the unit of capability (2026).</p>
+    <div class="diagram" aria-hidden="true">
+      <div class="evo-rail">
+        <div class="evo-node"><div class="evo-dot"></div><span class="evo-year">2022</span><span class="evo-label">Prompt loop</span></div>
+        <div class="evo-node"><div class="evo-dot"></div><span class="evo-year">2023</span><span class="evo-label">Tool contract</span></div>
+        <div class="evo-node"><div class="evo-dot"></div><span class="evo-year">2024</span><span class="evo-label">CLIs + MCP + code</span></div>
+        <div class="evo-node"><div class="evo-dot"></div><span class="evo-year">2025</span><span class="evo-label">Context + isolation</span></div>
+        <div class="evo-node hot"><div class="evo-dot"></div><span class="evo-year">2026</span><span class="evo-label">Benches + self-edit</span></div>
+      </div>
+    </div>
+    <p class="kicker"><strong>Agent = Model + Harness.</strong> Read this deck as that growth path, not a model-quality timeline.</p>
+  </section>
+
+  <section class="slide" id="s1" data-title="Agenda">
+    <p class="eyebrow">Deep dive · ~25 min</p>
+    <h2>Agenda</h2>
+    <div class="toc">
+      <a data-goto="2"><span class="n">01</span><span class="t">The arc: failure → layer</span></a>
+      <a data-goto="3"><span class="n">02</span><span class="t">What a harness is</span></a>
+      <a data-goto="4"><span class="n">03</span><span class="t">2022: Loop lives in the prompt</span></a>
+      <a data-goto="7"><span class="n">04</span><span class="t">2023: Tools become a contract</span></a>
+      <a data-goto="11"><span class="n">05</span><span class="t">2024: Coding agent as product</span></a>
+      <a data-goto="12"><span class="n">06</span><span class="t">MCP + code-as-action</span></a>
+      <a data-goto="14"><span class="n">07</span><span class="t">2025: Context, scale, isolation</span></a>
+      <a data-goto="20"><span class="n">08</span><span class="t">Across runs: sessions &amp; control</span></a>
+      <a data-goto="22"><span class="n">09</span><span class="t">Context as a variable (RLM)</span></a>
+      <a data-goto="25"><span class="n">10</span><span class="t">Anatomy of a modern harness</span></a>
+      <a data-goto="26"><span class="n">11</span><span class="t">Evals &amp; Model+Harness</span></a>
+      <a data-goto="28"><span class="n">12</span><span class="t">Self-edit, co-train, thesis</span></a>
+    </div>
+  </section>
+
+<section class="slide" id="s2" data-title="Evolution map">
+    <p class="eyebrow">Section 01 · Arc</p>
+    <h2>Four years of harness growth</h2>
+    <p class="lead">Story rule for this deck: each stage answers “what broke last time?” and ships a new layer around the same ReAct skeleton.</p>
+    <div class="diagram" role="img" aria-label="Timeline of harness evolution from 2022 to 2026">
+      <div class="evo-rail">
+        <div class="evo-node">
+          <div class="evo-dot"></div>
+          <span class="evo-year">2022</span>
+          <span class="evo-label">Prompt loop</span>
+          <span class="evo-sub">CoT → MRKL → ReAct</span>
+        </div>
+        <div class="evo-node">
+          <div class="evo-dot"></div>
+          <span class="evo-year">2023</span>
+          <span class="evo-label">Tool contract</span>
+          <span class="evo-sub">Function calling, frameworks</span>
+        </div>
+        <div class="evo-node">
+          <div class="evo-dot"></div>
+          <span class="evo-year">2024</span>
+          <span class="evo-label">Product surface</span>
+          <span class="evo-sub">CLIs, MCP, code-as-action</span>
+        </div>
+        <div class="evo-node">
+          <div class="evo-dot"></div>
+          <span class="evo-year">2025</span>
+          <span class="evo-label">Long-run machinery</span>
+          <span class="evo-sub">Context, isolation, RLM</span>
+        </div>
+        <div class="evo-node hot">
+          <div class="evo-dot"></div>
+          <span class="evo-year">2026</span>
+          <span class="evo-label">Harness as the unit</span>
+          <span class="evo-sub">Benches, self-edit, co-train next</span>
+        </div>
+      </div>
+      <p class="diagram-caption">Same circle the whole talk: each year adds a ring. The model stays in the center.</p>
+    </div>
+    <div class="onion-rail" role="img" aria-label="Concentric harness growing a ring each year from 2022 to 2026">
+      <div class="onion onion-md era-2022">
+        <svg viewBox="0 0 200 200" aria-hidden="true">
+          <circle class="o-ring o-outer" cx="100" cy="100" r="96"/><circle class="o-ring o-product" cx="100" cy="100" r="78"/><circle class="o-ring o-tools" cx="100" cy="100" r="60"/><circle class="o-ring o-loop" cx="100" cy="100" r="44"/><circle class="o-ring o-core" cx="100" cy="100" r="28"/>
+          <text class="o-label" x="100" y="100" text-anchor="middle" dy="0.35em">M</text>
+        </svg>
+        <span class="onion-cap"><strong>2022</strong>+ prompt loop</span>
+      </div>
+      <div class="onion onion-md era-2023">
+        <svg viewBox="0 0 200 200" aria-hidden="true">
+          <circle class="o-ring o-outer" cx="100" cy="100" r="96"/><circle class="o-ring o-product" cx="100" cy="100" r="78"/><circle class="o-ring o-tools" cx="100" cy="100" r="60"/><circle class="o-ring o-loop" cx="100" cy="100" r="44"/><circle class="o-ring o-core" cx="100" cy="100" r="28"/>
+          <text class="o-label" x="100" y="100" text-anchor="middle" dy="0.35em">M</text>
+        </svg>
+        <span class="onion-cap"><strong>2023</strong>+ tool contract</span>
+      </div>
+      <div class="onion onion-md era-2024">
+        <svg viewBox="0 0 200 200" aria-hidden="true">
+          <circle class="o-ring o-outer" cx="100" cy="100" r="96"/><circle class="o-ring o-product" cx="100" cy="100" r="78"/><circle class="o-ring o-tools" cx="100" cy="100" r="60"/><circle class="o-ring o-loop" cx="100" cy="100" r="44"/><circle class="o-ring o-core" cx="100" cy="100" r="28"/>
+          <text class="o-label" x="100" y="100" text-anchor="middle" dy="0.35em">M</text>
+        </svg>
+        <span class="onion-cap"><strong>2024</strong>+ product surface</span>
+      </div>
+      <div class="onion onion-md era-2025">
+        <svg viewBox="0 0 200 200" aria-hidden="true">
+          <circle class="o-ring o-outer" cx="100" cy="100" r="96"/><circle class="o-ring o-product" cx="100" cy="100" r="78"/><circle class="o-ring o-tools" cx="100" cy="100" r="60"/><circle class="o-ring o-loop" cx="100" cy="100" r="44"/><circle class="o-ring o-core" cx="100" cy="100" r="28"/>
+          <text class="o-label" x="100" y="100" text-anchor="middle" dy="0.35em">M</text>
+        </svg>
+        <span class="onion-cap"><strong>2025</strong>+ context &amp; isolation</span>
+      </div>
+      <div class="onion onion-md era-2026">
+        <svg viewBox="0 0 200 200" aria-hidden="true">
+          <circle class="o-ring o-outer" cx="100" cy="100" r="96"/><circle class="o-ring o-product" cx="100" cy="100" r="78"/><circle class="o-ring o-tools" cx="100" cy="100" r="60"/><circle class="o-ring o-loop" cx="100" cy="100" r="44"/><circle class="o-ring o-core" cx="100" cy="100" r="28"/>
+          <text class="o-label" x="100" y="100" text-anchor="middle" dy="0.35em">M</text>
+        </svg>
+        <span class="onion-cap"><strong>2026</strong>+ self-edit &amp; benches</span>
+      </div>
+    </div>
+  </section>
+
+<section class="slide" id="s3" data-title="Definition">
+    <p class="eyebrow">Section 02 · Definition</p>
+    <h2>What is an agent harness?</h2>
+    <div class="split">
+      <div>
+        <p class="lead">The software around an LLM that turns it into an agent: prompts, tools, the control loop, context and memory, permissions, and (often) sessions or skills. Distinct from the model’s own reasoning.</p>
+        <div class="formula">
+          <span class="chip">Agent</span>
+          <span class="op">=</span>
+          <span class="chip">Model</span>
+          <span class="op">+</span>
+          <span class="chip accent">Harness</span>
+        </div>
+        <p class="muted" style="margin-top:1rem;margin-bottom:0">Job of a harness: get the model the right context at the right time. Watch this circle gain a ring on each chapter: same model, thicker harness.</p>
+      </div>
+      <div class="diagram" role="img" aria-label="Concentric diagram: model core with harness rings that grow over the talk">
+        <div class="onion onion-lg era-full">
+          <svg viewBox="0 0 200 200" aria-hidden="true">
+            <circle class="o-ring o-outer" cx="100" cy="100" r="96"/>
+            <circle class="o-ring o-product" cx="100" cy="100" r="78"/>
+            <circle class="o-ring o-tools" cx="100" cy="100" r="60"/>
+            <circle class="o-ring o-loop" cx="100" cy="100" r="44"/>
+            <circle class="o-ring o-core" cx="100" cy="100" r="28"/>
+            <text class="o-label" x="100" y="100" text-anchor="middle" dy="0.35em">Model</text>
+          </svg>
+        </div>
+        <div class="anatomy-legend">
+          <span><strong>Core</strong> model</span>
+          <span><strong>Loop</strong> ReAct</span>
+          <span><strong>Tools</strong> contract</span>
+          <span><strong>Product</strong> CLIs / MCP</span>
+          <span><strong>Outer</strong> context, isolation, skills, self-edit</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<section class="slide" id="s4" data-title="2022: Prompting">
+    <p class="eyebrow">Section 03 · 2022</p>
+    <h2>The prompting era: the loop lives in text</h2>
+    <div class="era-mark">
+      <p class="lead">Chapter start: before there is a “harness,” everything is text. No architecture change yet. Reasoning, routing, and action are all steered by what you put in the prompt.</p>
+      <div class="onion onion-sm era-2022" aria-hidden="true" title="2022: first harness ring = prompt loop">
+        <svg viewBox="0 0 200 200"><circle class="o-ring o-outer" cx="100" cy="100" r="96"/><circle class="o-ring o-product" cx="100" cy="100" r="78"/><circle class="o-ring o-tools" cx="100" cy="100" r="60"/><circle class="o-ring o-loop" cx="100" cy="100" r="44"/><circle class="o-ring o-core" cx="100" cy="100" r="28"/><text class="o-label" x="100" y="100" text-anchor="middle" dy="0.35em">M</text></svg>
+        <span class="onion-cap"><strong>+ loop</strong></span>
+      </div>
+    </div>
+    <div class="diagram" role="img" aria-label="2022 evolution steps from Chain of Thought to ReAct">
+      <div class="flow flow-3">
+        <div class="flow-step">
+          <span class="fy">Jan 2022</span>
+          <span class="ft">Chain-of-Thought</span>
+          <span class="fd">Reasoning made visible via exemplars</span>
+        </div>
+        <div class="flow-step">
+          <span class="fy">May 2022</span>
+          <span class="ft">MRKL</span>
+          <span class="fd">LLM as one component among external modules</span>
+        </div>
+        <div class="flow-step now">
+          <span class="fy">Oct 2022</span>
+          <span class="ft">ReAct</span>
+          <span class="fd">Reason → act → observe becomes the skeleton</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<section class="slide" id="s5" data-title="CoT &amp; MRKL">
+    <p class="eyebrow">Section 03 · Foundations</p>
+    <h2>Two preconditions for the harness</h2>
+    <div class="split">
+      <div>
+        <h3>Chain-of-Thought (Jan 2022)</h3>
+        <p>Wei et al.: few worked examples that spell out intermediate steps sharply improve complex reasoning. Gains show up on zero/few-shot math and reasoning evals (e.g. grade-school math) that reward intermediate work, not only a final token.</p>
+        <p class="muted">Premise every later harness builds on: a model’s internal state can be steered by text alone. Evals already set the target.</p>
+      </div>
+      <div>
+        <h3>MRKL (May 2022)</h3>
+        <p>AI21’s neuro-symbolic framing: the language model is one component routed to discrete modules (calculators, APIs, databases) as needed.</p>
+        <p class="muted">Named the limitation harnesses exist to fix: LLMs are fluent but can’t do arithmetic or fact-lookup reliably. Direct ancestor of tool calling and MCP.</p>
+      </div>
+    </div>
+  </section>
+
+<section class="slide" id="s6" data-title="ReAct">
+    <p class="eyebrow">Section 03 · ReAct</p>
+    <h2>ReAct fused thought and action</h2>
+    <p>Yao et al. (Oct 2022) interleaved reasoning traces with actions so a model could think, act on an external environment, observe the result, and think again. Eval pressure: on ALFWorld (environment success, not a string match) it beat imitation and RL baselines by 34 absolute points with 1-2 examples.</p>
+    <div class="diagram" role="img" aria-label="ReAct loop: reason, act, observe, repeat">
+      <div class="loop-diagram">
+        <div class="loop-node"><span class="ln">1</span><span class="lt">Reason</span></div>
+        <span class="loop-arrow" aria-hidden="true">→</span>
+        <div class="loop-node"><span class="ln">2</span><span class="lt">Act</span></div>
+        <span class="loop-arrow" aria-hidden="true">→</span>
+        <div class="loop-node"><span class="ln">3</span><span class="lt">Observe</span></div>
+        <span class="loop-arrow" aria-hidden="true">→</span>
+        <div class="loop-node"><span class="ln">4</span><span class="lt">Repeat</span></div>
+      </div>
+      <div class="loop-return"><span>↻ still the skeleton of every harness today</span></div>
+    </div>
+    <p class="pull">Reasoning traces help the model induce, track, and update action plans; actions let it interface with external sources to gather information.<cite>ReAct, 2022: the loop, in one sentence</cite></p>
+  </section>
+
+<section class="slide" id="s7" data-title="2023: Tools">
+    <p class="eyebrow">Section 04 · Tools</p>
+    <h2>Making tool use reliable</h2>
+    <div class="era-mark">
+      <p class="lead">Next failure: free-text ReAct actions are brittle to parse. 2023 moves tool decisions into models, then into a structured contract the harness can dispatch.</p>
+      <div class="onion onion-sm era-2023" aria-hidden="true" title="2023: tools ring">
+        <svg viewBox="0 0 200 200"><circle class="o-ring o-outer" cx="100" cy="100" r="96"/><circle class="o-ring o-product" cx="100" cy="100" r="78"/><circle class="o-ring o-tools" cx="100" cy="100" r="60"/><circle class="o-ring o-loop" cx="100" cy="100" r="44"/><circle class="o-ring o-core" cx="100" cy="100" r="28"/><text class="o-label" x="100" y="100" text-anchor="middle" dy="0.35em">M</text></svg>
+        <span class="onion-cap"><strong>+ tools</strong></span>
+      </div>
+    </div>
+    <div class="diagram" role="img" aria-label="Evolution of tool interfaces from free text to Assistants API">
+      <div class="flow flow-3">
+        <div class="flow-step">
+          <span class="fy">Feb 2023</span>
+          <span class="ft">Toolformer</span>
+          <span class="fd">Model learns when and how to call APIs</span>
+        </div>
+        <div class="flow-step now">
+          <span class="fy">Jun 2023</span>
+          <span class="ft">Function calling</span>
+          <span class="fd">Structured JSON contract replaces free-text parse</span>
+        </div>
+        <div class="flow-step">
+          <span class="fy">Nov 2023</span>
+          <span class="ft">Assistants API</span>
+          <span class="fd">Managed threads, sandboxed Code Interpreter, retrieval</span>
+        </div>
+      </div>
+      <p class="diagram-caption">Path: free-text ReAct actions → Toolformer (in-model) → OpenAI function calling (typed contract).</p>
+    </div>
+  </section>
+
+<section class="slide" id="s8" data-title="Function calling">
+    <p class="eyebrow">Section 04 · Contract</p>
+    <h2>Function calling gave the loop a contract</h2>
+    <div class="split">
+      <div>
+        <p>Developers describe functions; the model emits a structured JSON object naming the function and its arguments. Fragile text parsing became a machine-readable interface.</p>
+        <p>By DevDay (Nov 2023): parallel calls in one message, plus JSON mode that guaranteed valid output.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Why it mattered</span>
+        <h3>Dispatch, not guesswork</h3>
+        <p>The harness no longer had to guess intent from prose. It received a typed call it could dispatch directly. Major frameworks reorganized their tool layers around this contract within months.</p>
+      </div>
+    </div>
+    <div class="stat-row" style="grid-template-columns:1fr 1fr;margin-top:1rem">
+      <div class="stat">
+        <span class="num">Before</span>
+        <span class="label">Harness guessed tool intent by parsing free-text “Action: …” lines</span>
+      </div>
+      <div class="stat">
+        <span class="num">After</span>
+        <span class="label">Model emits a typed function name + arguments; harness only dispatches</span>
+      </div>
+    </div>
+  </section>
+
+<section class="slide" id="s9" data-title="Assistants API">
+    <p class="eyebrow">Section 04 · Nov 2023</p>
+    <h2>Assistants: context becomes a platform job</h2>
+    <p class="lead">OpenAI’s Assistants API is an early hosted harness surface: persistent threads, server-side context handling, Code Interpreter, and Retrieval. Context management stops being only the app’s problem.</p>
+    <div class="grid-3">
+      <div class="card">
+        <span class="tag">Threads</span>
+        <h3>Managed history</h3>
+        <p>Long-running conversation state offloaded to the platform, not stuffed into one prompt by hand.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Tools</span>
+        <h3>Hosted execution</h3>
+        <p>Sandboxed Code Interpreter and retrieval as product features of the loop, not bespoke glue.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Why it matters</span>
+        <h3>Harness, not demo</h3>
+        <p>Marks the shift from “script a ReAct loop” to “ship an agent runtime customers sit inside.”</p>
+      </div>
+    </div>
+  </section>
+
+<section class="slide" id="s10" data-title="Frameworks">
+    <p class="eyebrow">Section 04 · Frameworks</p>
+    <h2>The framework explosion, and its limits</h2>
+    <div class="grid-3">
+      <div class="card">
+        <span class="tag">Productization</span>
+        <h3>LangChain</h3>
+        <p>Packaged ReAct as <code>AgentExecutor</code>. Early Action Agents: input → tool → observation → history → repeat.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Autonomy</span>
+        <h3>AutoGPT</h3>
+        <p>Self-planning goals, unattended runs. Exposed task drift, looping, and token burn from no memory discipline.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Separation</span>
+        <h3>Plan-and-Execute</h3>
+        <p>Planner vs executor to fight prompt bloat. Precursor to subagent isolation and offloading intermediate steps.</p>
+      </div>
+    </div>
+    <p class="pull" style="margin-top:1rem">The lesson that shaped the next two years: raw autonomy without context management and structure is unreliable. SWE-bench (Oct 2023) already scores model + scaffold on real GitHub issues.</p>
+  </section>
+
+<section class="slide" id="s11" data-title="Coding harness product">
+    <p class="eyebrow">Section 05 · 2024-25</p>
+    <h2>The coding harness becomes the product</h2>
+    <div class="era-mark">
+      <p class="lead">Next failure: demos and notebook agents are not daily engineering. Frameworks abstract the loop; coding products make it installable: repo, shell, git, permissions, project files as default context.</p>
+      <div class="onion onion-sm era-2024" aria-hidden="true" title="2024: product surface ring">
+        <svg viewBox="0 0 200 200"><circle class="o-ring o-outer" cx="100" cy="100" r="96"/><circle class="o-ring o-product" cx="100" cy="100" r="78"/><circle class="o-ring o-tools" cx="100" cy="100" r="60"/><circle class="o-ring o-loop" cx="100" cy="100" r="44"/><circle class="o-ring o-core" cx="100" cy="100" r="28"/><text class="o-label" x="100" y="100" text-anchor="middle" dy="0.35em">M</text></svg>
+        <span class="onion-cap"><strong>+ product</strong></span>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <span class="tag">Lineage</span>
+        <h3>From scaffold to product</h3>
+        <p>SWE-agent and agent-computer interfaces (2024) make “how the agent touches the machine” first-class. Aider stays git-native. Cursor, Claude Code, Codex CLI, OpenHands, Cline, OpenCode, pi become daily harnesses.</p>
+      </div>
+      <div class="card">
+        <span class="tag">What they add</span>
+        <h3>Batteries for real work</h3>
+        <p>Repo maps, edit tools, test loops, PR workflows, permission modes, sessions on disk. The harness, not a notebook script, is what developers install.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Concurrent</span>
+        <h3>Multi-agent frameworks</h3>
+        <p>AutoGen / Crew-style systems parallel the coding CLI wave: multi-role orchestration before “subagents” go mainstream in coding products.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Eval link</span>
+        <h3>SWE-bench era</h3>
+        <p>SWE-bench (Oct 2023) and SWE-bench Verified (Aug 2024) already score model+scaffold. Terminal-Bench 1.0 (May 2025) and 2.0 (Nov 2025). Agent quality is measured inside a harness long before 2026.</p>
+      </div>
+    </div>
+  </section>
+
+<section class="slide" id="s12" data-title="MCP">
+    <p class="eyebrow">Section 06 · MCP · Nov 2024</p>
+    <h2>MCP standardized tool integration</h2>
+    <p class="lead">Next failure: every agent–tool pair needs a custom connector (N×M). MCP (25 Nov 2024) is a client–server bus over JSON-RPC 2.0 so any compliant agent can use any compliant tool (USB-C for AI).</p>
+    <p>Anthropic deliberately reused Language Server Protocol ideas. Adoption: OpenAI Mar 2025, Google DeepMind Apr 2025; donated to the Agentic AI Foundation (Linux Foundation) Dec 2025.</p>
+    <div class="diagram" role="img" aria-label="Before MCP many custom connectors; after MCP a shared bus">
+      <div class="nxm">
+        <div class="nxm-panel">
+          <h3>Before: N×M connectors</h3>
+          <div class="nxm-grid">
+            <div class="nxm-cell on"></div><div class="nxm-cell on"></div><div class="nxm-cell on"></div>
+            <div class="nxm-cell on"></div><div class="nxm-cell on"></div><div class="nxm-cell on"></div>
+            <div class="nxm-cell on"></div><div class="nxm-cell on"></div><div class="nxm-cell on"></div>
+          </div>
+          <p class="muted" style="margin:0.55rem 0 0;font-size:0.75rem;text-align:center">Every agent × every tool</p>
+        </div>
+        <div class="nxm-bus">
+          <span class="bus-label">MCP</span>
+          <div class="bus-line"></div>
+          <span class="bus-label">USB-C</span>
+        </div>
+        <div class="nxm-panel">
+          <h3>After: one standard bus</h3>
+          <div class="nxm-rows">
+            <div class="nxm-row"><span class="nxm-pill">Agent A</span><span class="nxm-pill">Agent B</span></div>
+            <div class="nxm-row" style="justify-content:center"><span class="nxm-pill" style="background:var(--accent);color:var(--accent-ink);border-color:var(--accent)">JSON-RPC bus</span></div>
+            <div class="nxm-row"><span class="nxm-pill">Tool X</span><span class="nxm-pill">Tool Y</span><span class="nxm-pill">Tool Z</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<section class="slide" id="s13" data-title="Code as action">
+    <p class="eyebrow">Section 06 · Action surface · late 2024</p>
+    <h2>When JSON tools are too rigid: act in code</h2>
+    <p class="lead">Fixed function schemas compose poorly for multi-step data work. The next move is not more tools: it is letting the model write the action as code.</p>
+    <div class="grid-2">
+      <div class="card">
+        <span class="tag">Failure</span>
+        <h3>JSON tool calls hit a ceiling</h3>
+        <p>Each step is one named function + args. Filtering, looping, and intermediate transforms either burn tokens through the model or force a combinatorial tool zoo.</p>
+      </div>
+      <div class="card">
+        <span class="tag">smolagents · late 2024</span>
+        <h3>Code as the action language</h3>
+        <p>Hugging Face CodeAgent: ReAct steps are Python snippets, not JSON tool calls. Optional sandboxed exec. The harness runs the code and returns results to the loop.</p>
+      </div>
+      <div class="card">
+        <span class="tag">What changed</span>
+        <h3>Action surface, not the whole harness</h3>
+        <p>Code-as-action upgrades <em>how</em> the agent acts on tools and data. It does not yet rewrite prompts, skills, or subagent specs. That is a later chapter.</p>
+      </div>
+      <div class="card">
+        <span class="tag">What it leaves open</span>
+        <h3>History is still a window</h3>
+        <p>Long runs still pack transcript and tool I/O into the prompt. Compaction and offload come next. Treating context itself as a programmable variable (RLM) arrives in late 2025.</p>
+      </div>
+    </div>
+  </section>
+
+<section class="slide" id="s14" data-title="Context problem">
+    <p class="eyebrow">Section 07 · Context</p>
+    <h2>Every long run overflows a finite window</h2>
+    <div class="era-mark">
+      <p class="lead">Next failure: long product runs fill a finite window. History, tool I/O, and intermediate steps cause overflow and context rot. Managing this becomes the defining 2025 harness job.</p>
+      <div class="onion onion-sm era-2025" aria-hidden="true" title="2025: outer ring starts (context)">
+        <svg viewBox="0 0 200 200"><circle class="o-ring o-outer" cx="100" cy="100" r="96"/><circle class="o-ring o-product" cx="100" cy="100" r="78"/><circle class="o-ring o-tools" cx="100" cy="100" r="60"/><circle class="o-ring o-loop" cx="100" cy="100" r="44"/><circle class="o-ring o-core" cx="100" cy="100" r="28"/><text class="o-label" x="100" y="100" text-anchor="middle" dy="0.35em">M</text></svg>
+        <span class="onion-cap"><strong>+ context</strong></span>
+      </div>
+    </div>
+    <div class="diagram" role="img" aria-label="Context window filling with history tools and little room left">
+      <div class="ctx-meter">
+        <div class="ctx-track">
+          <div class="ctx-seg hist">History</div>
+          <div class="ctx-seg tools">Tool I/O</div>
+          <div class="ctx-seg room">Room</div>
+          <div class="ctx-seg danger">Overflow</div>
+        </div>
+        <div class="ctx-legend">
+          <span><i style="background:color-mix(in srgb, var(--ink-muted) 55%, var(--accent))"></i>Transcript</span>
+          <span><i style="background:color-mix(in srgb, var(--accent) 70%, #0d6b38)"></i>Tool results</span>
+          <span><i style="background:color-mix(in srgb, var(--accent) 25%, transparent)"></i>Working room</span>
+          <span><i style="background:color-mix(in srgb, var(--accent) 18%, #8b4513)"></i>Context rot zone</span>
+        </div>
+      </div>
+    </div>
+    <div class="grid-2" style="margin-top:0.85rem">
+      <div class="card">
+        <span class="tag">Failure mode</span>
+        <h3>Context rot</h3>
+        <p>Degraded performance as the window fills: not a hard crash, a soft loss of focus and fidelity.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Insidious failure</span>
+        <h3>Goal drift</h3>
+        <p>After lossy summarization, the agent forgets the user’s intent. Summaries drop details unpredictably.</p>
+      </div>
+    </div>
+  </section>
+
+<section class="slide" id="s15" data-title="Compaction">
+    <p class="eyebrow">Section 07 · Compaction</p>
+    <h2>Offloading and compaction became standard</h2>
+    <p class="lead">Answer to overflow: push big tool results and stale history out of the window, keep a short working set, and leave the full transcript recoverable on disk.</p>
+    <p>Pattern from production systems (e.g. LangChain Deep Agents SDK) at rising thresholds:</p>
+    <div class="diagram" role="img" aria-label="Three stage context management pipeline">
+      <div class="flow flow-3">
+        <div class="flow-step">
+          <span class="fy">~20k tokens</span>
+          <span class="ft">Offload results</span>
+          <span class="fd">Write to disk; keep path + preview</span>
+        </div>
+        <div class="flow-step">
+          <span class="fy">~85% window</span>
+          <span class="ft">Offload inputs</span>
+          <span class="fd">Truncate old args to pointers</span>
+        </div>
+        <div class="flow-step now">
+          <span class="fy">Still full</span>
+          <span class="ft">Summarize</span>
+          <span class="fd">Intent, artifacts, next steps; full transcript on disk</span>
+        </div>
+      </div>
+      <p class="diagram-caption">Lossy summary + recoverable filesystem is the standard recovery pair.</p>
+    </div>
+  </section>
+
+<section class="slide" id="s16" data-title="Code + MCP">
+    <p class="eyebrow">Section 07 · Progressive disclosure · Nov 2025</p>
+    <h2>Too many tools → code APIs</h2>
+    <p class="lead">Next failure: hundreds of tool schemas and every intermediate result through the model burn context. After code-as-action and long runs, progressive disclosure becomes standard (Nov 2025 “code execution with MCP”).</p>
+    <div class="diagram" role="img" aria-label="Progressive disclosure: load only tools needed">
+      <div class="flow">
+        <div class="flow-step">
+          <span class="fy">Before</span>
+          <span class="ft">All schemas in</span>
+          <span class="fd">Hundreds of tool defs in the prompt</span>
+        </div>
+        <div class="flow-step">
+          <span class="fy">Pattern</span>
+          <span class="ft">Code APIs</span>
+          <span class="fd">MCP servers as a filesystem</span>
+        </div>
+        <div class="flow-step now">
+          <span class="fy">On demand</span>
+          <span class="ft">Discover + filter</span>
+          <span class="fd">Only needed tools reach the model</span>
+        </div>
+        <div class="flow-step">
+          <span class="fy">Result</span>
+          <span class="ft">150k → 2k</span>
+          <span class="fd">98.7% token save in one documented example</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<section class="slide" id="s17" data-title="Subagents">
+    <p class="eyebrow">Section 08 · Subagents</p>
+    <h2>Subagents keep the main context clean</h2>
+    <p class="lead">Next failure: one loop does everything and bloats itself. Isolation: the main agent hands side work to a subagent with its own prompt, tools, and permissions, and keeps only a summary.</p>
+    <div class="diagram" role="img" aria-label="Main agent delegates to Explore Plan and Custom subagents">
+      <div class="tree">
+        <div class="tree-root">Main agent (clean context)</div>
+        <div class="tree-stem"></div>
+        <div class="tree-branch">
+          <div class="tree-leaf">
+            <span class="tl-name">Explore</span>
+            <span class="tl-meta">Read-only · denied Write/Edit</span>
+          </div>
+          <div class="tree-leaf">
+            <span class="tl-name">Plan</span>
+            <span class="tl-meta">Isolated thinking · returns plan</span>
+          </div>
+          <div class="tree-leaf">
+            <span class="tl-name">Custom</span>
+            <span class="tl-meta">Markdown-defined · least privilege</span>
+          </div>
+        </div>
+      </div>
+      <p class="diagram-caption">Only a summary returns to the main context. Descendant of 2023 plan/execute with true isolation.</p>
+    </div>
+  </section>
+
+<section class="slide" id="s18" data-title="Control plane">
+    <p class="eyebrow">Section 08 · Orchestration</p>
+    <h2>From loop to operating system</h2>
+    <p class="lead">Once many workers share a task, a bare ReAct loop is not enough. High-end systems add an explicit control plane:</p>
+    <div class="stack">
+      <div class="stack-layer">
+        <span class="layer-name">Planning</span>
+        <span class="layer-desc">Goal decomposition, todos, prioritization</span>
+      </div>
+      <div class="stack-layer">
+        <span class="layer-name">Policy</span>
+        <span class="layer-desc">Enforcement of permissions and approval gates</span>
+      </div>
+      <div class="stack-layer">
+        <span class="layer-name">State / knowledge</span>
+        <span class="layer-desc">Durable memory, artifacts, session stores</span>
+      </div>
+      <div class="stack-layer">
+        <span class="layer-name">Observability</span>
+        <span class="layer-desc">Quality checks, traces, retries, call limits</span>
+      </div>
+      <div class="stack-layer core">
+        <span class="layer-name">Protocols</span>
+        <span class="layer-desc">MCP for tools · emerging A2A for peer coordination</span>
+      </div>
+    </div>
+  </section>
+
+<section class="slide" id="s19" data-title="Sandboxing">
+    <p class="eyebrow">Section 08 · Sandboxing</p>
+    <h2>Instructions aren’t security; the OS is</h2>
+    <p class="lead">Next failure: prompt “don’t touch X” is not security once the agent has a real shell. Sandboxes are not new (Code Interpreter 2023); local coding agents made OS enforcement urgent.</p>
+    <p>A regex banning <code>git</code> loses to <code>bash -c</code> or a renamed binary; poisoned <code>AGENTS.md</code> made the risk concrete. Serious products wired Seatbelt / bubblewrap (or a remote box) into the agent runtime.</p>
+    <div class="grid-3">
+      <div class="card">
+        <span class="tag">macOS</span>
+        <h3>Seatbelt</h3>
+        <p>OS-level profiles restricting filesystem and network.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Linux</span>
+        <h3>Bubblewrap</h3>
+        <p>Namespaces and isolation around the agent process.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Windows</span>
+        <h3>WSL</h3>
+        <p>Contained environments for agent shell access.</p>
+      </div>
+    </div>
+    <p class="muted" style="margin-top:1rem;margin-bottom:0">Subagents get independent least-privilege tool scopes; high-impact actions gated by human approval. Sandboxing is defense-in-depth: it can’t stop a script the agent tricks you into running outside it.</p>
+  </section>
+
+<section class="slide" id="s20" data-title="Sessions &amp; skills">
+    <p class="eyebrow">Section 09 · Across runs</p>
+    <h2>Sessions, skills, and project judgment</h2>
+    <p class="lead">Next failure: capability dies when the process exits. The harness stops being single-run: sessions, project judgment, and skills persist as files the next session loads.</p>
+    <div class="grid-2">
+      <div class="card">
+        <span class="tag">Sessions</span>
+        <h3>JSONL / resume</h3>
+        <p>Append-only transcripts: rewind, resume, recover mid-task without starting from zero.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Project files</span>
+        <h3>AGENTS.md / CLAUDE.md</h3>
+        <p>Team judgment loaded at boot: style, architecture, “done” criteria. Converges on portable formats (e.g. AGENTS.md under AAIF-era standards).</p>
+      </div>
+      <div class="card">
+        <span class="tag">Skills</span>
+        <h3>Procedures on disk</h3>
+        <p>Folders of instructions + scripts, progressive disclosure by description. Agents can author skills; humans version them in git.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Memory</span>
+        <h3>What to keep</h3>
+        <p>Auto-saved learnings and cross-session notes: not full chat dump, but curated harness state.</p>
+      </div>
+    </div>
+  </section>
+
+<section class="slide" id="s21" data-title="Hooks &amp; plan mode">
+    <p class="eyebrow">Section 09 · Control surface</p>
+    <h2>Hooks, plan mode, verification loops</h2>
+    <p class="lead">Modern coding harnesses add deterministic control the model cannot ignore, plus plan-before-act and test/review loops.</p>
+    <div class="grid-3">
+      <div class="card">
+        <span class="tag">Hooks</span>
+        <h3>Lifecycle automation</h3>
+        <p>Pre/Post tool use, stop, session start: shell or policy that always runs. Permissions and hygiene that prompts alone cannot guarantee.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Plan mode</span>
+        <h3>Read-only think first</h3>
+        <p>Separate planning from edits (Claude Code plan mode, Cline-style plan/act). Reduces thrash on large changes.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Close the loop</span>
+        <h3>Verify in the harness</h3>
+        <p>Run tests, lint, agent self-review, multi-reviewer subagents, Ralph-style re-inject-until-done. Outcome checks become part of the loop, not a human afterthought.</p>
+      </div>
+    </div>
+  </section>
+
+<section class="slide" id="s22" data-title="Context as variable">
+    <p class="eyebrow">Section 09 · Late 2025 · RLM</p>
+    <h2>Context stops being only a window</h2>
+    <div class="era-mark">
+      <p class="lead">Compaction and offload keep long runs alive but are lossy if everything must re-enter the prompt. Late 2025 answer: treat context as a variable the model can program over.</p>
+      <div class="onion onion-sm era-2025" aria-hidden="true" title="Late 2025: outer ring deepens (RLM)">
+        <svg viewBox="0 0 200 200"><circle class="o-ring o-outer" cx="100" cy="100" r="96"/><circle class="o-ring o-product" cx="100" cy="100" r="78"/><circle class="o-ring o-tools" cx="100" cy="100" r="60"/><circle class="o-ring o-loop" cx="100" cy="100" r="44"/><circle class="o-ring o-core" cx="100" cy="100" r="28"/><text class="o-label" x="100" y="100" text-anchor="middle" dy="0.35em">M</text></svg>
+        <span class="onion-cap"><strong>+ RLM</strong></span>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <span class="tag">Failure mode</span>
+        <h3>Window + compaction ceiling</h3>
+        <p>History and tool I/O either burn tokens or get summarized away. Files on disk help, but the model still cannot query, slice, and transform its own past as code without reloading it into the window.</p>
+      </div>
+      <div class="card">
+        <span class="tag">RLM · Oct–Dec 2025</span>
+        <h3>Recursive Language Models</h3>
+        <p>Zhang et al. (blog Oct 2025; arXiv 2512.24601, 31 Dec 2025): put the long prompt in an external environment (a REPL variable). The model writes code to inspect it and can call sub-LMs recursively over slices.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Idea</span>
+        <h3>Context as a variable</h3>
+        <p>Not “stuff more into the window.” Hold full history and data as programmable state. Compact the active prompt when needed; keep the rest addressable in the REPL.</p>
+      </div>
+      <div class="card">
+        <span class="tag">What comes next</span>
+        <h3>Product + self-edit in 2026</h3>
+        <p>Prime Agent productizes RLM (IPython as the main surface, subagents as <code>rlm(...)</code>). Self-editing harnesses are a separate move: rewrite prompts, skills, and subagent specs from trajectory evidence.</p>
+      </div>
+    </div>
+    <p class="muted" style="margin-top:0.85rem;margin-bottom:0">Timeline check: code-as-action ≈ late 2024. Context-as-variable (RLM) ≈ late 2025. Do not collapse them into one date.</p>
+  </section>
+
+  <section class="slide" id="s23" data-title="Vocabulary">
+    <p class="eyebrow">Section 10 · Vocabulary · late 2025</p>
+    <h2>Framework vs runtime vs harness</h2>
+    <p class="lead">By late 2025 the stack was thick enough to need names. Not a 2022 invention: a late label for a split that grew with the field. Without it, “we built an agent” meant three different jobs.</p>
+    <table>
+      <thead>
+        <tr><th>Layer</th><th>Job</th><th>Fixed which failure</th><th>Examples</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Framework</td>
+          <td>Abstractions to assemble agents</td>
+          <td>Everyone reimplements ReAct by hand</td>
+          <td>LangChain</td>
+        </tr>
+        <tr>
+          <td>Runtime</td>
+          <td>Durable multi-step execution</td>
+          <td>Long runs die, drift, or lose state</td>
+          <td>LangGraph-style durable runs</td>
+        </tr>
+        <tr>
+          <td>Harness</td>
+          <td>Batteries-included model environment</td>
+          <td>A library graph is not a daily coding agent</td>
+          <td>Claude Code, Codex, Deep Agents, Prime Agent</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="muted" style="margin-top:0.9rem;margin-bottom:0">Frameworks build. Runtimes keep runs alive. The harness is what the model sits in each turn, and what this talk evolves. Self-editing later rewrites the harness, not the framework API.</p>
+  </section>
+
+<section class="slide" id="s24" data-title="Harness stack">
+    <p class="eyebrow">Section 10 · Product loop</p>
+    <h2>Still ReAct; everything else is scaffolding</h2>
+    <p class="lead">Checkpoint: after all the layers above, the product loop is still ReAct. Claude Code frames it as gather context, take action, verify results. Everything else is scaffolding around that skeleton.</p>
+    <div class="grid-2">
+      <div class="card">
+        <span class="tag">Execution</span>
+        <h3>Environment</h3>
+        <p>Tools, persistent filesystem, code execution. Isolation is optional enforcement, not the harness.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Context</span>
+        <h3>Management</h3>
+        <p>Summarization, offloading, cross-session memory, on-demand skills.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Planning</span>
+        <h3>Delegation</h3>
+        <p>Todos and subagents in isolated contexts; plan mode before edits.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Safety</span>
+        <h3>Control</h3>
+        <p>Permissions, hooks the model cannot skip, human approval, verification loops.</p>
+      </div>
+    </div>
+  </section>
+
+<section class="slide" id="s25" data-title="Anatomy">
+    <p class="eyebrow">Section 10 · Assembled</p>
+    <h2>What a harness contains</h2>
+    <div class="anatomy-map" role="img" aria-label="Layered harness: model core, harness layers, optional sandbox">
+      <div class="anatomy-band model">
+        <span class="model-name">Model</span>
+        <span class="model-note">Reasons, acts, observes</span>
+      </div>
+      <div class="anatomy-band harness">
+        <div class="anatomy-band-label">
+          <strong>Harness</strong>
+          <span>Always around the model</span>
+        </div>
+        <div class="anatomy-chips">
+          <div class="anatomy-chip">
+            <h3>System prompts</h3>
+            <p>Defaults and instruction structure each turn</p>
+          </div>
+          <div class="anatomy-chip">
+            <h3>Tools, skills, MCP</h3>
+            <p>Capability surface and progressive disclosure</p>
+          </div>
+          <div class="anatomy-chip">
+            <h3>Orchestration loop</h3>
+            <p>Reason → act → observe (still ReAct)</p>
+          </div>
+          <div class="anatomy-chip">
+            <h3>Context machinery</h3>
+            <p>Compaction, offload; context as variable (RLM)</p>
+          </div>
+          <div class="anatomy-chip">
+            <h3>Sessions &amp; project files</h3>
+            <p>JSONL, AGENTS.md, cross-run state</p>
+          </div>
+          <div class="anatomy-chip">
+            <h3>Subagents</h3>
+            <p>Isolated contexts; return a summary</p>
+          </div>
+          <div class="anatomy-chip">
+            <h3>Hooks &amp; plan mode</h3>
+            <p>Deterministic lifecycle; plan-before-act</p>
+          </div>
+          <div class="anatomy-chip">
+            <h3>Permissions</h3>
+            <p>Least privilege, human approval</p>
+          </div>
+          <div class="anatomy-chip">
+            <h3>Verification</h3>
+            <p>Tests, review agents, stop conditions</p>
+          </div>
+        </div>
+      </div>
+      <div class="anatomy-band optional">
+        <div class="anatomy-band-label">
+          <strong>Optional enforcement</strong>
+          <span>Not the harness itself</span>
+        </div>
+        <div class="anatomy-chips" style="grid-template-columns:1fr">
+          <div class="anatomy-chip">
+            <h3>OS sandbox or remote runtime</h3>
+            <p>Seatbelt / bubblewrap / container / cloud box: enforces policy when shell would ignore prompts. Some products ship it; many do not.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<section class="slide" id="s26" data-title="Harness on the benches">
+    <p class="eyebrow">Section 11 · Evals co-evolved</p>
+    <h2>Evals were there from the start</h2>
+    <p class="lead">Harness progress was always eval-driven. What changed is not that evals appeared, but what they ask for and how much of the system they can see.</p>
+    <div class="flow" role="img" aria-label="Evolution of evals from zero-shot prompting to harness as axis">
+      <div class="flow-step">
+        <span class="fy">Prompt era</span>
+        <span class="ft">Zero-shot / few-shot</span>
+        <span class="fd">Score the model under a fixed prompt. CoT wins because evals reward intermediate steps.</span>
+      </div>
+      <div class="flow-step">
+        <span class="fy">Tool era</span>
+        <span class="ft">Call correctness</span>
+        <span class="fd">Right API, right args. Toolformer and function-call suites.</span>
+      </div>
+      <div class="flow-step">
+        <span class="fy">Agent envs</span>
+        <span class="ft">Task completion</span>
+        <span class="fd">ALFWorld (ReAct), SWE-bench (2023), Terminal-Bench (2025): environment outcome, not string match alone.</span>
+      </div>
+      <div class="flow-step now">
+        <span class="fy">Today</span>
+        <span class="ft">Scope keeps growing</span>
+        <span class="fd">Real deliverables and traces; then Model+Harness as the unit (Harness-Bench 2026).</span>
+      </div>
+    </div>
+    <div class="grid-2" style="margin-top:0.85rem">
+      <div class="card">
+        <span class="tag">Still the point</span>
+        <h3>Validate the output</h3>
+        <p>Oracles, unit tests, rubrics, security gates: evals check whether the work is done. Scope expanded so checks match real agent work.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Scope grew</span>
+        <h3>What they measure</h3>
+        <p>Text answer → tool args → multi-step env success → process quality → <strong>which harness</strong> produced the run.</p>
+      </div>
+    </div>
+  </section>
+
+<section class="slide" id="s27" data-title="Model plus harness">
+    <p class="eyebrow">Section 11 · Unit of capability</p>
+    <h2>Same model, different harness, different score</h2>
+    <p class="lead">Agent leaderboards never measured a naked model. What matured is treating the harness as an explicit experimental and product axis.</p>
+    <div class="grid-2">
+      <div class="card">
+        <span class="tag">Fixed harness</span>
+        <h3>Isolate the model</h3>
+        <p>SWE-bench Verified often freezes a scaffold (e.g. mini-SWE-agent) so model ranks are comparable. Still model + harness :  just held constant.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Variable harness</span>
+        <h3>Harness-Bench (May 2026)</h3>
+        <p>106 sandboxed workflow tasks; thousands of trajectories. Fix task/budget/evaluator; vary harness native behavior. Large gaps across harnesses under the same model pool.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Claim</span>
+        <h3>Report the pair</h3>
+        <p>Capability is a <strong>model-harness configuration</strong>, not a model name alone. Climbing the board means climbing the wrapper.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Infra</span>
+        <h3>Taskset × harness × runtime</h3>
+        <p>Prime Intellect Environments Hub and hosted evals (and peers) separate environment, harness, and runtime for RL and public leaderboards.</p>
+      </div>
+    </div>
+  </section>
+
+<section class="slide" id="s28" data-title="Self-editing harnesses">
+    <p class="eyebrow">Section 12 · Self-editing · 2026</p>
+    <h2>Harnesses that rewrite themselves</h2>
+    <div class="era-mark">
+      <p class="lead">After RLM made context programmable, the next failure was static harness state. Three tiers: static (human-owned), accumulating (skills/memory grow), self-editing (automated refine of harness state or code).</p>
+      <div class="onion onion-sm era-2026" aria-hidden="true" title="2026: full onion, self-edit">
+        <svg viewBox="0 0 200 200"><circle class="o-ring o-outer" cx="100" cy="100" r="96"/><circle class="o-ring o-product" cx="100" cy="100" r="78"/><circle class="o-ring o-tools" cx="100" cy="100" r="60"/><circle class="o-ring o-loop" cx="100" cy="100" r="44"/><circle class="o-ring o-core" cx="100" cy="100" r="28"/><text class="o-label" x="100" y="100" text-anchor="middle" dy="0.35em">M</text></svg>
+        <span class="onion-cap"><strong>+ self-edit</strong></span>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <span class="tag">Product</span>
+        <h3>Prime Agent (Aug 2026)</h3>
+        <p>Ships RLM (REPL) <em>and</em> Continual Harness: CRUD on prompts/memory/skills/subagents; <code>/refine</code> from trajectory. Claimed ARC-AGI-3 95.5% Best@1 with Opus 5 (protocol-bound). No model trained on it yet.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Product</span>
+        <h3>Hermes Agent</h3>
+        <p>Autonomous skill creation/refine from complex tasks; cross-session memory. Accumulating/self-improving skill library; optional external optimizers (e.g. DSPy-style) with review gates.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Research</span>
+        <h3>Self-Harness, AHE, Compass</h3>
+        <p>Weakness mining → propose → validate; observability-driven evolution; component-wise optimization (e.g. SWE-bench Verified gains under paper protocols).</p>
+      </div>
+      <div class="card">
+        <span class="tag">Research</span>
+        <h3>Meta-Harness &amp; more</h3>
+        <p>Search over harness code; Continual Harness paper (embodied, mid-episode CRUD); The Last Harness You’ll Ever Build (meta-evolution). 2026 is crowded with self-edit loops.</p>
+      </div>
+    </div>
+  </section>
+
+<section class="slide" id="s29" data-title="Research 2026">
+    <p class="eyebrow">Section 12 · Papers</p>
+    <h2>Self-editing is a research program</h2>
+    <div class="grid-2">
+      <div class="card">
+        <span class="tag">arXiv 2605.09998</span>
+        <h3>Continual Harness</h3>
+        <p>Karten et al.: reset-free mid-episode CRUD on harness state (prompt, subagents, skills, memory). Abstraction Prime Agent productizes for coding.</p>
+      </div>
+      <div class="card">
+        <span class="tag">arXiv 2606.09498</span>
+        <h3>Self-Harness</h3>
+        <p>Agent improves its own harness via weakness mining → bounded proposal → validation (no stronger outer agent required).</p>
+      </div>
+      <div class="card">
+        <span class="tag">arXiv 2605.27922</span>
+        <h3>Harness-Bench</h3>
+        <p>Diagnostic: harness as primary axis under fixed tasks. Capability is a configuration, not a model name alone.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Also</span>
+        <h3>Compass, AHE, Meta-Harness</h3>
+        <p>Component-wise evolution; observability-driven coding harnesses; searching harness code for Pareto improvements. Updating ability ≠ benefit across model tiers.</p>
+      </div>
+    </div>
+  </section>
+
+<section class="slide" id="s30" data-title="Co-training next">
+    <p class="eyebrow">Section 12 · Next</p>
+    <h2>Next: train models for a harness</h2>
+    <p class="lead">Self-editing improves the wrapper around a fixed model. The open frontier is model-harness co-learning: weights that expect a given loop, tool surface, and context regime.</p>
+    <div class="grid-3">
+      <div class="card">
+        <span class="tag">Today</span>
+        <h3>Self-edit the scaffold</h3>
+        <p>Refine skills, prompts, subagents from traces without changing weights.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Gap</span>
+        <h3>No co-training yet</h3>
+        <p>Prime Agent states no model is trained around its RLM/Continual Harness interface; features under-used until then.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Next</span>
+        <h3>Joint optimization</h3>
+        <p>Train (or distill) models for a harness while the harness adapts :  expected large remaining gains.</p>
+      </div>
+    </div>
+  </section>
+
+<section class="slide" id="s31" data-title="Through-line">
+    <p class="eyebrow">Section 13 · Pattern</p>
+    <h2>Each layer fixed the failure of the last</h2>
+    <p class="lead">The whole story on one slide. Read top-left → bottom: failure, then the layer that fixed it.</p>
+    <div class="chain" role="list">
+      <div class="chain-step" role="listitem">
+        <span class="when">1 · 2022 · Prompting</span>
+        <span class="what"><span class="fail">Opaque, ungrounded reasoning</span>CoT + MRKL; ReAct loop (eval: few-shot + ALFWorld)</span>
+      </div>
+      <div class="chain-step" role="listitem">
+        <span class="when">2 · 2023 · Tools</span>
+        <span class="what"><span class="fail">Brittle free-text actions</span>Function calling; Assistants host context</span>
+      </div>
+      <div class="chain-step" role="listitem">
+        <span class="when">3 · 2023 · Frameworks</span>
+        <span class="what"><span class="fail">Everyone reimplements the loop</span>Productize ReAct; hit drift and bloat</span>
+      </div>
+      <div class="chain-step" role="listitem">
+        <span class="when">4 · 2024 · Coding product</span>
+        <span class="what"><span class="fail">Demos ≠ daily engineering</span>CLIs/IDEs; SWE-bench already scores scaffolds</span>
+      </div>
+      <div class="chain-step" role="listitem">
+        <span class="when">5 · Nov 2024 · MCP</span>
+        <span class="what"><span class="fail">N×M connectors</span>Standard tool bus (USB-C for AI)</span>
+      </div>
+      <div class="chain-step" role="listitem">
+        <span class="when">6 · Late 2024 · Code-as-action</span>
+        <span class="what"><span class="fail">JSON tools too rigid to compose</span>smolagents: Python as action language</span>
+      </div>
+      <div class="chain-step" role="listitem">
+        <span class="when">7 · 2025 · Context</span>
+        <span class="what"><span class="fail">Window overflow / rot</span>Offload, compact, recover on disk</span>
+      </div>
+      <div class="chain-step" role="listitem">
+        <span class="when">8 · 2025 · Tool scale</span>
+        <span class="what"><span class="fail">Schema load burns tokens</span>Progressive disclosure; MCP as code APIs</span>
+      </div>
+      <div class="chain-step" role="listitem">
+        <span class="when">9 · 2025 · Isolation</span>
+        <span class="what"><span class="fail">One bloated loop; prompt “security”</span>Subagents, permissions; OS sandbox optional</span>
+      </div>
+      <div class="chain-step" role="listitem">
+        <span class="when">10 · 2025 · Across time</span>
+        <span class="what"><span class="fail">Capability dies with the session</span>Sessions, skills, AGENTS.md, hooks, plan mode</span>
+      </div>
+      <div class="chain-step" role="listitem">
+        <span class="when">11 · Late 2025 · Context as variable</span>
+        <span class="what"><span class="fail">Can’t program over history/data</span>RLM: context is a variable in a REPL</span>
+      </div>
+      <div class="chain-step endpoint" role="listitem">
+        <span class="when">12 · 2026 · Self-editing</span>
+        <span class="what"><span class="fail">Hand-tuned skills go stale</span>Continual Harness / Prime refine; Hermes; Self-Harness. Evals co-evolved the whole arc. Next: model-harness co-training</span>
+      </div>
+    </div>
+    <p class="muted" style="margin-top:0.55rem;margin-bottom:0;text-align:center">Evals are not a late layer: zero/few-shot → tool correctness → env success → Model+Harness as the unit. They made each failure above measurable.</p>
+  </section>
+
+<section class="slide" id="s32" data-title="Thesis">
+    <p class="eyebrow">Section 13 · Thesis</p>
+    <h2>Intelligence moved outward</h2>
+    <div class="era-mark">
+      <p class="lead">The model still thinks, acts, and observes. Durable agent capability lives outside the weights, and is measured as Model + Harness. The circle is full: every ring we added is still there.</p>
+      <div class="onion onion-sm era-full" aria-hidden="true" title="Full harness around the model">
+        <svg viewBox="0 0 200 200"><circle class="o-ring o-outer" cx="100" cy="100" r="96"/><circle class="o-ring o-product" cx="100" cy="100" r="78"/><circle class="o-ring o-tools" cx="100" cy="100" r="60"/><circle class="o-ring o-loop" cx="100" cy="100" r="44"/><circle class="o-ring o-core" cx="100" cy="100" r="28"/><text class="o-label" x="100" y="100" text-anchor="middle" dy="0.35em">M</text></svg>
+        <span class="onion-cap"><strong>full</strong></span>
+      </div>
+    </div>
+    <div class="locus" role="img" aria-label="What stayed in the model versus what moved into the harness">
+      <div class="locus-panel">
+        <span class="locus-kicker">Still in the model</span>
+        <h3>Unchanged job</h3>
+        <ul class="locus-list">
+          <li><strong>Reason</strong><span>Plan, handle exceptions, choose next step</span></li>
+          <li><strong>Act</strong><span>Emit tool calls, code, language</span></li>
+          <li><strong>Observe</strong><span>Fold results into the next thought</span></li>
+        </ul>
+      </div>
+      <div class="locus-panel outer">
+        <span class="locus-kicker">Now in the harness</span>
+        <h3>Where agents actually win</h3>
+        <ul class="locus-list">
+          <li><strong>Durable state</strong><span>Filesystem, sessions, recoverability</span></li>
+          <li><strong>Context as a variable</strong><span>RLM / REPL over history and data</span></li>
+          <li><strong>Tool surface</strong><span>MCP, progressive disclosure, code-as-action</span></li>
+          <li><strong>Self-edit &amp; control</strong><span>Skills, hooks, refine loops, verification</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="shift-row" aria-label="Four concrete shifts">
+      <div class="shift-item">
+        <span class="from">JSON-only tools</span>
+        <span class="to">Code-as-action + <em>context as variable</em></span>
+      </div>
+      <div class="shift-item">
+        <span class="from">Everything in the window</span>
+        <span class="to">Offload + <em>programmable state</em></span>
+      </div>
+      <div class="shift-item">
+        <span class="from">Model-only leaderboards</span>
+        <span class="to">Report <em>Model+Harness</em></span>
+      </div>
+      <div class="shift-item">
+        <span class="from">Static skills forever</span>
+        <span class="to">Self-editing <em>harness</em></span>
+      </div>
+    </div>
+    <p class="thesis-close">Same ReAct skeleton at the center. The product surface is the harness. <strong>Same model, different harness, different agent</strong>, and a different leaderboard row.</p>
+  </section>
+
+<section class="slide" id="s33" data-title="Sources">
+    <p class="eyebrow">Section 13 · Sources</p>
+    <h2>Primary sources</h2>
+    <ul class="sources">
+      <li data-n="1">ReAct / CoT / Toolformer (foundational papers)</li>
+      <li data-n="2">OpenAI function calling &amp; Assistants API</li>
+      <li data-n="3">Anthropic MCP; progressive disclosure write-ups</li>
+      <li data-n="4">SWE-bench (2023) / Verified (2024); Terminal-Bench 1.0-2.0 (2025)</li>
+      <li data-n="5">Harness-Bench (arXiv 2605.27922, May 2026)</li>
+      <li data-n="6">smolagents CodeAgent (HF, late 2024)</li>
+      <li data-n="7">RLM (2512.24601); Continual Harness (2605.09998)</li>
+      <li data-n="8">Prime Agent (Aug 2026); Hermes Agent skills loop</li>
+      <li data-n="9">Self-Harness, AHE, HarnessCompass, Meta-Harness</li>
+      <li data-n="10">LangChain anatomy of a harness</li>
+      <li data-n="11">Claude Code / Codex product docs (hooks, plan, skills)</li>
+      <li data-n="12">SWE-agent / agent-computer interfaces</li>
+      <li data-n="13">Prime Intellect Environments Hub / hosted evals</li>
+      <li data-n="14">facts.md compiled 2026-08-07 for this deck</li>
+    </ul>
+    <p class="muted" style="margin-top:1rem;margin-bottom:0;font-size:0.85rem">Vendor bench numbers are protocol-bound. Always report model + harness together.</p>
+  </section>
+
+</main>
+
+<nav class="controls" aria-label="Slide controls">
+  <button class="nav-btn" id="prev" type="button" aria-label="Previous slide">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+  </button>
+  <div class="progress-pipe" aria-hidden="true"><div class="progress-bar" id="progress-bar"></div></div>
+  <span class="slide-count" id="slide-count">1 / 34</span>
+  <button class="nav-btn" id="next" type="button" aria-label="Next slide">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+  </button>
+  <span class="hint">← → · Space</span>
+</nav>
+
+<script>
+(() => {
+  const root = document.documentElement;
+  const toggle = document.getElementById("theme-toggle");
+  const stored = localStorage.getItem("theme");
+  if (stored) root.setAttribute("data-theme", stored);
+
+  function currentTheme() {
+    if (root.getAttribute("data-theme")) return root.getAttribute("data-theme");
+    return matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  function applyTheme(theme) {
+    root.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }
+  if (toggle) {
+    toggle.addEventListener("click", () => {
+      const next = currentTheme() === "dark" ? "light" : "dark";
+      if (document.startViewTransition) document.startViewTransition(() => applyTheme(next));
+      else applyTheme(next);
+    });
+  }
+
+  const slides = [...document.querySelectorAll(".slide")];
+  const prevBtn = document.getElementById("prev");
+  const nextBtn = document.getElementById("next");
+  const countEl = document.getElementById("slide-count");
+  const bar = document.getElementById("progress-bar");
+  const crumb = document.getElementById("crumb-section");
+  let i = 0;
+
+  // Structure each slide: [eyebrow|meta] + [h1|h2] → .slide-head (top center)
+  // everything else → .slide-body (centered in remaining space)
+  function structureSlide(slide) {
+    if (slide.querySelector(":scope > .slide-head")) return;
+    const kids = [...slide.children];
+    if (!kids.length) return;
+
+    const head = document.createElement("div");
+    head.className = "slide-head";
+    const body = document.createElement("div");
+    body.className = "slide-body";
+
+    let idx = 0;
+    const first = kids[0];
+    if (first.classList.contains("eyebrow") || first.classList.contains("slide-meta")) {
+      head.appendChild(first);
+      idx = 1;
+    }
+    const title = kids[idx];
+    if (title && (title.tagName === "H1" || title.tagName === "H2")) {
+      head.appendChild(title);
+      idx += 1;
+    }
+    for (; idx < kids.length; idx++) body.appendChild(kids[idx]);
+
+    // Clear any leftover text/comment nodes, then mount structured regions
+    while (slide.firstChild) slide.removeChild(slide.firstChild);
+    if (head.childNodes.length) slide.appendChild(head);
+    if (body.childNodes.length) slide.appendChild(body);
+  }
+
+  slides.forEach(structureSlide);
+
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, idx) => s.classList.toggle("active", idx === i));
+    countEl.textContent = `${i + 1} / ${slides.length}`;
+    bar.style.width = `${(i / Math.max(1, slides.length - 1)) * 100}%`;
+    prevBtn.disabled = i === 0;
+    nextBtn.disabled = i === slides.length - 1;
+    crumb.textContent = slides[i].dataset.title || "";
+    history.replaceState(null, "", `#s${i}`);
+    const body = slides[i].querySelector(".slide-body");
+    if (body) body.scrollTop = 0;
+    slides[i].scrollTop = 0;
+  }
+
+  prevBtn.addEventListener("click", () => show(i - 1));
+  nextBtn.addEventListener("click", () => show(i + 1));
+
+  document.querySelectorAll("[data-goto]").forEach((el) => {
+    el.addEventListener("click", (e) => {
+      e.preventDefault();
+      show(Number(el.dataset.goto));
+    });
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.target.matches("input, textarea, [contenteditable]")) return;
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") {
+      e.preventDefault();
+      show(i + 1);
+    } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+      e.preventDefault();
+      show(i - 1);
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      show(0);
+    } else if (e.key === "End") {
+      e.preventDefault();
+      show(slides.length - 1);
+    }
+  });
+
+  // Touch swipe
+  let touchX = null;
+  document.addEventListener("touchstart", (e) => {
+    touchX = e.changedTouches[0].screenX;
+  }, { passive: true });
+  document.addEventListener("touchend", (e) => {
+    if (touchX == null) return;
+    const dx = e.changedTouches[0].screenX - touchX;
+    if (Math.abs(dx) > 50) show(i + (dx < 0 ? 1 : -1));
+    touchX = null;
+  }, { passive: true });
+
+  const hash = location.hash.match(/^#s(\d+)$/);
+  show(hash ? Number(hash[1]) : 0);
+})();
+</script>
+</body>
+</html>
