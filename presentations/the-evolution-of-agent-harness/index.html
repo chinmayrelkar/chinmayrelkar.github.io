@@ -242,9 +242,10 @@ ul { margin: 0; padding: 0; list-style: none; }
   margin: 0 0.5rem;
   color: color-mix(in srgb, var(--ink-muted) 75%, transparent);
 }
-.crumb-root { flex: none; transition: color 0.15s ease; }
+.crumb-root { flex: none; transition: color 0.15s ease; color: inherit; text-decoration: none; }
 .crumb-root:hover { color: var(--accent); }
-.crumb-title { flex: 0 4 auto; }
+.crumb-title { flex: 0 4 auto; color: inherit; text-decoration: none; transition: color 0.15s ease; }
+.crumb-title:hover { color: var(--accent); }
 .crumb-h1 { flex: 0 1 auto; color: var(--accent); font-weight: 500; }
 .crumb-h1:empty { display: none; }
 .crumb-h1:empty::before { content: none; }
@@ -2104,6 +2105,10 @@ code {
   .controls { left: 0.75rem; right: 4.5rem; transform: none; width: auto; justify-content: space-between; }
   .progress-pipe { width: 80px; flex: 1; }
   .hint { display: none; }
+  :root {
+    /* Fallback until JS measures the real sticky header */
+    --header-h: 3.5rem;
+  }
   .site-header {
     padding: 0;
   }
@@ -2117,16 +2122,36 @@ code {
     border-left: none;
     border-right: none;
     border-top: none;
-    padding: 0.65rem 1rem 0.7rem;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.2rem;
+    padding: 0.7rem 0.9rem;
+    /* Keep wordmark + trail on one row; wrap only if truly tight */
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.75rem;
   }
-  .crumb { flex-direction: column; }
+  .site-wordmark {
+    flex: 0 0 auto;
+  }
+  .crumb {
+    flex: 1 1 auto;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: baseline;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .crumb-context,
+  .crumb-position {
+    flex: 0 1 auto;
+    overflow: hidden;
+  }
   .crumb-root::before { content: none; }
+  .crumb-title { flex: 0 1 auto; }
+  .crumb-h1 { flex: 0 1 auto; }
   #theme-toggle { width: 46px; height: 46px; right: 1rem; bottom: 1rem; }
   .deck {
-    padding: calc(var(--header-h) + 1.35rem) 0.65rem 5.1rem;
+    padding: calc(var(--header-h) + 0.75rem) 0.65rem 5.1rem;
     align-items: stretch;
   }
   .slide {
@@ -3290,6 +3315,19 @@ code {
       if (document.startViewTransition) document.startViewTransition(() => applyTheme(next));
       else applyTheme(next);
     });
+  }
+
+  // Keep deck clear of the fixed header: measure real height (mobile especially).
+  const siteHeader = document.querySelector(".site-header");
+  function syncHeaderHeight() {
+    if (!siteHeader) return;
+    const h = Math.ceil(siteHeader.getBoundingClientRect().height);
+    if (h > 0) root.style.setProperty("--header-h", `${h}px`);
+  }
+  syncHeaderHeight();
+  window.addEventListener("resize", syncHeaderHeight);
+  if (typeof ResizeObserver !== "undefined" && siteHeader) {
+    new ResizeObserver(syncHeaderHeight).observe(siteHeader);
   }
 
   const slides = [...document.querySelectorAll(".slide")];
