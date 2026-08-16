@@ -1234,7 +1234,7 @@ body:has(.post) .reading-progress {
 }
 
 /* Responsive */
-@media (max-width: 640px) {
+@media (max-width: 720px) {
   .project-grid { grid-template-columns: 1fr; gap: 0.95rem; }
 
   body {
@@ -1273,17 +1273,36 @@ body:has(.post) .reading-progress {
     font-size: 0.78rem;
   }
 
-  /* Crumb on essay pages: elegant single-row pill matching presentation deck */
-  :root:has(.crumb) { --header-h: 3.25rem; }
+  /* Crumb on essay pages: full-width edge-to-edge flush navbar matching presentation deck */
+  :root:has(.crumb) { --header-h: 2.85rem; }
 
+  body:has(.post) .site-header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+  }
+
+  body:has(.post) .site-header-inner,
   .site-header-inner:has(.crumb) {
+    max-width: none;
+    width: 100%;
     height: 2.85rem;
     min-height: 2.85rem;
+    margin: 0;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--rule) 90%, var(--accent));
+    box-shadow: none;
+    padding: 0 0.85rem;
+    gap: 0.5rem;
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-    gap: 0.5rem;
-    padding: 0 0.85rem;
   }
 
   .site-header-inner:has(.crumb) .site-wordmark {
