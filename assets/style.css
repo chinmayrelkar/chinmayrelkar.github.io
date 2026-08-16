@@ -140,7 +140,8 @@ ul { margin: 0; padding: 0; list-style: none; }
   line-height: 1.45;
 }
 
-#theme-toggle {
+#theme-toggle,
+.theme-toggle {
   position: fixed;
   right: 1.5rem;
   bottom: 1.5rem;
@@ -163,14 +164,17 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 
 #theme-toggle:hover,
-#theme-toggle:focus-visible {
+#theme-toggle:focus-visible,
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
   transform: translateY(-3px) scale(1.04);
   box-shadow:
     0 0 0 5px color-mix(in srgb, var(--accent) 28%, transparent),
     0 16px 40px color-mix(in srgb, var(--accent) 45%, transparent);
 }
 
-#theme-toggle svg {
+#theme-toggle svg,
+.theme-toggle svg {
   position: absolute;
   width: 20px;
   height: 20px;
@@ -1267,27 +1271,60 @@ body:has(.post) .reading-progress {
     font-size: 0.78rem;
   }
 
-  /* Crumb rows on essay pages */
-  :root:has(.crumb) { --header-h: 5.4rem; }
+  /* Crumb on essay pages: elegant single-row pill on mobile */
+  :root:has(.crumb) { --header-h: 3.25rem; }
 
   .site-header-inner:has(.crumb) {
-    height: auto;
-    min-height: 3rem;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: center;
-    gap: 0.15rem;
-    padding: 0.55rem 0.85rem;
+    height: 2.75rem;
+    min-height: 2.75rem;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.35rem;
+    padding: 0 0.75rem;
+  }
+
+  .site-header-inner:has(.crumb) .site-wordmark {
+    font-size: 0.78rem;
+    font-weight: 700;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   .crumb {
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: row;
+    align-items: center;
     overflow: hidden;
+    white-space: nowrap;
+    font-size: 0.74rem;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .crumb-context,
+  .crumb-position {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .crumb-title,
+  .crumb-h1,
+  .crumb-h2 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .crumb-root::before,
-  .crumb-h1::before { content: none; }
+  .crumb-title::before,
+  .crumb-h1::before,
+  .crumb-h2::before {
+    content: "\203A";
+    margin: 0 0.3rem;
+  }
 
   .tabs {
     flex-wrap: nowrap;
@@ -1371,7 +1408,8 @@ body:has(.post) .reading-progress {
     padding: 0.75rem 0.85rem;
   }
 
-  #theme-toggle {
+  #theme-toggle,
+  .theme-toggle {
     width: 44px;
     height: 44px;
     right: 0.85rem;
