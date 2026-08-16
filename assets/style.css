@@ -776,17 +776,13 @@ body.header-compact:has(.title-page) .site-wordmark-slot .site-wordmark {
   color: color-mix(in srgb, var(--ink-muted) 75%, transparent);
 }
 
-.crumb-root {
-  flex: none;
-  transition: color 0.15s ease;
-}
-
+.crumb-root { flex: none; transition: color 0.15s ease; color: inherit; text-decoration: none; }
 .crumb-root:hover { color: var(--accent); }
 
-.crumb-title { flex: 0 4 auto; }
+.crumb-title { flex: 0 4 auto; color: inherit; text-decoration: none; transition: color 0.15s ease; }
+.crumb-title:hover { color: var(--accent); }
 
 .crumb-h1 { flex: 0 1 auto; }
-
 .crumb-h2 { flex: 0 2 auto; }
 
 /* Green marks only the deepest level currently in view, so the eye lands on where
@@ -798,6 +794,12 @@ body.header-compact:has(.title-page) .site-wordmark-slot .site-wordmark {
 
 .crumb-h1[hidden],
 .crumb-h2[hidden] { display: none; }
+
+@media (min-width: 641px) {
+  .crumb-h1.crumb-h1-default {
+    display: none;
+  }
+}
 
 /* Deep links to a numbered section must clear the header. */
 .post h2, .post h3 { scroll-margin-top: calc(var(--header-h) + 1rem); }
@@ -1271,59 +1273,60 @@ body:has(.post) .reading-progress {
     font-size: 0.78rem;
   }
 
-  /* Crumb on essay pages: elegant single-row pill on mobile */
+  /* Crumb on essay pages: elegant single-row pill matching presentation deck */
   :root:has(.crumb) { --header-h: 3.25rem; }
 
   .site-header-inner:has(.crumb) {
-    height: 2.75rem;
-    min-height: 2.75rem;
+    height: 2.85rem;
+    min-height: 2.85rem;
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-    gap: 0.35rem;
-    padding: 0 0.75rem;
+    gap: 0.5rem;
+    padding: 0 0.85rem;
   }
 
   .site-header-inner:has(.crumb) .site-wordmark {
-    font-size: 0.78rem;
+    flex: 0 0 auto;
+    font-size: 0.82rem;
     font-weight: 700;
     white-space: nowrap;
-    flex-shrink: 0;
   }
 
   .crumb {
-    flex-direction: row;
-    align-items: center;
-    overflow: hidden;
-    white-space: nowrap;
-    font-size: 0.74rem;
-    min-width: 0;
     flex: 1 1 auto;
+    min-width: 0;
+    gap: 0.35rem;
   }
 
-  .crumb-context,
+  .crumb-context {
+    display: none;
+  }
+
   .crumb-position {
     display: flex;
-    align-items: center;
     min-width: 0;
     overflow: hidden;
-    white-space: nowrap;
   }
 
-  .crumb-title,
-  .crumb-h1,
-  .crumb-h2 {
+  .crumb-h1 {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--accent);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  .crumb-root::before,
-  .crumb-title::before,
-  .crumb-h1::before,
-  .crumb-h2::before {
+  .crumb-h1::before {
     content: "\203A";
-    margin: 0 0.3rem;
+    margin: 0 0.35rem 0 0;
+    color: color-mix(in srgb, var(--ink-muted) 75%, transparent);
+  }
+
+  .crumb-h2 {
+    display: none;
   }
 
   .tabs {

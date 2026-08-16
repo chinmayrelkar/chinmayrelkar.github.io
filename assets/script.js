@@ -249,10 +249,12 @@
     // belonged to the previous section.
     const crumbNodes = [...post.querySelectorAll("h2, h3")];
 
+    const postTitle = (post.querySelector("h1") && post.querySelector("h1").textContent.trim()) || "Writing";
+
     const updateCrumb = () => {
-      if (!crumbH1 || !crumbH2) return;
+      if (!crumbH1) return;
       // A heading counts as "current" once it passes under the header.
-      const threshold = header.offsetHeight + 12;
+      const threshold = header.offsetHeight + 16;
 
       let h2 = null;
       let h3 = null;
@@ -268,15 +270,25 @@
 
       const h2Text = h2 ? h2.dataset.label || h2.textContent.trim() : "";
       const h3Text = h3 ? h3.textContent.trim() : "";
-      if (crumbH1.textContent !== h2Text) crumbH1.textContent = h2Text;
-      if (crumbH2.textContent !== h3Text) crumbH2.textContent = h3Text;
-      // Hidden rather than empty, so no orphan "›" separator is drawn.
-      crumbH1.hidden = !h2Text;
-      crumbH2.hidden = !h3Text;
-      // Highlight the deepest level in view — the subsection when inside one,
-      // otherwise the section itself.
+
+      if (h2Text) {
+        if (crumbH1.textContent !== h2Text) crumbH1.textContent = h2Text;
+        crumbH1.classList.remove("crumb-h1-default");
+        crumbH1.hidden = false;
+      } else {
+        if (crumbH1.textContent !== postTitle) crumbH1.textContent = postTitle;
+        crumbH1.classList.add("crumb-h1-default");
+        crumbH1.hidden = false;
+      }
+
+      if (crumbH2) {
+        if (crumbH2.textContent !== h3Text) crumbH2.textContent = h3Text;
+        crumbH2.hidden = !h3Text;
+        crumbH2.classList.toggle("is-current", !!h3Text);
+      }
+
+      // Highlight the deepest level in view
       crumbH1.classList.toggle("is-current", !!h2Text && !h3Text);
-      crumbH2.classList.toggle("is-current", !!h3Text);
     };
 
     let queued = false;
