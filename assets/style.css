@@ -750,7 +750,41 @@ body.header-compact:has(.title-page) .site-wordmark-slot .site-wordmark {
   }
 }
 
-/* Breadcrumb: Writing > Title > heading 1 > heading 2 */
+/* Breadcrumb: Back > Title > heading 1 > heading 2 */
+.crumb-back {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--ink);
+  text-decoration: none;
+  padding: 0.28rem 0.65rem 0.28rem 0.45rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid color-mix(in srgb, var(--rule) 85%, transparent);
+  background: color-mix(in srgb, var(--bg-card) 60%, transparent);
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  line-height: 1;
+}
+
+.crumb-back:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.crumb-back svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  transition: transform 0.15s ease;
+}
+
+.crumb-back:hover svg {
+  transform: translateX(-2px);
+}
+
 .crumb {
   flex: 1 1 auto;
   min-width: 0;
@@ -778,15 +812,13 @@ body.header-compact:has(.title-page) .site-wordmark-slot .site-wordmark {
   text-overflow: ellipsis;
 }
 
-/* One divider rule for every crumb item, so an empty trailing level draws none. */
+/* One divider rule for every crumb item */
 .crumb-root::before,
 .crumb-title::before,
 .crumb-h1::before,
 .crumb-h2::before {
   content: "\203A";
   margin: 0 0.5rem;
-  /* --rule is a border tone and reads as invisible at text size. Mixed down from
-     the muted ink instead: legible, but still recessive next to the labels. */
   color: color-mix(in srgb, var(--ink-muted) 75%, transparent);
 }
 
@@ -799,21 +831,18 @@ body.header-compact:has(.title-page) .site-wordmark-slot .site-wordmark {
 .crumb-h1 { flex: 0 1 auto; }
 .crumb-h2 { flex: 0 2 auto; }
 
-/* Green marks only the deepest level currently in view, so the eye lands on where
-   the reader actually is instead of on a fixed rung of the hierarchy. */
+/* Green marks only the deepest level currently in view */
 .crumb .is-current {
   color: var(--accent);
   font-weight: 500;
 }
 
+.crumb-h1:empty,
 .crumb-h1[hidden],
+.crumb-h2:empty,
 .crumb-h2[hidden] { display: none; }
-
-@media (min-width: 641px) {
-  .crumb-h1.crumb-h1-default {
-    display: none;
-  }
-}
+.crumb-h1:empty::before,
+.crumb-h2:empty::before { content: none; }
 
 /* Deep links to a numbered section must clear the header. */
 .post h2, .post h3 { scroll-margin-top: calc(var(--header-h) + 1rem); }
@@ -1309,7 +1338,7 @@ body:has(.post) .reading-progress {
   }
 
   /* Crumb on essay & deck pages: full-width edge-to-edge flush navbar matching presentation deck */
-  :root:has(.crumb) { --header-h: 2.85rem; }
+  :root:has(.crumb), :root:has(.crumb-back) { --header-h: 2.85rem; }
 
   body:has(.post) .site-header,
   body:has(.deck) .site-header {
@@ -1327,7 +1356,8 @@ body:has(.post) .reading-progress {
 
   body:has(.post) .site-header-inner,
   body:has(.deck) .site-header-inner,
-  .site-header-inner:has(.crumb) {
+  .site-header-inner:has(.crumb),
+  .site-header-inner:has(.crumb-back) {
     max-width: none;
     width: 100%;
     height: 2.85rem;
@@ -1340,26 +1370,44 @@ body:has(.post) .reading-progress {
     border-bottom: 1px solid color-mix(in srgb, var(--rule) 90%, var(--accent));
     box-shadow: none;
     padding: 0 0.85rem;
-    gap: 0.5rem;
+    gap: 0.45rem;
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
   }
 
-  .site-header-inner:has(.crumb) .site-wordmark {
-    flex: 0 0 auto;
-    font-size: 0.82rem;
-    font-weight: 700;
-    white-space: nowrap;
+  .crumb-back {
+    padding: 0.22rem 0.55rem 0.22rem 0.38rem;
+    font-size: 0.78rem;
+    gap: 0.25rem;
+  }
+
+  .crumb-back svg {
+    width: 13px;
+    height: 13px;
   }
 
   .crumb {
     flex: 1 1 auto;
     min-width: 0;
-    gap: 0.35rem;
+    gap: 0;
   }
 
-  .crumb-context {
+  .crumb-title {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .crumb-title::before {
+    margin: 0 0.35rem;
+  }
+
+  /* When scrolled into a section on mobile, hide the article title so the section gets full space */
+  .crumb:has(.crumb-h1:not([hidden]):not(:empty)) .crumb-title {
     display: none;
   }
 

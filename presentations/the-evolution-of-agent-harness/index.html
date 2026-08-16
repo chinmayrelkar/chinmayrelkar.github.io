@@ -2472,12 +2472,12 @@ code {
 
 <header class="site-header">
   <div class="site-header-inner">
-    <a class="site-wordmark" href="../../index.html">Chinmay Relkar</a>
+    <a class="crumb-back" href="../../index.html#projects" aria-label="Back to Projects">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      <span>Projects</span>
+    </a>
     <nav class="crumb" aria-label="Breadcrumb">
-      <span class="crumb-context">
-        <a class="crumb-root" href="../../index.html">Home</a>
-        <a class="crumb-title" href="#s0">Agent Harness</a>
-      </span>
+      <a class="crumb-title" href="#s0">The Evolution of the Agent Harness</a>
       <span class="crumb-position" aria-hidden="true">
         <span class="crumb-h1" id="crumb-section"></span>
       </span>
@@ -3656,7 +3656,7 @@ code {
     bar.style.width = `${(i / Math.max(1, slides.length - 1)) * 100}%`;
     prevBtn.disabled = i === 0;
     nextBtn.disabled = i === slides.length - 1;
-    crumb.textContent = slides[i].dataset.title || "";
+    crumb.textContent = i === 0 ? "" : (slides[i].dataset.title || "");
     const body = slides[i].querySelector(".slide-body");
     if (body) body.scrollTop = 0;
     slides[i].scrollTop = 0;

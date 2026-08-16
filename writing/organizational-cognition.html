@@ -88,17 +88,12 @@
 
 <header class="site-header">
   <div class="site-header-inner">
-    <a class="site-wordmark" href="../index.html">Chinmay Relkar</a>
-    <!-- Two groups so the mobile header can break between them: fixed context on
-         one row, live position on the next. "Writing" is real navigation and stays
-         in the a11y tree; the rest duplicates the page's own headings, so it is
-         hidden from it: the title mirrors the <h1> and script.js rewrites the
-         last two on scroll. -->
+    <a class="crumb-back" href="../index.html#writing" aria-label="Back to Writing">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      <span>Writing</span>
+    </a>
     <nav class="crumb" aria-label="Breadcrumb">
-      <span class="crumb-context">
-        <a class="crumb-root" href="../index.html#writing">Writing</a>
-        <a class="crumb-title" href="#">Organizational Cognition</a>
-      </span>
+      <a class="crumb-title" href="#">Organizational Cognition</a>
       <span class="crumb-position" aria-hidden="true">
         <span class="crumb-h1"></span>
         <span class="crumb-h2"></span>
