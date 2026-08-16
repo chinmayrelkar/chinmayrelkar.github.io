@@ -87,6 +87,7 @@
   // In-house posts: add one entry per post you write as its own file under writing/.
   // { title: "Post title", link: "writing/post-slug.html", pubDate: "2026-07-01" }
   const LOCAL_POSTS = [
+    { title: "Harness Self-Evolution Is Two Capabilities", link: "writing/harness-self-evolution.html", pubDate: "2026-08-10" },
     { title: "The Evolution of the Agent Harness", link: "presentations/the-evolution-of-agent-harness/", pubDate: "2026-08-10" },
     { title: "Organizational Cognition", link: "writing/organizational-cognition.html", pubDate: "2026-07-29" },
   ];

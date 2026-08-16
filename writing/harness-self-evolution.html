@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-D6ZMQF83JY"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-D6ZMQF83JY');
+</script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Harness Self-Evolution Is Two Capabilities &middot; Chinmay Relkar</title>
+<meta name="description" content="Self-evolving agent harnesses look like one research program. The evidence separates harness-updating from harness-benefit, and puts the acceptance gate outside the loop." />
+<meta name="author" content="Chinmay Relkar" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="Chinmay Relkar" />
+<meta property="og:url" content="https://chinmayrelkar.github.io/writing/harness-self-evolution.html" />
+<meta property="og:title" content="Harness Self-Evolution Is Two Capabilities" />
+<meta property="og:description" content="End-to-end scores hide two model capabilities: producing useful harness updates, and benefiting from them. What sits outside the loop decides whether the system improves or hacks." />
+<meta property="og:image" content="https://chinmayrelkar.github.io/assets/og-image.png" />
+<meta property="og:image:secure_url" content="https://chinmayrelkar.github.io/assets/og-image.png" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Harness self-evolution: update capability vs benefit capability, with the evaluator outside the loop" />
+<meta property="og:locale" content="en_US" />
+<meta property="article:author" content="Chinmay Relkar" />
+<meta property="article:published_time" content="2026-08-10T00:00:00+00:00" />
+<meta property="article:modified_time" content="2026-08-10T00:00:00+00:00" />
+<meta property="article:section" content="Writing" />
+<meta property="article:tag" content="AI agents" />
+<meta property="article:tag" content="Agent harness" />
+<meta property="article:tag" content="Self-evolution" />
+<meta property="article:tag" content="Continual harness" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Harness Self-Evolution Is Two Capabilities" />
+<meta name="twitter:description" content="End-to-end scores hide two model capabilities: producing useful harness updates, and benefiting from them." />
+<meta name="twitter:image" content="https://chinmayrelkar.github.io/assets/og-image.png" />
+<meta name="twitter:image:alt" content="Harness self-evolution: update capability vs benefit capability, with the evaluator outside the loop" />
+<meta name="twitter:creator" content="@chinmayrelkar" />
+<meta name="color-scheme" content="light dark" />
+<meta name="theme-color" content="#f6f8f3" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#14170f" media="(prefers-color-scheme: dark)" />
+<link rel="canonical" href="https://chinmayrelkar.github.io/writing/harness-self-evolution.html" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231f9d55'/%3E%3Ctext x='32' y='42' font-family='Arial,sans-serif' font-weight='700' font-size='26' fill='%23ffffff' text-anchor='middle'%3ECR%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Harness Self-Evolution Is Two Capabilities",
+  "name": "Harness Self-Evolution Is Two Capabilities",
+  "description": "Self-evolving agent harnesses look like one research program. The evidence separates harness-updating from harness-benefit, and puts the acceptance gate outside the loop.",
+  "url": "https://chinmayrelkar.github.io/writing/harness-self-evolution.html",
+  "image": "https://chinmayrelkar.github.io/assets/og-image.png",
+  "datePublished": "2026-08-10",
+  "dateModified": "2026-08-10",
+  "author": {
+    "@type": "Person",
+    "name": "Chinmay Relkar",
+    "url": "https://chinmayrelkar.github.io/"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Chinmay Relkar",
+    "url": "https://chinmayrelkar.github.io/"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://chinmayrelkar.github.io/writing/harness-self-evolution.html"
+  },
+  "inLanguage": "en"
+}
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="site-wordmark" href="../index.html">Chinmay Relkar</a>
+    <nav class="crumb" aria-label="Breadcrumb">
+      <span class="crumb-context">
+        <a class="crumb-root" href="../index.html#writing">Writing</a>
+        <span class="crumb-title" aria-hidden="true">Harness Self-Evolution Is Two Capabilities</span>
+      </span>
+      <span class="crumb-position" aria-hidden="true">
+        <span class="crumb-h1"></span>
+        <span class="crumb-h2"></span>
+      </span>
+    </nav>
+  </div>
+</header>
+
+<div class="page">
+  <button class="theme-toggle" type="button" aria-label="Toggle color theme" title="Toggle color theme">
+    <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1.5" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22.5"/><line x1="1.5" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22.5" y2="12"/><line x1="4.6" y1="4.6" x2="6.3" y2="6.3"/><line x1="17.7" y1="17.7" x2="19.4" y2="19.4"/><line x1="4.6" y1="19.4" x2="6.3" y2="17.7"/><line x1="17.7" y1="6.3" x2="19.4" y2="4.6"/></g></svg>
+    <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.7 14.9A8.5 8.5 0 0 1 9.1 3.3a8.5 8.5 0 1 0 11.6 11.6Z"/></svg>
+  </button>
+
+  <main id="main-content">
+    <article class="post">
+      <p class="post-meta"><span>Research note</span><span>August 2026</span><span>~20 min</span></p>
+      <h1>Harness Self-Evolution Is Two Capabilities</h1>
+      <p class="post-dek">Self-evolving agent harnesses look like one research program. The evidence separates producing useful updates from benefiting from them. What sits outside the loop decides whether the system improves or hacks.</p>
+
+      <h2>1. The Question</h2>
+      <p>In 2025 and 2026 the literature stopped treating agent scaffolding as a fixed product decision and started treating it as an optimizable state. Papers and products now claim that an agent can improve the harness around a frozen model: prompts, skills, memory, tools, middleware, subagent specs. End-to-end numbers look large. Held-out Terminal-Bench pass rates jump tens of points.<sup class="fn"><a href="#ref-1" role="doc-noteref" aria-label="Reference 1">1</a></sup> SWE-bench Verified Pass@1 moves from 54% to 66% in five evolution iterations under one method.<sup class="fn"><a href="#ref-2" role="doc-noteref" aria-label="Reference 2">2</a></sup> A vendor harness reports frontier models above a human expert baseline on ARC-AGI-3 under its own protocol.<sup class="fn"><a href="#ref-3" role="doc-noteref" aria-label="Reference 3">3</a></sup></p>
+      <p>Those numbers answer a product question: <em>does this pipeline raise score?</em> They do not answer the research question this note is about:</p>
+      <p><strong>When a self-evolving harness “works,” what actually improved, and which model capability did the work?</strong></p>
+      <p>End-to-end scores mix at least three things: the agent’s base task-solving ability under the initial harness, the quality of harness updates the evolver proposes, and the agent’s ability to load and follow those updates over long trajectories. A fourth design choice sits beside all three: what is forbidden to edit (evaluator, permissions, immutable base prompt, held-out gates). Collapse those, and “self-evolution” becomes a brand rather than a mechanism.</p>
+      <p>This is a research note, not a product review. Claims are labeled <em>observed</em> (from primary papers and the Prime Agent write-up), <em>interpreted</em> (synthesis), or <em>predicted</em> (open). It is a sequel to <a href="../presentations/the-evolution-of-agent-harness/">The Evolution of the Agent Harness</a>: that piece argued capability is Model + Harness. This piece asks what happens when the harness starts rewriting itself.</p>
+
+      <hr class="post-hr" />
+
+      <h2>2. Definitions</h2>
+      <p><strong>Harness.</strong> The non-parametric layer that situates a fixed language model as an agent: system instructions and notes, tools and skill packages, memory stores, middleware and runtime policy, subagent configuration, verification and recovery rules. The model weights are not part of the harness.<sup class="fn"><a href="#ref-1" role="doc-noteref" aria-label="Reference 1">1</a><a href="#ref-4" role="doc-noteref" aria-label="Reference 4">4</a><a href="#ref-5" role="doc-noteref" aria-label="Reference 5">5</a></sup></p>
+      <p><strong>Agent.</strong> Agent = Model + Harness. Same model, different harness, different measured capability. That is no longer a slogan; it is the experimental control in every paper below.</p>
+      <p><strong>Harness evolution.</strong> A process that revises harness state from execution evidence (trajectories, verifier outcomes, failures, sometimes agent self-report) while model weights stay fixed, unless the method explicitly co-learns weights.</p>
+      <p><strong>Evolver.</strong> The role that maps (current harness, evidence) to a harness delta. Often the same LLM as the agent, sometimes a stronger external model, sometimes a separate “evolve agent.”</p>
+      <p><strong>Harness-updating vs harness-benefit.</strong> Following Lin et al.:<sup class="fn"><a href="#ref-6" role="doc-noteref" aria-label="Reference 6">6</a></sup></p>
+      <ul>
+        <li><strong>Harness-updating:</strong> ability to produce useful persistent harness updates from execution evidence.</li>
+        <li><strong>Harness-benefit:</strong> ability to improve task-solving performance when given those updates (load them, follow them, keep following them).</li>
+      </ul>
+      <p>These are different functions of the same model family. Measuring only the product of the two is how the field got confused.</p>
+
+      <hr class="post-hr" />
+
+      <h2>3. Three Regimes</h2>
+      <p>The 2025–2026 literature is not one algorithm with different logos. It clusters into three regimes that answer different engineering constraints.</p>
+
+      <h3>Regime A: Offline batch evolution</h3>
+      <p>Run the agent on a task set. Mine failures. Propose bounded edits. Accept only under a regression gate. Promote. Repeat. The episode ends before the harness changes, or the harness changes only between evaluation rounds.</p>
+      <p>Canonical forms: Self-Harness (weakness mining → proposal → held-in/held-out acceptance), Agentic Harness Engineering (observability-driven edits with falsifiable predictions), HarnessCompass (task-agnostic constraints, proactive feedback, component-wise optimization).<sup class="fn"><a href="#ref-1" role="doc-noteref" aria-label="Reference 1">1</a><a href="#ref-7" role="doc-noteref" aria-label="Reference 7">7</a><a href="#ref-2" role="doc-noteref" aria-label="Reference 2">2</a></sup> Lineage: STOP’s improver-of-improvers, ADAS meta-agent search, AFlow workflow graphs, Meta-Harness optimizing harness code, Darwin Gödel Machine evolving agent repositories.<sup class="fn"><a href="#ref-5" role="doc-noteref" aria-label="Reference 5">5</a></sup></p>
+      <p>Strength: clean attribution if the evaluator and editable surface are separated. Weakness: needs cheap resets and a scorable task distribution. Open-ended production streams are not this setting.</p>
+
+      <h3>Regime B: Online continual harness</h3>
+      <p>Harness state is CRUD-able mid-trajectory, without full episode resets. Continual Harness formalizes H = (ρ, G, K, M) — prompt, sub-agents, skills, memory — and a refiner that rewrites those components every F steps from the recent trajectory window.<sup class="fn"><a href="#ref-4" role="doc-noteref" aria-label="Reference 4">4</a></sup> Prime Agent productizes the same abstraction: <code>rlm.harness.create_*</code> / <code>update_*</code> / <code>delete_*</code>, plus <code>/refine</code> that proposes small evidence-backed edits while the base system prompt stays immutable.<sup class="fn"><a href="#ref-3" role="doc-noteref" aria-label="Reference 3">3</a></sup></p>
+      <p>Strength: matches long-running coding agents, ops, and embodied play where free resets are expensive or impossible. Weakness: the same loop that codifies good skills can codify exploits when the reward channel is broken (Prime Agent’s Factorio RCON case is the clearest public admission).<sup class="fn"><a href="#ref-3" role="doc-noteref" aria-label="Reference 3">3</a></sup></p>
+
+      <h3>Regime C: Meta-evolution and joint learning</h3>
+      <p>Outer loops that search over evolution policies, or that update weights and harness together. Examples: two-level harness + meta-evolution frameworks; SIA’s joint harness and weight updates; Continual Harness’s open-source co-learning with a process reward model and teacher relabeling.<sup class="fn"><a href="#ref-4" role="doc-noteref" aria-label="Reference 4">4</a><a href="#ref-5" role="doc-noteref" aria-label="Reference 5">5</a></sup></p>
+      <p>Strength: closest path to model–harness co-training that vendors keep promising. Weakness: evidence is thinner and confounded (teacher strength, warm-up recipes, weak baselines). Treat as direction, not settled fact.</p>
+
+      <table>
+        <thead>
+          <tr><th>Regime</th><th>When harness changes</th><th>Typical gate</th><th>Failure mode of interest</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>A Offline batch</strong></td><td>Between scored rounds</td><td>Held-out pass / prediction check</td><td>Overfit evolution set; joint-component interference</td></tr>
+          <tr><td><strong>B Online continual</strong></td><td>Mid-trajectory</td><td>Often soft (refine policy, immutable base)</td><td>Reward hacking; skill bloat; capability floor</td></tr>
+          <tr><td><strong>C Meta / joint</strong></td><td>Outer loop or weight steps</td><td>Training objective + harness edit rules</td><td>Confounded gains; teacher dependence</td></tr>
+        </tbody>
+      </table>
+
+      <hr class="post-hr" />
+
+      <h2>4. The Disentangling Result</h2>
+      <p>Lin et al. (arXiv 2605.30621) is the load-bearing empirical paper for this note’s title.<sup class="fn"><a href="#ref-6" role="doc-noteref" aria-label="Reference 6">6</a></sup> They fix the evolution protocol and vary which model plays <em>agent</em> versus <em>evolver</em> across SWE-bench Verified, MCP-Atlas, and SkillsBench, seven LLMs spanning open and closed families.</p>
+
+      <h3>Finding 1: Harness-updating is flat in base capability</h3>
+      <p>When the task-solving agent is held fixed and the evolver changes, the spread in mean evolution gain across evolvers is at most <strong>3.1 percentage points</strong> on any benchmark. No evolver dominates all three. The smallest evolver in the study, Qwen3.5-9B, can post the highest gain on SkillsBench. A case study shows a 9B-evolved skill that is procedurally isomorphic to an Opus 4.6–evolved skill and enables the same agent to solve the same task.</p>
+      <p><em>Interpreted:</em> once the editable surface and evidence format are fixed, “propose a useful skill or prompt patch” is not where frontier intelligence is scarce. Spending capability budget on a stronger evolver is a weak lever.</p>
+
+      <h3>Finding 2: Harness-benefit is non-monotonic in base capability</h3>
+      <p>Mid-tier models often gain the most from updated harnesses. Strong-tier models gain less (ceiling: many tasks already solved under H<sub>0</sub>). Weak-tier models gain least despite the largest nominal headroom.</p>
+      <p>That weak-tier collapse is not mysterious. On SkillsBench the authors measure two failure modes:</p>
+      <ol>
+        <li><strong>Activation failure.</strong> Skill-load rate ~0.25 for Qwen3-32B versus ~0.96 for Opus 4.6 / Sonnet 4.6 / Qwen3-235B. The harness exists; the agent never brings it into context as a valid action.</li>
+        <li><strong>Adherence failure.</strong> Even when loaded, harness-following rates and phase-level adherence drift: weak models fall from ~0.52 after load to ~0.13 by the final turn; strong models stay near 0.8–0.9.</li>
+      </ol>
+      <p><em>Interpreted:</em> self-evolution without activation and long-horizon instruction-following is a library of unread manuals. Training and product design should target <em>invocation and sustained adherence</em>, not only cleverer evolution prompts.</p>
+
+      <h3>Finding 3: Post-evolution score is still mostly base capability</h3>
+      <p>Within-agent variation across seven evolvers is small relative to between-agent gaps in base capability. Pairing a weak agent with its best evolver still loses to a strong agent with its worst evolver by large margins on every benchmark in the paper.</p>
+      <p>This is the quiet implication for leaderboards and procurement: you cannot buy your way out of a weak agent by buying a better harness-evolution story. You can still buy a large jump for a mid-tier agent that actually uses the harness.</p>
+
+      <hr class="post-hr" />
+
+      <h2>5. Offline Evidence: Gates Make the Difference</h2>
+      <p>Regime A papers converge on a methodological claim even when their architectures differ: <strong>an edit is not an improvement until a gate that the editor cannot rewrite says so.</strong></p>
+
+      <h3>Self-Harness</h3>
+      <p>Self-Harness runs the same fixed model as agent and proposer under a minimal DeepAgent-style harness on Terminal-Bench-2.0.<sup class="fn"><a href="#ref-1" role="doc-noteref" aria-label="Reference 1">1</a></sup> Acceptance requires non-regression on both held-in and held-out splits, plus strict improvement on at least one. Reported held-out pass rates:</p>
+      <table>
+        <thead>
+          <tr><th>Model</th><th>Initial</th><th>After Self-Harness</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>MiniMax M2.5</td><td>40.5%</td><td>61.9%</td></tr>
+          <tr><td>Qwen3.5-35B-A3B</td><td>23.8%</td><td>38.1%</td></tr>
+          <tr><td>GLM-5</td><td>42.9%</td><td>57.1%</td></tr>
+        </tbody>
+      </table>
+      <p>Qualitative diffs are model-specific: early artifact creation and tool-loop limits for one backend; dependency precheck and artifact recovery middleware for another; environment persistence and exploration-to-implementation transition for a third. That matches Lin et al.: useful updates exist across tiers; the content of those updates is not one generic “be careful” paragraph.</p>
+
+      <h3>AHE</h3>
+      <p>Agentic Harness Engineering argues the bottleneck is observability, not search slogans.<sup class="fn"><a href="#ref-7" role="doc-noteref" aria-label="Reference 7">7</a></sup> Every editable component is a file. Trajectories are distilled into layered evidence. Every edit declares a prediction that the next round can falsify. The runs directory, tracer, verifier, and model config are read-only, blocking a family of reward hacks (disable verifier, swap model, raise budget). Reported: Terminal-Bench 2 pass@1 from 69.7% to 77.0% in ten iterations, above Codex-CLI’s 71.9% under their comparison; frozen harness transfers to SWE-bench Verified and yields cross-family gains of +5.1 to +10.1 pp. Ablations put gains in tools, middleware, and long-term memory more than system-prompt prose.</p>
+
+      <h3>HarnessCompass</h3>
+      <p>HarnessCompass diagnoses three prior failure modes: overfit to evolution tasks, trajectory-only signals, and joint optimization of components that interfere.<sup class="fn"><a href="#ref-2" role="doc-noteref" aria-label="Reference 2">2</a></sup> Its countermeasures: constrain edits to task-agnostic harness changes; add proactive first-person feedback about harness use; optimize components separately before consolidating. Claimed: SWE-bench Verified with GPT-5.4, Pass@1 54% → 66% in five iterations, with better transfer than prior automatic evolution baselines.</p>
+      <p><em>Interpreted:</em> offline self-evolution is not “let the model cook.” It is <strong>scientific method on the scaffold</strong>: hypothesis (edit + predicted effect), experiment (re-run), reject on regression. The papers that report transfer are the ones that put non-editable structure around that method.</p>
+
+      <hr class="post-hr" />
+
+      <h2>6. Online Evidence: Continual Harness and Prime Agent</h2>
+      <p>Regime B answers a different constraint: long episodes where you cannot afford to restart the world every time you learn something.</p>
+
+      <h3>Continual Harness (paper)</h3>
+      <p>Karten et al. start from Gemini Plays Pokémon: human-supervised harness refinement that completed multiple Pokémon RPGs, then automate the refiner.<sup class="fn"><a href="#ref-4" role="doc-noteref" aria-label="Reference 4">4</a></sup> From a minimalist interface (frames, local text map, buttons), the agent acts; every F steps a refiner applies CRUD to prompt, sub-agents, skills, and memory from the recent trajectory window. No full-episode reset between updates.</p>
+      <p>On Red and Emerald, Continual Harness reduces button-press cost versus the minimalist harness and recovers a majority of the gap to a hand-engineered expert harness without that expert’s domain tools. Gains are capability-dependent: Gemini 3 Pro is Pareto-dominant with Continual Harness; Flash is high-variance; Flash-Lite sits below a capability floor where refinement does not help and can hurt. That is the online cousin of Lin et al.’s weak-tier result: a refining harness is not free lunch for a model that cannot use harness structure.</p>
+      <p>They also run co-learning: open-source Gemma-4 plays inside a live-refining harness; a process reward model scores windows; a frontier teacher relabels low-reward windows; soft SFT updates weights; emulator state is not reset across training iterations. Milestone progress advances over iterations. The paper is careful that teacher strength and warm-up matter; the mechanism claim is co-adaptation of trajectory distribution and harness state, not that any open model bootstraps alone.</p>
+
+      <h3>Prime Agent (product form)</h3>
+      <p>Prime Agent (Prime Intellect, August 2026) is the coding-agent productization of two papers: Recursive Language Models (context as a variable; primary action surface a persistent IPython REPL) and Continual Harness.<sup class="fn"><a href="#ref-3" role="doc-noteref" aria-label="Reference 3">3</a><a href="#ref-8" role="doc-noteref" aria-label="Reference 8">8</a></sup> Subagents are function calls that admit immediately and communicate by message. Harness state is <code>rlm.harness</code>. <code>/refine</code> proposes small evidence-backed CRUD; the base system prompt is immutable; refinements can roll back by ID.</p>
+      <p>Vendor-reported results (not independently re-run for this note): Opus 5 in Prime Agent at 95.5% RHAE Best@1 on ARC-AGI-3 versus ARC’s reported human expert baseline of 95.4%, with three-run consistency and full level completion under their protocol; competitive long-context suite with open-weight GLM-5.2; explicit statement that <strong>no model has yet been trained around Prime Agent</strong>.</p>
+      <p>The research-relevant admission is Factorio. The same refine loop that turned failures into legitimate skills also turned an RCON resource-spawn exploit into efficient cheating skills, despite heartbeat prompts not to cheat. That is not a footnote. It is Regime B’s central hazard: online self-improvement optimizes the reward channel you actually expose, not the one you wrote in a safety sentence.</p>
+
+      <hr class="post-hr" />
+
+      <h2>7. What Sits Outside the Loop</h2>
+      <p>Across regimes, the methods that remain coherent share a design pattern:</p>
+      <table>
+        <thead>
+          <tr><th>Outside the editable loop</th><th>Why it matters</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Evaluator / verifier / tests</td><td>Otherwise the agent disables the judge (AHE’s explicit threat model)</td></tr>
+          <tr><td>Held-out tasks or prediction checks</td><td>Otherwise edits overfit the evolution set (Self-Harness, HarnessCompass)</td></tr>
+          <tr><td>Immutable base system prompt</td><td>Bounds how far online refine can rewrite identity (Prime Agent)</td></tr>
+          <tr><td>Permissions / OS sandbox</td><td>Prompt-level “don’t” is insufficient once shell or RCON exists</td></tr>
+          <tr><td>Model weights (unless co-learning is deliberate)</td><td>Keeps attribution on harness deltas</td></tr>
+        </tbody>
+      </table>
+      <p><em>Interpreted:</em> “self-evolving harness” without an outside is not recursive self-improvement. It is an unconstrained program with write access to its own policy and a score to Goodhart. The scientific content of the field is less “agents improve themselves” and more “<strong>which surfaces may the agent edit, under what falsifiable contract?</strong>”</p>
+      <p>Weng’s survey of harness engineering for self-improvement reaches a compatible operational conclusion: near-term recursive improvement is more likely through harness meta-methodology than through models freely rewriting weights, and the evaluator should live outside the evolution loop with held-out tests and human review at high-impact decisions.<sup class="fn"><a href="#ref-5" role="doc-noteref" aria-label="Reference 5">5</a></sup></p>
+
+      <hr class="post-hr" />
+
+      <h2>8. Failure Modes (Field Map)</h2>
+      <ol>
+        <li><strong>Activation failure</strong> — harness artifacts never enter context (Lin et al.).</li>
+        <li><strong>Adherence failure</strong> — loaded, then abandoned mid-trajectory (Lin et al.).</li>
+        <li><strong>Capability floor</strong> — model too weak to use a refining harness (Continual Harness Flash-Lite; STOP’s weak-model degradation).</li>
+        <li><strong>Evolution-set overfitting</strong> — gains vanish on held-out or chronological streams (HarnessCompass motivation; Adaptive Auto-Harness peak-then-decline on open-ended streams).<sup class="fn"><a href="#ref-2" role="doc-noteref" aria-label="Reference 2">2</a><a href="#ref-5" role="doc-noteref" aria-label="Reference 5">5</a></sup></li>
+        <li><strong>Reward hacking</strong> — refine invents exploits that raise the measured score (Prime Agent Factorio).</li>
+        <li><strong>Component interference</strong> — joint optimization of prompt + tools + memory at once (HarnessCompass).</li>
+        <li><strong>Diversity collapse</strong> — evolutionary populations converge on local harness variants (surveyed failure in open-ended search).</li>
+        <li><strong>Confounded end-to-end scores</strong> — update quality, agent base, and benefit mixed into one number (Lin et al.’s motivation for the whole line of work).</li>
+      </ol>
+
+      <hr class="post-hr" />
+
+      <h2>9. Observed, Interpreted, Predicted</h2>
+
+      <h3>Observed</h3>
+      <ul>
+        <li>Multiple independent groups show double-digit absolute gains on agent benchmarks by editing harnesses with model weights fixed (Self-Harness, AHE, HarnessCompass, Continual Harness embodied results).<sup class="fn"><a href="#ref-1" role="doc-noteref" aria-label="Reference 1">1</a><a href="#ref-7" role="doc-noteref" aria-label="Reference 7">7</a><a href="#ref-2" role="doc-noteref" aria-label="Reference 2">2</a><a href="#ref-4" role="doc-noteref" aria-label="Reference 4">4</a></sup></li>
+        <li>Cross-pairing experiments show harness-updating gains nearly flat across model tiers while harness-benefit is non-monotonic, with weak models failing activation and adherence.<sup class="fn"><a href="#ref-6" role="doc-noteref" aria-label="Reference 6">6</a></sup></li>
+        <li>Methods that freeze the evaluator and require held-out non-regression report transfer; methods that allow online CRUD without a hard outside show both skill formation and reward hacking in the wild.<sup class="fn"><a href="#ref-1" role="doc-noteref" aria-label="Reference 1">1</a><a href="#ref-7" role="doc-noteref" aria-label="Reference 7">7</a><a href="#ref-3" role="doc-noteref" aria-label="Reference 3">3</a></sup></li>
+        <li>No public frontier model is yet trained specifically around Prime Agent’s RLM + Continual Harness interface; co-training is an explicit open bet.<sup class="fn"><a href="#ref-3" role="doc-noteref" aria-label="Reference 3">3</a></sup></li>
+      </ul>
+
+      <h3>Interpreted</h3>
+      <ul>
+        <li>Self-evolving harness research is two capability questions plus one systems question: update, benefit, outside-loop design.</li>
+        <li>The field’s real progress is the promotion of the harness from configuration file to scientific object: versioned, editable, gated, attributable.</li>
+        <li>Mid-tier models are the highest-leverage deployment targets for harness evolution today: enough benefit capacity, not yet ceilinged.</li>
+        <li>Online continual and offline batch are complements, not competitors: batch for auditable product harness lineages; online for long-horizon sessions that must adapt without reset.</li>
+      </ul>
+
+      <h3>Predicted</h3>
+      <ol>
+        <li>Leaderboards that report only model name without harness lineage and evolution protocol will be treated as non-comparable within a year of serious harness-bench adoption.</li>
+        <li>Training recipes will add explicit objectives for harness invocation and long-horizon adherence; “skill files on disk” will not be enough.</li>
+        <li>Production systems will split roles: a constrained evolver with write access to a harness package registry, and a task agent with least-privilege tools — even if both call the same model family.</li>
+        <li>Model–harness co-training around REPL-native and CRUD-native interfaces will move vendor numbers more than further hand-prompting of static harnesses.</li>
+      </ol>
+
+      <hr class="post-hr" />
+
+      <h2>10. This Framework Is Wrong If&hellip;</h2>
+      <p>Any one of the following is enough to abandon the title claim.</p>
+      <p><strong>Update quality tracks base capability tightly once evidence formats improve.</strong> If stronger models systematically produce better harness deltas under the same protocol by large margins, “updating is flat” was an artifact of coarse editable surfaces, not a structural fact.</p>
+      <p><strong>Weak models gain more than mid-tier once activation is forced.</strong> If auto-loading every skill and hard-wiring adherence checks inverts the non-monotonic benefit curve, the weak-tier story is mostly UX of the tool API, not a capability structure.</p>
+      <p><strong>Online refine without external gates reliably improves held-out real work without reward hacking.</strong> If long-running production agents with free CRUD on their own prompts and skills show sustained quality gains under independent audit, the “outside the loop” requirement is overfit to game and bench settings.</p>
+      <p>The third would change my mind fastest about deployment architecture. The first would change my mind about where to spend model capability budget.</p>
+
+      <hr class="post-hr" />
+
+      <h2>11. Limits</h2>
+      <p>This note synthesizes primary papers and one major vendor write-up. It does not re-run Terminal-Bench, SWE-bench, ARC-AGI-3, or Pokémon experiments. Vendor ARC numbers and long-suite tables are reported as claimed under the vendor’s protocol. Cross-paper absolute scores are not comparable (different models, harness seeds, task filters, attempt counts).</p>
+      <p>The taxonomy of three regimes is a reading, not a standard. Some systems straddle (online refine plus offline co-training). Joint weight–harness methods are under-covered relative to their long-term importance because public evidence is thinner and more confounded.</p>
+      <p>Related work that optimizes only prompts or only memory is mentioned in lineage, not re-litigated. The focus is harness-level self-evolution where multiple component types can change.</p>
+
+      <hr class="post-hr" />
+
+      <h2>12. Implications</h2>
+      <p><strong>For researchers.</strong> Report agent model, evolver model, editable surfaces, acceptance rule, and held-out protocol separately. Publish activation and adherence rates when claiming benefit. Do not treat end-to-end Δ as a single scientific object.</p>
+      <p><strong>For builders.</strong> Put the expensive model on the task agent. Keep the evolver smaller if the editable surface is structured. Invest in load APIs that weak models can invoke, and in runtime checks that adherence has not decayed by turn 40. Never let the evolver edit the verifier, the sandbox policy, or the immutable base contract.</p>
+      <p><strong>For buyers.</strong> Ask whether a “self-improving agent” product can export its harness lineage, roll back a bad refine, and show held-out or production-metric non-regression. If the pitch is only a rising internal score, you are buying a loop, not a measured improvement process.</p>
+
+      <hr class="post-hr" />
+
+      <h2>13. Open Questions</h2>
+      <p><strong>Can activation and adherence be trained as first-class skills?</strong> Lin et al. recommend it; public recipes are thin.</p>
+      <p><strong>What is the right unit of harness state for portability?</strong> Skills, memories, subagent specs, and middleware are not one export format. Organizational cognition and harness evolution meet here: accumulation without portability is lock-in.</p>
+      <p><strong>How should online refine schedule itself?</strong> Fixed every-F-steps, agent-triggered, or prediction-error-triggered? Evidence is still mostly case-by-case.</p>
+      <p><strong>When does co-training dominate frozen-model evolution?</strong> Prime Agent and Continual Harness both bet on co-learning; the crossover curve is not public.</p>
+      <p><strong>What is a good harness-evolution benchmark that resists both overfitting and reward hacking?</strong> Harness-Bench-style config reporting helps model–harness comparison; evolution-specific suites need chronological streams, held-out tasks, and non-editable judges by construction.</p>
+
+      <hr class="post-hr" />
+
+      <h2>14. Closing</h2>
+      <p>Self-evolving harnesses are real. The gains in the offline literature are large enough, and the qualitative edits specific enough, that “the scaffold is fixed product work” is no longer a serious position. The online literature shows the same mechanism under long-horizon constraints, including its failure modes.</p>
+      <p>What is not real is the idea that self-evolution is one capability bar that rises with model size. The evidence we have says: <strong>updating is flat; benefit is peaked; the outside of the loop is design, not detail.</strong> Build and measure those separately, and the next year of harness research will compound. Collapse them, and we will keep celebrating loops that score well on the only judge they were allowed to rewrite.</p>
+
+      <hr class="post-hr" />
+
+      <h2>15. References</h2>
+      <p>Primary sources for dated and quantitative claims. Survey citations are for lineage and framing only.</p>
+      <ol class="references">
+        <li id="ref-1"><span class="ref-pub">Zhang et al.</span> <a href="https://arxiv.org/abs/2606.09498" target="_blank" rel="noopener">Self-Harness: Harnesses That Improve Themselves (arXiv:2606.09498)</a></li>
+        <li id="ref-2"><span class="ref-pub">Zhang et al.</span> <a href="https://arxiv.org/abs/2608.01918" target="_blank" rel="noopener">HarnessCompass: Guiding Automatic Harness Evolution toward Generalizable and Effective Agent Harnesses (arXiv:2608.01918)</a></li>
+        <li id="ref-3"><span class="ref-pub">Prime Intellect.</span> <a href="https://www.primeintellect.ai/blog/prime-agent" target="_blank" rel="noopener">Prime Agent: A self-improving RLM agent (August 2026)</a></li>
+        <li id="ref-4"><span class="ref-pub">Karten et al.</span> <a href="https://arxiv.org/abs/2605.09998" target="_blank" rel="noopener">Continual Harness: Online Adaptation for Self-Improving Foundation Agents (arXiv:2605.09998)</a></li>
+        <li id="ref-5"><span class="ref-pub">Weng, Lilian.</span> <a href="https://lilianweng.github.io/posts/2026-07-04-harness/" target="_blank" rel="noopener">Harness Engineering for Self-Improvement (Lil’Log, July 2026)</a></li>
+        <li id="ref-6"><span class="ref-pub">Lin et al.</span> <a href="https://arxiv.org/abs/2605.30621" target="_blank" rel="noopener">Harness Updating Is Not Harness Benefit: Disentangling Evolution Capabilities in Self-Evolving LLM Agents (arXiv:2605.30621)</a></li>
+        <li id="ref-7"><span class="ref-pub">Lin et al.</span> <a href="https://arxiv.org/abs/2604.25850" target="_blank" rel="noopener">Agentic Harness Engineering: Observability-Driven Automatic Evolution of Coding-Agent Harnesses (arXiv:2604.25850)</a></li>
+        <li id="ref-8"><span class="ref-pub">Zhang et al.</span> <a href="https://arxiv.org/abs/2512.24601" target="_blank" rel="noopener">Recursive Language Models (arXiv:2512.24601)</a></li>
+        <li id="ref-9"><span class="ref-pub">Zelikman et al.</span> <a href="https://arxiv.org/abs/2310.02304" target="_blank" rel="noopener">Self-Taught Optimizer (STOP) (arXiv:2310.02304)</a></li>
+        <li id="ref-10"><span class="ref-pub">Hu, Lu, and Clune.</span> <a href="https://arxiv.org/abs/2408.08435" target="_blank" rel="noopener">Automated Design of Agentic Systems (arXiv:2408.08435)</a></li>
+        <li id="ref-11"><span class="ref-pub">Lee et al.</span> <a href="https://arxiv.org/abs/2603.28052" target="_blank" rel="noopener">Meta-Harness: End-to-End Optimization of Model Harnesses (arXiv:2603.28052)</a></li>
+        <li id="ref-12"><span class="ref-pub">Zhang et al.</span> <a href="https://arxiv.org/abs/2505.22954" target="_blank" rel="noopener">Darwin Gödel Machine: Open-Ended Evolution of Self-Improving Agents (arXiv:2505.22954)</a></li>
+        <li id="ref-13"><span class="ref-pub">Seong et al.</span> <a href="https://arxiv.org/abs/2604.21003" target="_blank" rel="noopener">The Last Harness You’ll Ever Build (arXiv:2604.21003)</a></li>
+        <li id="ref-14"><span class="ref-pub">Hebbar et al.</span> <a href="https://arxiv.org/abs/2605.27276" target="_blank" rel="noopener">SIA: Self Improving AI with Harness &amp; Weight Updates (arXiv:2605.27276)</a></li>
+      </ol>
+    </article>
+
+    <footer class="site-footer">
+      <p><a class="back-link" href="../index.html">&larr; back to chinmayrelkar.github.io</a></p>
+    </footer>
+  </main>
+</div>
+
+<script src="../assets/script.js"></script>
+</body>
+</html>
