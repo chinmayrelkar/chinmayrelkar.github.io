@@ -249,8 +249,6 @@
     // belonged to the previous section.
     const crumbNodes = [...post.querySelectorAll("h2, h3")];
 
-    const postTitle = (post.querySelector("h1") && post.querySelector("h1").textContent.trim()) || "Writing";
-
     const updateCrumb = () => {
       if (!crumbH1) return;
       // A heading counts as "current" once it passes under the header.
@@ -273,12 +271,10 @@
 
       if (h2Text) {
         if (crumbH1.textContent !== h2Text) crumbH1.textContent = h2Text;
-        crumbH1.classList.remove("crumb-h1-default");
         crumbH1.hidden = false;
       } else {
-        if (crumbH1.textContent !== postTitle) crumbH1.textContent = postTitle;
-        crumbH1.classList.add("crumb-h1-default");
-        crumbH1.hidden = false;
+        crumbH1.textContent = "";
+        crumbH1.hidden = true;
       }
 
       if (crumbH2) {
