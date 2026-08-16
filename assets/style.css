@@ -513,10 +513,24 @@ section { margin-bottom: 4.5rem; scroll-margin-top: calc(var(--header-h) + var(-
     var(--shadow-soft);
 }
 
-/* Essay shell is a touch wider; same language as home. */
+/* Essay & deck shells; same language as home. */
 body:has(.post) .site-header-inner,
 body:has(.post) .page {
   max-width: var(--measure);
+}
+
+body:has(.deck) .site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 0.65rem 1rem 0;
+  pointer-events: none;
+}
+
+body:has(.deck) .site-header-inner {
+  max-width: var(--stage, min(1100px, calc(100vw - 2.5rem)));
+  pointer-events: auto;
 }
 
 body:has(.post) .page {
