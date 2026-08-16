@@ -247,7 +247,7 @@ body.header-compact:has(.title-page) .site-wordmark-slot .site-wordmark {
 }
 .skip-link:focus { top: 1rem; }
 
-@media (max-width: 640px) {
+@media (max-width: 720px) {
   .page { padding: 1.15rem 0.85rem 3.5rem; }
   .site-header { padding: 0; top: 0.35rem; }
   body:has(.title-page) .site-header { margin-bottom: 1.75rem; }
@@ -260,34 +260,25 @@ body.header-compact:has(.title-page) .site-wordmark-slot .site-wordmark {
     gap: 0.25rem;
   }
   .site-wordmark { font-size: 0.78rem; font-weight: 700; }
-  body:has(.title-page) .site-wordmark-slot .site-wordmark {
-    padding-right: 0.35rem;
-    font-size: 0.78rem;
+  body:has(.title-page) .site-wordmark-slot {
+    display: none !important;
   }
-  .tabs {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-    border-radius: 1.1rem;
-    gap: 0.15rem;
-  }
-  .tabs::-webkit-scrollbar { display: none; }
-  .tabs a { white-space: nowrap; flex-shrink: 0; }
   body:has(.title-page) .site-header .tabs {
     display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    gap: 0.25rem;
     flex-wrap: nowrap;
     overflow-x: auto;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
-    margin: 0;
-    padding: 0;
-    gap: 0.15rem;
   }
   body:has(.title-page) .site-header .tabs::-webkit-scrollbar { display: none; }
   body:has(.title-page) .site-header .tabs a {
-    padding: 0.3rem 0.55rem;
-    font-size: 0.74rem;
+    padding: 0.35rem 0.65rem;
+    font-size: 0.78rem;
     font-weight: 600;
     white-space: nowrap;
     flex-shrink: 0;
