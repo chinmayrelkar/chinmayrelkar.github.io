@@ -87,7 +87,6 @@
   // In-house posts: add one entry per post you write as its own file under writing/.
   // { title: "Post title", link: "writing/post-slug.html", pubDate: "2026-07-01" }
   const LOCAL_POSTS = [
-    { title: "Harness Self-Evolution Needs an Outside", link: "writing/harness-self-evolution.html", pubDate: "2026-08-10" },
     { title: "The Evolution of the Agent Harness", link: "presentations/the-evolution-of-agent-harness/", pubDate: "2026-08-10" },
     { title: "Organizational Cognition", link: "writing/organizational-cognition.html", pubDate: "2026-07-29" },
   ];
@@ -183,9 +182,8 @@
     });
 
     // Close each block of content with a divider whose weight matches the depth
-    // of the block it ends: green for a section, white for a subsection, faint
-    // grey below that. Section-level rules are already authored in the markup as
-    // <hr class="post-hr">, so only the deeper ones are generated here.
+    // of the block it ends. Section h2s already have a top border, so only
+    // deeper (h3/h4) rules are generated here.
     const RULE_DEPTH = { H2: 1, H3: 2, H4: 3 };
     const blockHeadings = [...post.querySelectorAll("h2, h3, h4")];
 
