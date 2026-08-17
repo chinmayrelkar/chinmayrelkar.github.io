@@ -127,8 +127,6 @@
       <p>Anthropic donates MCP. Google donates A2A. OpenAI contributes <code>AGENTS.md</code>. Microsoft, AWS, Cloudflare, and Bloomberg back neutral foundation projects under the Linux Foundation.<sup class="fn"><a href="#ref-3" role="doc-noteref" aria-label="Reference 3">3</a><a href="#ref-10" role="doc-noteref" aria-label="Reference 10">10</a></sup> Salesforce rebuilds Slackbot on a competitor's model and a competitor's protocol.<sup class="fn"><a href="#ref-1" role="doc-noteref" aria-label="Reference 1">1</a><a href="#ref-16" role="doc-noteref" aria-label="Reference 16">16</a></sup> Team judgment files converge on a vendor-neutral format (<code>AGENTS.md</code>) that essentially every serious coding agent now reads.<sup class="fn"><a href="#ref-14" role="doc-noteref" aria-label="Reference 14">14</a></sup></p>
       <p>Existing explanations account for pieces of this. None account for all of it. Missing category: what everyone is trying to accumulate once the pipes are free.</p>
 
-      <hr class="post-hr" />
-
       <h2>2. Four Explanations, Four Gaps</h2>
 
       <h3>Better Models</h3>
@@ -152,8 +150,6 @@
       <h3>The Residual</h3>
       <p>Models, workflows, distribution, and statelessness each explain part of the landscape. None explain why every player converges on the same capabilities, or why what is being assembled is organization-specific judgment rather than organization-specific facts.</p>
       <p>That residual is the claim of this essay. Product decisions below are <em>observed</em>; the reading of them is <em>interpreted</em>; forecasts in section 7 are <em>predicted</em>. The lens organizes the convergence. It is not yet shown to be necessary: competitive mirroring and procurement checklists can produce similar surfaces. What it has to earn is that the content of those surfaces is judgment, not generic RAG with SSO.</p>
-
-      <hr class="post-hr" />
 
       <h2>3. Organizational Cognition</h2>
 
@@ -188,8 +184,6 @@
 
       <p>Externalization is not all-or-nothing. Style guides, runbooks, and escalation matrices capture thin static slices of judgment. What they do not carry is the live process: which rule wins when two conflict, noticing that a rule is stale, breaking it once and being right. The artifact is data. Authoring, revising, and knowing when to deviate is cognition.</p>
 
-      <hr class="post-hr" />
-
       <h2>4. A Taxonomy</h2>
       <p>Four functions, two control surfaces. Products are built against these separately, which is why they show up as six dimensions. Memory is perception across time: what is kept and re-surfaced. Reasoning is decide. Coordination and Learning keep their names. Delegation and Governance are not extra functions; they distribute and audit the authority to perform the four.</p>
       <table>
@@ -206,8 +200,6 @@
         </tbody>
       </table>
       <p>Two organizations with identical archives can differ entirely on what past context gets curated and deployed. That difference is cognitive. Governance is the difference between "the AI learned from how we work" and "the AI makes decisions we cannot explain or override."</p>
-
-      <hr class="post-hr" />
 
       <h2>5. Three Cases</h2>
       <p>If the lens is useful, it should make sense of product decisions that look unrelated under other frameworks.</p>
@@ -237,16 +229,12 @@
       <p>Block's Buzz attacks the moat rather than digging one. Agents are members with portable cryptographic identities so accumulated context might belong to the organization rather than the vendor.<sup class="fn"><a href="#ref-17" role="doc-noteref" aria-label="Reference 17">17</a><a href="#ref-18" role="doc-noteref" aria-label="Reference 18">18</a></sup> Early, and the first serious attempt to collapse switching costs: a preview of the falsifier in section 8.</p>
       <p>Every roadmap makes sense if organizations generate decision-relevant patterns not captured in formal docs; those patterns can be externalized through continuous human/AI interaction; once externalized they become a durable asset; the asset compounds; switching providers means losing or rebuilding it. Without those assumptions, MCP, Projects, ontologies, and agent identity look like unnecessary complexity. With them, the products are solving for context accumulation, not data access.</p>
 
-      <hr class="post-hr" />
-
       <h2>6. What History Suggests</h2>
       <p>Major computing revolutions externalized something that previously lived only in human minds: writing (memory), print (knowledge at scale), spreadsheets (calculation), databases (structured records), cloud (infrastructure). Each created value not only by making the old thing cheaper, but by enabling work that was previously impossible.</p>
       <p>If AI is externalizing organizational cognition (how organizations perceive, decide, coordinate, delegate, learn, and govern), the current moment is closer to what databases did for records than to what a better calculator did for arithmetic.</p>
       <p>The analogy cuts against pure lock-in. Every externalization on that list ended in standardization: alphabets, formula syntax, SQL, containers. Substrate became portable; whoever bet only on lock-in eventually lost. Portability standards are a battleground. Switching costs do not rise forever.</p>
       <p>Earlier externalizations standardized quickly because the content already had a formal shape (double-entry bookkeeping before VisiCalc; relational algebra before SQL). Organizational cognition has no prior shared formalism. There is no agreed representation of what an approval norm or a risk threshold <em>is</em>. Until there is a shared semantics, an export format is a container with nothing standard inside it.</p>
       <p>Prediction: switching costs rise before a shared representation exists, and fall once one arrives. My guess is the period lasts longer than for spreadsheets or SQL, because the substrate is tacit judgment and governance has to standardize before content can. Lock-in as a permanent condition has no precedent on that list.</p>
-
-      <hr class="post-hr" />
 
       <h2>7. Observed, Interpreted, Predicted</h2>
 
@@ -275,8 +263,6 @@
         <li>Platform value will track rate of cognition accumulation more than benchmark scores.</li>
       </ol>
 
-      <hr class="post-hr" />
-
       <h2>8. This Framework Is Wrong If&hellip;</h2>
       <p>Any one of the following is enough to abandon the thesis.</p>
       <p><strong>Persistent organizational context does not produce measurably better decisions.</strong> If platforms with memory, connectors, and custom instructions produce the same decision quality as a stateless model handed the same documents, accumulation buys nothing. Runnable today on a single team with a held-out set of real decisions.</p>
@@ -284,21 +270,15 @@
       <p><strong>A stateless model with superior reasoning eliminates the need for accumulated context.</strong> If a future model produces equivalent or better organizational decisions given only current documents and a prompt, with no learned history of how the organization behaves, then organizational cognition is a transitional artifact of weak models, not a structural layer.</p>
       <p>The second would change my mind fastest.</p>
 
-      <hr class="post-hr" />
-
       <h2>9. Limits</h2>
       <p>This essay shows product and standards convergence and offers a lens for it. It does not show that accumulated organizational context improves decision quality. That is the load-bearing empirical claim, and it remains unproven here. Without that lift, "organizational cognition" could still be a marketing story for permissions-aware retrieval, session state, and compliance UI.</p>
       <p>The lens is also underdetermined. Competitive mirroring, enterprise security requirements, and procurement checklists can produce similar roadmaps without anyone intending to externalize tacit judgment. Convergence is evidence that something is shared, not proof that the shared thing is this category.</p>
       <p>Figures that disagree across sources (non-human identity ratios, platform valuations) are cited with that disagreement intact. Dated product claims depend on the primary sources in section 12.</p>
 
-      <hr class="post-hr" />
-
       <h2>10. Implications</h2>
       <p><strong>For buyers.</strong> Evaluate export and portability of <em>judgment history</em> (agent memory, override logs, instruction revision history, who authorized what), not only model tier and seat price. Ask what degrades for six months if you leave. If "nothing structural," you are buying a tool. If "how we decide," you are choosing a cognitive substrate.</p>
       <p><strong>For builders.</strong> Do not bet the company on owning the pipe. Instrument the loop: when rules are written, revised, overridden, and deleted; when agents are corrected mid-flight; when postmortems change future behavior. That loop is the product surface that compounds. Interfaces will be standardized out from under you either way.</p>
       <p><strong>For leaders.</strong> Treat agent memory and decision trails as candidates for a system of record, with ownership, access control, audit, and decay, not as chat logs that happen to persist. Decide who owns organizational cognition before a vendor's terms of service decides for you. Memory without learning is residue, and residue makes confident wrong decisions.</p>
-
-      <hr class="post-hr" />
 
       <h2>11. Open Questions</h2>
       <p><strong>Who owns it?</strong> When decision patterns are externalized into a platform, rights sit awkwardly among the enterprise, the vendor, and the employees whose interactions produced them.</p>
@@ -306,8 +286,6 @@
       <p><strong>Can it be version-controlled and merged?</strong> Can cognition be branched, rolled back, and reconciled in a merger the way code and ERP systems can, or does it only accumulate as a stale picture of how the company used to work?</p>
       <p><strong>Can it decay?</strong> If interaction stops, does the asset persist, degrade, or actively mislead? Memory without learning is residue.</p>
       <p><strong>Can it become a system of record?</strong> Databases for data. CRMs for relationships. Could an AI platform become the authoritative source for how the organization decides?</p>
-
-      <hr class="post-hr" />
 
       <h2>12. References</h2>
       <p>Every figure and dated claim in sections 1, 2, 5, and 7 traces to one of the following. Where sources disagree, the disagreement is noted rather than resolved. Undated architectural claims are from the vendors' own documentation.</p>

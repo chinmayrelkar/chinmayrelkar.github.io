@@ -90,13 +90,16 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
+em {
+    color: var(--accent)
+}
 
 ::selection {
   background: color-mix(in srgb, var(--accent) 28%, transparent);
   color: var(--ink);
 }
 
-a { color: inherit; text-decoration: none; }
+a { color: var(--accent); }
 ul { margin: 0; padding: 0; list-style: none; }
 
 .page {
@@ -1108,11 +1111,8 @@ body:has(.post) .reading-progress {
   padding: 0.08em 0.35em;
 }
 
-/* Dividers close the content of the block above them, one weight per heading
-   depth: green ends a heading-1 section, white ends a heading-2 subsection,
-   faint grey ends a heading-3 block. The green rules are authored in the markup
-   as <hr class="post-hr"> so they survive without JavaScript; the deeper ones
-   have no markup to hang off and are inserted by script.js. */
+/* Section h2s carry their own top border. script.js inserts post-rule
+   dividers for h3/h4 blocks. */
 /* Footnote markers. Superscript links out to the reference list; adjacent markers
    on one claim (e.g. "4 15") get a hairline separator so they don't read as "415". */
 .post sup.fn {
@@ -1215,7 +1215,6 @@ body:has(.post) .reading-progress {
   text-wrap: balance;
 }
 
-.post-hr,
 .post-rule {
   border: none;
   position: relative;
@@ -1230,7 +1229,6 @@ body:has(.post) .reading-progress {
   );
 }
 
-.post-hr::after,
 .post-rule--1::after {
   content: "";
   position: absolute;

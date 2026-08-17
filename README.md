@@ -33,10 +33,8 @@ between body text and the title. Set a heading from these, never a bare
 In a post, `h1` is the title, `h2` is heading 1, and `h3` is heading 2. All
 headings use `--ink` rather than the accent colour.
 
-Each block of content closes with a divider whose weight matches its depth:
-green (2px) ends a section, white (1px) ends a subsection, faint grey ends an
-`h4` block. Only the green rules are authored, as `<hr class="post-hr">` before
-each `<h2>`; `script.js` generates the rest and closes the final section.
+Each `h2` has a top border. `script.js` inserts lighter `post-rule` dividers
+for `h3`/`h4` blocks.
 
 ## Sticky bars
 
