@@ -2482,6 +2482,32 @@ code {
 }
 
 
+
+
+/* Force scroll-document mode on phones (overrides deck theater) */
+@media (max-width: 767px) {
+  html, body {
+    height: auto !important;
+    overflow: visible !important;
+    overflow-x: hidden !important;
+  }
+  .deck {
+    height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: visible !important;
+    padding: 0.75rem 0.75rem 5.5rem !important;
+    gap: 0.85rem !important;
+  }
+  .slide {
+    display: flex !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    width: 100% !important;
+  }
+}
+
 /* ── Portfolio refresh overrides ───────────────────────────────────────── */
 .site-header.portfolio-chrome {
   backdrop-filter: blur(16px) saturate(1.2);
@@ -3655,6 +3681,7 @@ code {
   }
 
   const slides = [...document.querySelectorAll(".slide")];
+  const isMobileDeck = () => window.matchMedia("(max-width: 767px)").matches;
   const prevBtn = document.getElementById("prev");
   const nextBtn = document.getElementById("next");
   const countEl = document.getElementById("slide-count");
@@ -3706,6 +3733,13 @@ code {
   function apply(n) {
     i = Math.max(0, Math.min(slides.length - 1, n));
     slides.forEach((s, idx) => s.classList.toggle("active", idx === i));
+    if (isMobileDeck()) {
+      const target = slides[i];
+      if (target) {
+        const top = target.getBoundingClientRect().top + window.scrollY - 56;
+        window.scrollTo({ top, behavior: "smooth" });
+      }
+    }
     countEl.textContent = `${i + 1} / ${slides.length}`;
     bar.style.width = `${(i / Math.max(1, slides.length - 1)) * 100}%`;
     prevBtn.disabled = i === 0;
@@ -3798,6 +3832,14 @@ code {
   apply(start != null ? start : 0);
   if (location.hash !== `#s${i}`) history.replaceState({ s: i }, "", `#s${i}`);
 })();
+
+  // mobile deck scroll init: keep hash navigation but never trap scroll
+  if (isMobileDeck()) {
+    document.documentElement.classList.add("deck-mobile-scroll");
+  }
+  window.addEventListener("resize", () => {
+    document.documentElement.classList.toggle("deck-mobile-scroll", isMobileDeck());
+  });
 </script>
 </body>
 </html>
