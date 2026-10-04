@@ -405,46 +405,6 @@
 /* —— Footer —— */
 
 
-/* —— Footer logo flashlight (neo.work-style) —— */
-.footer-logo {
-  position: relative;
-  width: min(100%, var(--max-w));
-  margin: 0 auto;
-  padding: 2.5rem var(--pad) 0.5rem;
-  color: var(--text);
-  user-select: none;
-  touch-action: none;
-}
-
-.footer-logo-svg {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.footer-logo-reveal {
-  position: absolute;
-  inset: 2.5rem var(--pad) 0.5rem;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  -webkit-mask-image: radial-gradient(circle 0px at 50% 50%, #000 0%, transparent 70%);
-  mask-image: radial-gradient(circle 0px at 50% 50%, #000 0%, transparent 70%);
-  -webkit-mask-mode: alpha;
-  mask-mode: alpha;
-}
-
-.footer-logo.is-hot .footer-logo-reveal {
-  opacity: 1;
-}
-
-@media (hover: none), (pointer: coarse) {
-  .footer-logo { display: none; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .footer-logo-reveal { display: none !important; }
-}
 
 .footer {
   border-top: 1px solid var(--border);

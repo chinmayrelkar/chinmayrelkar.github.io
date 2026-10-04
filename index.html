@@ -53,7 +53,10 @@
 
   <header class="site-header" id="nav">
     <div class="site-header-inner">
-      <a href="/" class="brand">Chinmay Relkar</a>
+      <a href="/" class="brand" data-brand-logo aria-label="Chinmay Relkar home">
+        <span class="brand-fill">Chinmay Relkar</span>
+        <span class="brand-reveal" aria-hidden="true">Chinmay Relkar</span>
+      </a>
       <div class="header-actions">
         <nav class="site-nav" id="nav-links" aria-label="Primary">
           <a href="#writing">Writing</a>
@@ -247,23 +250,6 @@
   </main>
 
   <footer class="footer">
-    <div class="footer-logo" data-footer-logo aria-hidden="true">
-      <svg class="footer-logo-svg" viewBox="0 0 1200 160" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="footer-logo-fill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="currentColor" stop-opacity="0.14"/>
-            <stop offset="70%" stop-color="currentColor" stop-opacity="0.07"/>
-            <stop offset="100%" stop-color="currentColor" stop-opacity="0"/>
-          </linearGradient>
-        </defs>
-        <text class="footer-logo-fill" x="50%" y="72%" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-size="120" font-weight="500" letter-spacing="-0.04em" fill="url(#footer-logo-fill)">Chinmay Relkar</text>
-      </svg>
-      <div class="footer-logo-reveal">
-        <svg class="footer-logo-svg" viewBox="0 0 1200 160" xmlns="http://www.w3.org/2000/svg">
-          <text class="footer-logo-stroke" x="50%" y="72%" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-size="120" font-weight="500" letter-spacing="-0.04em" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round">Chinmay Relkar</text>
-        </svg>
-      </div>
-    </div>
     <div class="footer-inner">
       <span class="footer-name">&copy; <span id="year"></span> Chinmay Relkar</span>
       <nav class="footer-links" aria-label="Social links">
