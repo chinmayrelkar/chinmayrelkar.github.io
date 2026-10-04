@@ -49,19 +49,30 @@
   <a class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-neutral-900 focus:px-3 focus:py-2 focus:text-white" href="#main-content">Skip to content</a>
 
   <header class="sticky top-0 z-40 border-b border-neutral-200/80 bg-neutral-50/90 backdrop-blur dark:border-neutral-800 dark:bg-neutral-950/90">
-    <div class="mx-auto flex h-14 w-full items-center justify-between px-6 sm:px-10 lg:px-16 xl:px-20">
-      <a href="/" class="text-sm font-semibold tracking-tight">Chinmay Relkar</a>
-      <nav class="flex items-center gap-5 text-sm text-neutral-600 dark:text-neutral-400">
-        <a class="hover:text-neutral-900 dark:hover:text-white" href="#writing">Writing</a>
-        <a class="hover:text-neutral-900 dark:hover:text-white" href="#projects">Projects</a>
-        <a class="hover:text-neutral-900 dark:hover:text-white" href="#experience">Experience</a>
-        <a class="hover:text-neutral-900 dark:hover:text-white" href="#contact">Contact</a>
+    <div class="mx-auto flex h-14 w-full items-center justify-between gap-3 px-4 sm:px-6 lg:px-16 xl:px-20">
+      <a href="/" class="truncate text-sm font-semibold tracking-tight">Chinmay Relkar</a>
+      <div class="flex items-center gap-2">
+        <nav class="hidden items-center gap-5 text-sm text-neutral-600 md:flex dark:text-neutral-400">
+          <a class="hover:text-neutral-900 dark:hover:text-white" href="#writing">Writing</a>
+          <a class="hover:text-neutral-900 dark:hover:text-white" href="#projects">Projects</a>
+          <a class="hover:text-neutral-900 dark:hover:text-white" href="#experience">Experience</a>
+          <a class="hover:text-neutral-900 dark:hover:text-white" href="#contact">Contact</a>
+        </nav>
+        <details class="relative md:hidden">
+          <summary class="cursor-pointer list-none rounded-md border border-neutral-300 px-2 py-1 text-xs text-neutral-600 dark:border-neutral-700 dark:text-neutral-300 [&::-webkit-details-marker]:hidden">Menu</summary>
+          <div class="absolute right-0 z-50 mt-2 w-44 rounded-md border border-neutral-200 bg-neutral-50 p-2 shadow-lg dark:border-neutral-800 dark:bg-neutral-950">
+            <a class="block rounded px-2 py-2 text-sm text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-neutral-900" href="#writing">Writing</a>
+            <a class="block rounded px-2 py-2 text-sm text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-neutral-900" href="#projects">Projects</a>
+            <a class="block rounded px-2 py-2 text-sm text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-neutral-900" href="#experience">Experience</a>
+            <a class="block rounded px-2 py-2 text-sm text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-neutral-900" href="#contact">Contact</a>
+          </div>
+        </details>
         <button type="button" data-theme-toggle class="rounded-md border border-neutral-300 px-2 py-1 text-xs dark:border-neutral-700" aria-label="Toggle dark mode">Auto</button>
-      </nav>
+      </div>
     </div>
   </header>
 
-  <main id="main-content" class="mx-auto w-full px-6 py-16 sm:px-10 sm:py-20 lg:px-16 xl:px-20">
+  <main id="main-content" class="mx-auto w-full px-4 py-10 sm:px-6 sm:py-16 lg:px-16 lg:py-20 xl:px-20">
     <section class="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
       <div>
         <p class="text-sm text-neutral-500 dark:text-neutral-400">Engineer. Jack of many trades</p>
@@ -146,14 +157,14 @@
         <div>
           <h2 class="text-sm font-semibold uppercase tracking-wider text-neutral-500">Experience</h2>
           <ul class="mt-6 space-y-5">
-        <li class="grid gap-1 sm:grid-cols-[7.5rem_1fr]">
+        <li class="grid gap-1 md:grid-cols-[7.5rem_1fr]">
           <p class="text-sm text-neutral-500">2024 - Present</p>
           <div>
             <p><span class="font-medium">Clarisights</span> <span class="text-neutral-500">Software Engineer</span></p>
             <p class="mt-1 text-[15px] leading-6 text-neutral-600 dark:text-neutral-400">Building AI. Rebuilt orchestration. Spent time hanging out with data integrations written in Ruby and Scala, mostly Ruby.</p>
           </div>
         </li>
-        <li class="grid gap-1 sm:grid-cols-[7.5rem_1fr]">
+        <li class="grid gap-1 md:grid-cols-[7.5rem_1fr]">
           <p class="text-sm text-neutral-500">2022 - 2024</p>
           <div>
             <p><span class="font-medium">Unacademy Group</span> <span class="text-neutral-500">Senior Software Engineer to Engineering Lead (incl. Cohesive)</span></p>
@@ -161,21 +172,21 @@
             <p class="mt-1 text-[15px] leading-6 text-neutral-600 dark:text-neutral-400">Built Cohesive Cloud and Live: Vercel for every service. Led bottled projects with interns for the Cohesive marketplace.</p>
           </div>
         </li>
-        <li class="grid gap-1 sm:grid-cols-[7.5rem_1fr]">
+        <li class="grid gap-1 md:grid-cols-[7.5rem_1fr]">
           <p class="text-sm text-neutral-500">2021 - 2022</p>
           <div>
             <p><span class="font-medium">Amazon</span> <span class="text-neutral-500">SDE</span></p>
             <p class="mt-1 text-[15px] leading-6 text-neutral-600 dark:text-neutral-400">Enabled IAP tax overrides for quick resolution. Enabled IAB compliance for the App Store. Spent some time profiling app bundles and APKs submitted on the App Store for bad actors.</p>
           </div>
         </li>
-        <li class="grid gap-1 sm:grid-cols-[7.5rem_1fr]">
+        <li class="grid gap-1 md:grid-cols-[7.5rem_1fr]">
           <p class="text-sm text-neutral-500">2021</p>
           <div>
             <p><span class="font-medium">100ms.live</span> <span class="text-neutral-500">Software Engineer</span></p>
             <p class="mt-1 text-[15px] leading-6 text-neutral-600 dark:text-neutral-400">Built Beam. Took it 0-1.</p>
           </div>
         </li>
-        <li class="grid gap-1 sm:grid-cols-[7.5rem_1fr]">
+        <li class="grid gap-1 md:grid-cols-[7.5rem_1fr]">
           <p class="text-sm text-neutral-500">2019 - 2021</p>
           <div>
             <p><span class="font-medium">Schlumberger</span> <span class="text-neutral-500">Associate Application Engineer to Application Engineer</span></p>
@@ -183,7 +194,7 @@
             <p class="mt-1 text-[15px] leading-6 text-neutral-600 dark:text-neutral-400">Contributed to cloud cost monitoring by pillars, initiatives, teams, sub-teams, and apps with owner visibility. Built an end-to-end integrations monitoring system. Contributed to data archival initiatives and SRE golden rules for internal systems.</p>
           </div>
         </li>
-        <li class="grid gap-1 sm:grid-cols-[7.5rem_1fr]">
+        <li class="grid gap-1 md:grid-cols-[7.5rem_1fr]">
           <p class="text-sm text-neutral-500">2018 - 2019</p>
           <div>
             <p><span class="font-medium">GarageBot</span> <span class="text-neutral-500">Software Engineer Intern</span></p>
@@ -197,11 +208,11 @@
         <div>
           <h2 class="text-sm font-semibold uppercase tracking-wider text-neutral-500">Education</h2>
           <ul class="mt-6 space-y-5">
-        <li class="grid gap-1 sm:grid-cols-[7.5rem_1fr]">
+        <li class="grid gap-1 md:grid-cols-[7.5rem_1fr]">
           <p class="text-sm text-neutral-500">2025 - 2026</p>
           <p><span class="font-medium">Indian Institute of Management Bangalore</span> <span class="text-neutral-500">Executive General Management</span></p>
         </li>
-        <li class="grid gap-1 sm:grid-cols-[7.5rem_1fr]">
+        <li class="grid gap-1 md:grid-cols-[7.5rem_1fr]">
           <p class="text-sm text-neutral-500">2015 - 2019</p>
           <p><span class="font-medium">Pune Vidhyarthi Griha's College of Engineering and Technology</span> <span class="text-neutral-500">B.E., Information Technology</span></p>
         </li>
