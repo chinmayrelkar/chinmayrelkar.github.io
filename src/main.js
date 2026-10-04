@@ -2,16 +2,49 @@ import './style.css'
 import 'preline'
 
 const root = document.documentElement
-const stored = localStorage.getItem('theme')
-if (stored === 'dark' || (!stored && matchMedia('(prefers-color-scheme: dark)').matches)) {
-  root.classList.add('dark')
+const mq = matchMedia('(prefers-color-scheme: dark)')
+
+function preference() {
+  const stored = localStorage.getItem('theme')
+  if (stored === 'light' || stored === 'dark' || stored === 'system') return stored
+  return 'system'
 }
+
+function isDark() {
+  const pref = preference()
+  if (pref === 'dark') return true
+  if (pref === 'light') return false
+  return mq.matches
+}
+
+function syncThemeToggleLabels() {
+  const pref = preference()
+  const label = pref === 'system' ? 'Auto' : pref === 'dark' ? 'Dark' : 'Light'
+  document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
+    btn.textContent = label
+    btn.setAttribute('aria-label', `Color theme: ${label}. Click to change.`)
+    btn.title = 'Cycles Light, Dark, and Auto (system)'
+  })
+}
+
+function applyTheme() {
+  root.classList.toggle('dark', isDark())
+  syncThemeToggleLabels()
+}
+
+applyTheme()
+mq.addEventListener('change', () => {
+  if (preference() === 'system') applyTheme()
+})
 
 document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
   btn.addEventListener('click', () => {
-    const next = root.classList.contains('dark') ? 'light' : 'dark'
-    root.classList.toggle('dark', next === 'dark')
-    localStorage.setItem('theme', next)
+    const order = ['system', 'light', 'dark']
+    const current = preference()
+    const next = order[(order.indexOf(current) + 1) % order.length]
+    if (next === 'system') localStorage.removeItem('theme')
+    else localStorage.setItem('theme', next)
+    applyTheme()
   })
 })
 

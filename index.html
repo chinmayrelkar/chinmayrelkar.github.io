@@ -26,6 +26,16 @@
   <meta name="twitter:image" content="https://chinmayrelkar.github.io/assets/og-image.png" />
   <meta name="twitter:creator" content="@chinmayrelkar" />
   <meta name="color-scheme" content="light dark" />
+  <script>
+    (function () {
+      try {
+        var pref = localStorage.getItem('theme');
+        var dark = pref === 'dark' || ((pref !== 'light') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        if (dark) document.documentElement.classList.add('dark');
+      } catch (e) {}
+    })();
+  </script>
+
   <link rel="canonical" href="https://chinmayrelkar.github.io/" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2318181b'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-weight='700' font-size='26' fill='%23fafafa' text-anchor='middle'%3ECR%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -46,7 +56,7 @@
         <a class="hover:text-neutral-900 dark:hover:text-white" href="#projects">Projects</a>
         <a class="hover:text-neutral-900 dark:hover:text-white" href="#experience">Experience</a>
         <a class="hover:text-neutral-900 dark:hover:text-white" href="#contact">Contact</a>
-        <button type="button" data-theme-toggle class="rounded-md border border-neutral-300 px-2 py-1 text-xs dark:border-neutral-700" aria-label="Toggle dark mode">Theme</button>
+        <button type="button" data-theme-toggle class="rounded-md border border-neutral-300 px-2 py-1 text-xs dark:border-neutral-700" aria-label="Toggle dark mode">Auto</button>
       </nav>
     </div>
   </header>
