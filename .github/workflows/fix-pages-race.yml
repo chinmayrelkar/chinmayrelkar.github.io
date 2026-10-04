@@ -1,7 +1,7 @@
 name: Fix Pages after legacy build
 
-# Legacy "pages build and deployment" (Jekyll from branch root) can finish after
-# our Vite deploy and overwrite dist with source HTML. Re-publish the Vite build.
+# If legacy "pages build and deployment" (Jekyll from branch root) finishes after
+# our Vite deploy and overwrites dist with source HTML, republish the Vite build.
 on:
   workflow_run:
     workflows: ["pages-build-deployment"]
@@ -14,16 +14,13 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages-vite
+  group: pages
   cancel-in-progress: true
 
 jobs:
-  build-deploy:
+  build:
     if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -37,5 +34,13 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - id: deployment
         uses: actions/deploy-pages@v4
