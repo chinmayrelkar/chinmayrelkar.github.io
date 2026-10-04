@@ -26,7 +26,7 @@
   --fs-h2: 1.757rem;
   --fs-h3: 1.41rem;
   --fs-body: 1.0625rem;
-  --measure: min(100rem, calc(100vw - 4rem));
+  --measure: calc(100vw - 3rem);
   --essay-pad: clamp(1.25rem, 3vw, 2.75rem);
   --radius-card: 1.25rem;
   --radius-pill: 999px;
@@ -1490,4 +1490,32 @@ body:has(.post) .reading-progress {
     right: 0.85rem;
     bottom: calc(0.85rem + env(safe-area-inset-bottom, 0px));
   }
+}
+
+
+/* Wide essay/home chrome: use the viewport */
+body:has(.post) .site-header {
+  padding-left: 0;
+  padding-right: 0;
+}
+body:has(.post) .site-header-inner,
+body:has(.post) .page {
+  max-width: calc(100vw - 3rem);
+  width: calc(100vw - 3rem);
+}
+body:has(.post) .page {
+  padding-left: 0;
+  padding-right: 0;
+}
+body:has(.post) .post {
+  max-width: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+body:has(.post) .post h1 {
+  max-width: none;
+}
+body:has(.post) .reading-progress {
+  width: calc(100vw - 3rem);
+  left: 1.5rem;
 }
