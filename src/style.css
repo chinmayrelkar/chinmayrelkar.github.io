@@ -1,19 +1,23 @@
 @import "tailwindcss";
-
-/* Preline UI */
 @source "../node_modules/preline/dist/*.js";
 @import "preline/variants.css";
 @plugin "@tailwindcss/forms";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --color-brand-50: #eef2ff;
+  --color-brand-100: #e0e7ff;
+  --color-brand-500: #6366f1;
+  --color-brand-600: #4f46e5;
+  --color-brand-700: #4338ca;
+}
+
 @layer base {
   html { scroll-behavior: smooth; }
   body {
-    @apply bg-stone-50 text-stone-900 antialiased dark:bg-stone-950 dark:text-stone-100;
+    @apply bg-zinc-50 font-sans text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-50;
   }
-  button:not(:disabled),
-  [role="button"]:not(:disabled) {
-    cursor: pointer;
-  }
+  button:not(:disabled), [role="button"]:not(:disabled) { cursor: pointer; }
 }
