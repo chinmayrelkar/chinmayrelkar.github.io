@@ -26,7 +26,7 @@
   --fs-h2: 1.757rem;
   --fs-h3: 1.41rem;
   --fs-body: 1.0625rem;
-  --measure: 58rem;
+  --measure: min(100rem, calc(100vw - 4rem));
   --essay-pad: clamp(1.25rem, 3vw, 2.75rem);
   --radius-card: 1.25rem;
   --radius-pill: 999px;
@@ -103,7 +103,7 @@ a { color: var(--accent); }
 ul { margin: 0; padding: 0; list-style: none; }
 
 .page {
-  max-width: min(900px, var(--measure));
+  max-width: var(--measure);
   margin: 0 auto;
   padding: 1.5rem 1.5rem 3.5rem;
 }
@@ -499,7 +499,7 @@ section { margin-bottom: 4.5rem; scroll-margin-top: calc(var(--header-h) + var(-
 }
 
 .site-header-inner {
-  max-width: min(900px, var(--measure));
+  max-width: var(--measure);
   height: 3rem;
   margin: 0 auto;
   padding: 0 1.15rem;
@@ -858,7 +858,7 @@ body.header-compact:has(.title-page) .site-wordmark-slot .site-wordmark {
   bottom: 1.35rem;
   top: auto;
   z-index: 80;
-  width: min(var(--measure, 56.25rem), calc(100vw - 6rem));
+  width: min(var(--measure), calc(100vw - 3rem));
   transform: translateX(-50%);
   pointer-events: none;
   padding: 0 0.65rem;
@@ -946,7 +946,7 @@ body.header-compact:has(.title-page) .site-wordmark-slot .site-wordmark {
 }
 
 body:has(.post) .reading-progress {
-  width: min(var(--measure), calc(100vw - 6.5rem));
+  width: min(var(--measure), calc(100vw - 3rem));
 }
 
 @media (max-width: 640px) {
