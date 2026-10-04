@@ -50,16 +50,16 @@ function renderTicketList(list, items) {
     li.className = 'group'
     const a = document.createElement('a')
     a.href = item.link
-    a.className = 'flex items-center justify-between gap-4 rounded-xl border border-zinc-200 bg-white px-4 py-3 transition hover:border-emerald-500/50 hover:shadow-sm dark:border-zinc-800 dark:bg-zinc-900'
+    a.className = 'flex items-baseline justify-between gap-4 py-4 hover:bg-neutral-100/70 dark:hover:bg-neutral-900/50'
     if (/^https?:\/\//.test(item.link)) {
       a.target = '_blank'
       a.rel = 'noopener'
     }
     const title = document.createElement('span')
-    title.className = 'font-medium text-zinc-900 group-hover:text-emerald-700 dark:text-zinc-100 dark:group-hover:text-emerald-300'
+    title.className = 'font-medium'
     title.textContent = item.title
     const date = document.createElement('span')
-    date.className = 'shrink-0 text-sm text-zinc-500 dark:text-zinc-400'
+    date.className = 'shrink-0 text-sm text-neutral-500'
     date.textContent = formatTicketDate(item.pubDate)
     a.append(title, date)
     li.appendChild(a)
