@@ -3831,15 +3831,14 @@ code {
   const start = parseHash();
   apply(start != null ? start : 0);
   if (location.hash !== `#s${i}`) history.replaceState({ s: i }, "", `#s${i}`);
-})();
 
-  // mobile deck scroll init: keep hash navigation but never trap scroll
-  if (isMobileDeck()) {
-    document.documentElement.classList.add("deck-mobile-scroll");
-  }
+  // mobile deck scroll init
+  if (isMobileDeck()) document.documentElement.classList.add("deck-mobile-scroll");
   window.addEventListener("resize", () => {
     document.documentElement.classList.toggle("deck-mobile-scroll", isMobileDeck());
   });
+})();
+
 </script>
 </body>
 </html>
