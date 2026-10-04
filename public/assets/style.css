@@ -985,14 +985,6 @@ body:has(.post) .site-footer {
     font-size: 0.95rem;
     padding: 0.75rem 0.85rem;
   }
-
-  #theme-toggle,
-  .theme-toggle {
-    width: 44px;
-    height: 44px;
-    right: 0.85rem;
-    bottom: calc(0.85rem + env(safe-area-inset-bottom, 0px));
-  }
 }
 
 
