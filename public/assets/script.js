@@ -1,29 +1,57 @@
 (() => {
   const root = document.documentElement;
+  const mq = matchMedia("(prefers-color-scheme: dark)");
+
+  function preference() {
+    const stored = localStorage.getItem("theme");
+    if (stored === "light" || stored === "dark" || stored === "system") return stored;
+    return "system";
+  }
+
+  function isDark() {
+    const pref = preference();
+    if (pref === "dark") return true;
+    if (pref === "light") return false;
+    return mq.matches;
+  }
+
+  function syncThemeToggleLabels() {
+    const pref = preference();
+    const label = pref === "system" ? "Auto" : pref === "dark" ? "Dark" : "Light";
+    document.querySelectorAll("[data-theme-toggle]").forEach((btn) => {
+      btn.textContent = label;
+      btn.setAttribute("aria-label", `Color theme: ${label}. Click to change.`);
+    });
+  }
+
+  function applyTheme() {
+    const dark = isDark();
+    root.classList.toggle("dark", dark);
+    root.setAttribute("data-theme", dark ? "dark" : "light");
+    syncThemeToggleLabels();
+  }
+
+  applyTheme();
+  mq.addEventListener("change", () => {
+    if (preference() === "system") applyTheme();
+  });
+
+  document.querySelectorAll("[data-theme-toggle]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const order = ["system", "light", "dark"];
+      const current = preference();
+      const next = order[(order.indexOf(current) + 1) % order.length];
+      if (next === "system") localStorage.removeItem("theme");
+      else localStorage.setItem("theme", next);
+      applyTheme();
+    });
+  });
+
+  // Legacy floating toggle (hidden via CSS) — keep harmless if present
   const toggle = document.getElementById("theme-toggle");
-  const stored = localStorage.getItem("theme");
-  if (stored) root.setAttribute("data-theme", stored);
-
-  function currentTheme() {
-    if (root.getAttribute("data-theme")) return root.getAttribute("data-theme");
-    return matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-  }
-
-  function applyTheme(theme) {
-    root.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme);
-  }
-
-  // Guarded: this whole file is one IIFE, so a page without the toggle would
-  // otherwise throw here and take the feed and reading progress down with it.
-  if (toggle) {
+  if (toggle && !toggle.hasAttribute("data-theme-toggle")) {
     toggle.addEventListener("click", () => {
-      const next = currentTheme() === "dark" ? "light" : "dark";
-      if (document.startViewTransition) {
-        document.startViewTransition(() => applyTheme(next));
-      } else {
-        applyTheme(next);
-      }
+      document.querySelector("[data-theme-toggle]")?.click();
     });
   }
 

@@ -1,0 +1,274 @@
+/* Align essay + deck chrome with the monochrome home page */
+
+:root {
+  --bg: #fafafa;
+  --bg-card: #ffffff;
+  --ink: #0a0a0a;
+  --ink-muted: #737373;
+  --rule: #e5e5e5;
+  --accent: #171717;
+  --accent-ink: #fafafa;
+  --font: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --glass: #fafafa;
+  --shadow-soft: none;
+  --radius-pill: 0.375rem;
+  --radius-card: 0.5rem;
+  --header-h: 3.5rem;
+}
+
+html.dark,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0a0a0a;
+  --bg-card: #171717;
+  --ink: #fafafa;
+  --ink-muted: #a3a3a3;
+  --rule: #262626;
+  --accent: #e5e5e5;
+  --accent-ink: #0a0a0a;
+  --glass: #0a0a0a;
+}
+
+html, body {
+  background: var(--bg) !important;
+  color: var(--ink);
+  font-family: var(--font);
+}
+
+/* Home-like sticky header */
+.site-header,
+.site-header.portfolio-chrome {
+  position: sticky !important;
+  top: 0 !important;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  border-bottom: 1px solid var(--rule) !important;
+  border-radius: 0 !important;
+  background: color-mix(in srgb, var(--bg) 90%, transparent) !important;
+  backdrop-filter: blur(12px) !important;
+  box-shadow: none !important;
+}
+
+.site-header-inner {
+  max-width: none !important;
+  width: 100% !important;
+  height: 3.5rem !important;
+  min-height: 3.5rem !important;
+  margin: 0 !important;
+  padding: 0 1.5rem !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+  gap: 1.25rem !important;
+  font-size: 0.875rem !important;
+}
+
+@media (min-width: 640px) {
+  .site-header-inner { padding: 0 2.5rem !important; }
+}
+@media (min-width: 1024px) {
+  .site-header-inner { padding: 0 4rem !important; }
+}
+@media (min-width: 1280px) {
+  .site-header-inner { padding: 0 5rem !important; }
+}
+
+.site-header .brand,
+.site-header .site-wordmark,
+.site-header a.brand {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.site-header nav.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-left: auto;
+}
+
+.site-header nav.site-nav a {
+  color: var(--ink-muted);
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+.site-header nav.site-nav a:hover {
+  color: var(--ink);
+}
+
+.site-header [data-theme-toggle],
+.site-header .theme-toggle-inline {
+  border: 1px solid var(--rule);
+  border-radius: 0.375rem;
+  background: transparent;
+  color: var(--ink-muted);
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+}
+
+/* Hide old floating theme FAB on essay/deck */
+#theme-toggle.theme-toggle {
+  display: none !important;
+}
+
+/* Crumb becomes quiet secondary title in header if present */
+.crumb-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--ink-muted);
+  text-decoration: none;
+  font-size: 0.875rem;
+  border: none !important;
+  background: none !important;
+  padding: 0 !important;
+}
+.crumb-back:hover { color: var(--ink); }
+.crumb-back svg { width: 1rem; height: 1rem; }
+
+.crumb {
+  display: none; /* drop live section crumbs for cleaner chrome */
+}
+
+/* Essay page: flat, wide, no postcard frame */
+body:has(.post) .page {
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 2.5rem 1.5rem 4rem !important;
+}
+@media (min-width: 640px) {
+  body:has(.post) .page { padding-left: 2.5rem !important; padding-right: 2.5rem !important; }
+}
+@media (min-width: 1024px) {
+  body:has(.post) .page { padding-left: 4rem !important; padding-right: 4rem !important; }
+}
+@media (min-width: 1280px) {
+  body:has(.post) .page { padding-left: 5rem !important; padding-right: 5rem !important; }
+}
+
+.post {
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.post::before { display: none !important; }
+
+.post-meta {
+  gap: 0.75rem;
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.post-meta span {
+  border: none !important;
+  background: none !important;
+  padding: 0 !important;
+}
+.post-meta span + span::before {
+  content: "·";
+  margin-right: 0.75rem;
+  color: var(--ink-muted);
+}
+
+.post h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  max-width: none !important;
+  margin: 0.75rem 0 1rem;
+}
+
+.post-dek {
+  font-size: 1.125rem;
+  font-weight: 400;
+  color: var(--ink-muted);
+  border: none !important;
+  background: none !important;
+  padding: 0 !important;
+  margin: 0 0 2.5rem !important;
+  max-width: 50rem;
+}
+
+.post h2 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-top: 2.75rem;
+}
+
+.post p, .post li {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+.post-figure {
+  margin: 2rem 0;
+  border: 1px solid var(--rule);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: var(--bg-card);
+}
+.post-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.post-figure figcaption {
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+  border-top: 1px solid var(--rule);
+}
+
+.post-rule { display: none !important; }
+
+body:has(.post) .reading-progress {
+  background: var(--rule);
+  height: 2px;
+}
+body:has(.post) .reading-progress > span,
+body:has(.post) .reading-progress::after {
+  background: var(--ink) !important;
+}
+
+.site-footer {
+  border-top: 1px solid var(--rule);
+  background: transparent !important;
+  box-shadow: none !important;
+  margin-top: 3rem;
+  padding: 1.5rem !important;
+}
+
+/* Deck: keep slides, quiet the chrome */
+body:has(.deck) .site-header {
+  position: sticky !important;
+}
+body:has(.deck) {
+  --stage: calc(100vw - 3rem);
+}
+.slide {
+  border-radius: 0.75rem !important;
+  border: 1px solid var(--rule) !important;
+  box-shadow: none !important;
+  background: var(--bg-card) !important;
+}
+.eyebrow {
+  color: var(--ink-muted) !important;
+  letter-spacing: 0.06em;
+}

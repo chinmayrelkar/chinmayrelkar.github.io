@@ -41,10 +41,25 @@
 <meta name="twitter:image:alt" content="Organizational Cognition: free the pipe, own the asset, export test for data vs cognition" />
 <meta name="twitter:creator" content="@chinmayrelkar" />
 <meta name="color-scheme" content="light dark" />
-<meta name="theme-color" content="#f6f8f3" media="(prefers-color-scheme: light)" />
-<meta name="theme-color" content="#14170f" media="(prefers-color-scheme: dark)" />
+<script>
+(function(){
+  try {
+    var pref = localStorage.getItem('theme');
+    var dark = pref === 'dark' || (pref !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+    if (dark) {
+      document.documentElement.classList.add('dark');
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  } catch (e) {}
+})();
+</script>
+
+<meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
 <link rel="canonical" href="https://chinmayrelkar.github.io/writing/organizational-cognition.html" />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231f9d55'/%3E%3Ctext x='32' y='42' font-family='Arial,sans-serif' font-weight='700' font-size='26' fill='%23ffffff' text-anchor='middle'%3ECR%3C/text%3E%3C/svg%3E" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2318181b'/%3E%3Ctext x='32' y='42' font-family='Arial,sans-serif' font-weight='700' font-size='26' fill='%23ffffff' text-anchor='middle'%3ECR%3C/text%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
@@ -53,6 +68,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </noscript>
 <link rel="stylesheet" href="../assets/style.css" />
+<link rel="stylesheet" href="../assets/coherent.css" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -86,18 +102,16 @@
 
 <a class="skip-link" href="#main-content">Skip to content</a>
 
-<header class="site-header portfolio-chrome">
+<header class="site-header">
   <div class="site-header-inner">
-    <a class="crumb-back" href="../index.html#writing" aria-label="Back to Writing">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
-      <span>Writing</span>
-    </a>
-    <nav class="crumb" aria-label="Breadcrumb">
-      <a class="crumb-title" href="#">Organizational Cognition</a>
-      <span class="crumb-position" aria-hidden="true">
-        <span class="crumb-h1"></span>
-        <span class="crumb-h2"></span>
-      </span>
+    <a class="brand" href="/">Chinmay Relkar</a>
+    <a class="crumb-back" href="/#writing">Writing</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="/#writing">Writing</a>
+      <a href="/#projects">Projects</a>
+      <a href="/#experience">Experience</a>
+      <a href="/#contact">Contact</a>
+      <button type="button" data-theme-toggle class="theme-toggle-inline">Auto</button>
     </nav>
   </div>
 </header>
