@@ -1,3 +1,5 @@
+@import "./chrome.css";
+
 /* Align essay + deck chrome with the monochrome home page */
 
 :root {
@@ -35,115 +37,6 @@ html, body {
   background: var(--bg) !important;
   color: var(--ink);
   font-family: var(--font);
-}
-
-/* Sticky header — match home .nav */
-.site-header,
-.site-header.portfolio-chrome {
-  height: var(--nav-h) !important;
-  min-height: var(--nav-h) !important;
-  position: sticky !important;
-  top: 0 !important;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: none !important;
-  border-bottom: 1px solid var(--rule) !important;
-  border-radius: 0 !important;
-  background: var(--bg) !important;
-  backdrop-filter: none !important;
-  box-shadow: none !important;
-}
-
-.site-header-inner {
-  max-width: 1100px !important;
-  width: 100% !important;
-  height: var(--nav-h) !important;
-  min-height: var(--nav-h) !important;
-  margin: 0 auto !important;
-  padding: 0 24px !important;
-  border: none !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  backdrop-filter: none !important;
-  box-shadow: none !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  gap: 1rem !important;
-  font-size: 0.875rem !important;
-  box-sizing: border-box !important;
-}
-
-@media (min-width: 640px) {
-  .site-header-inner { padding: 0 32px !important; }
-}
-@media (min-width: 860px) {
-  .site-header-inner { padding: 0 48px !important; }
-}
-
-.site-header .brand,
-.site-header .site-wordmark,
-.site-header a.brand {
-  color: var(--ink);
-  text-decoration: none;
-  font-family: var(--font-display);
-  font-size: 16px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-}
-
-.site-header nav.site-nav {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  margin-left: auto;
-}
-
-.site-header nav.site-nav a {
-  color: var(--ink-muted);
-  text-decoration: none;
-  font-size: 13px;
-}
-.site-header nav.site-nav a:hover {
-  color: var(--ink);
-}
-
-.site-header [data-theme-toggle],
-.site-header .theme-toggle-inline {
-  border: 1px solid var(--rule);
-  border-radius: 0.375rem;
-  background: transparent;
-  color: var(--ink-muted);
-  font-size: 0.75rem;
-  padding: 0.2rem 0.5rem;
-  cursor: pointer;
-}
-
-/* Hide old floating theme FAB on essay/deck */
-#theme-toggle.theme-toggle {
-  display: none !important;
-}
-
-/* Crumb becomes quiet secondary title in header if present */
-.crumb-back {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  color: var(--ink-muted);
-  text-decoration: none;
-  font-size: 0.875rem;
-  border: none !important;
-  background: none !important;
-  padding: 0 !important;
-}
-.crumb-back:hover { color: var(--ink); }
-.crumb-back svg { width: 1rem; height: 1rem; }
-
-.crumb {
-  display: none; /* drop live section crumbs for cleaner chrome */
 }
 
 /* Essay page: flat, wide, no postcard frame */
@@ -254,9 +147,7 @@ body:has(.post) .page {
 }
 
 /* Deck: keep slides, quiet the chrome */
-body:has(.deck) .site-header {
-  position: sticky !important;
-}
+
 body:has(.deck) {
   --stage: calc(100vw - 3rem);
 }
@@ -273,85 +164,21 @@ body:has(.deck) {
 
 
 /* ========== Mobile ========== */
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-left: auto;
-  min-width: 0;
-}
 
-.nav-menu { position: relative; display: none; }
-.nav-menu > summary {
-  list-style: none;
-  cursor: pointer;
-  border: 1px solid var(--rule);
-  border-radius: 0.375rem;
-  padding: 0.35rem 0.65rem;
-  font-size: 0.8125rem;
-  color: var(--ink-muted);
-  min-height: 36px;
-}
-.nav-menu > summary::-webkit-details-marker { display: none; }
-.nav-menu-panel {
-  position: absolute;
-  right: 0;
-  top: calc(100% + 0.4rem);
-  z-index: 50;
-  width: 12rem;
-  padding: 0.35rem;
-  border: 1px solid var(--rule);
-  border-radius: 0.5rem;
-  background: var(--bg);
-}
-.nav-menu-panel a {
-  display: block;
-  padding: 0.7rem 0.75rem;
-  border-radius: 0.375rem;
-  color: var(--ink);
-  text-decoration: none;
-  font-size: 0.9375rem;
-}
+
+
+
+
+
+
 
 @media (max-width: 767px) {
   html, body {
     overflow-x: hidden !important;
   }
 
-  .site-header-inner {
-    padding: 0 0.85rem !important;
-    height: 3rem !important;
-    min-height: 3rem !important;
-  }
-
-  .site-header .brand {
-    font-size: 0.8125rem;
-    max-width: 46vw;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .site-header nav.site-nav {
-    display: none !important;
-  }
-
   /* Essay/deck: keep a single back affordance, hide duplicate Writing in menu chrome */
-  body:has(.post) .site-header .brand,
-  body:has(.deck) .site-header .brand {
-    display: none;
-  }
-  body:has(.post) .site-header .crumb-back,
-  body:has(.deck) .site-header .crumb-back {
-    display: inline-flex !important;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--ink);
-  }
-  body:has(.post) .nav-menu,
-  body:has(.deck) .nav-menu {
-    display: block;
-  }
+  body:has(.post) 
 
   /* Essay: comfortable reading column feel on phone, no fancy frame */
   body:has(.post) {
@@ -525,27 +352,7 @@ body:has(.deck) {
   }
 }
 
-@media (min-width: 768px) {
-  .nav-menu { display: none !important; }
-}
 
 
-/* Shared top progress (home + essay) */
-.scroll-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--ink);
-  transform-origin: left center;
-  transform: scaleX(0);
-  z-index: 200;
-  pointer-events: none;
-  opacity: 0.35;
-}
 
-@media (prefers-reduced-motion: reduce) {
-  .scroll-progress { display: none !important; }
-}
 

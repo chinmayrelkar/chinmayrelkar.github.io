@@ -157,7 +157,7 @@ initReveals()
 
 function initScrollSpy() {
   const sideLinks = [...document.querySelectorAll('.side-link[href^="#"]')]
-  const navLinks = [...document.querySelectorAll('.nav-link[href^="#"]')]
+  const navLinks = [...document.querySelectorAll('.site-nav a[href^="#"]')]
   const links = [...sideLinks, ...navLinks]
   if (!links.length) return
 

@@ -1,0 +1,250 @@
+/* Shared site chrome — ONE source for home, essay, deck.
+   Home imports this from src/style.css.
+   Essay/deck load it as <link rel="stylesheet" href=".../chrome.css">. */
+
+:root {
+  --chrome-bg: #ffffff;
+  --chrome-text: #111111;
+  --chrome-muted: #999999;
+  --chrome-border: #e4e4e4;
+  --chrome-max: min(100rem, calc(100vw - 3rem));
+  --nav-h: 52px;
+  --header-h: 52px;
+  --chrome-pad: 48px;
+}
+
+html.dark,
+:root[data-theme="dark"] {
+  --chrome-bg: #0a0a0a;
+  --chrome-text: #f5f5f5;
+  --chrome-muted: #737373;
+  --chrome-border: #262626;
+}
+
+@media (max-width: 860px) {
+  :root { --chrome-pad: 32px; }
+}
+@media (max-width: 640px) {
+  :root { --chrome-pad: 24px; }
+}
+
+
+/* Prefer essay/home ink tokens when present */
+html {
+  --chrome-bg: var(--bg, var(--chrome-bg));
+  --chrome-text: var(--ink, var(--text, var(--chrome-text)));
+  --chrome-muted: var(--ink-muted, var(--text-muted, var(--chrome-muted)));
+  --chrome-border: var(--rule, var(--border, var(--chrome-border)));
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 1000;
+  padding: 0.5rem 0.75rem;
+  background: var(--chrome-text);
+  color: var(--chrome-bg);
+}
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+}
+
+/* —— Header —— */
+.site-header,
+.site-header.portfolio-chrome {
+  position: sticky !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 100 !important;
+  height: var(--nav-h) !important;
+  min-height: var(--nav-h) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  border-bottom: 1px solid var(--chrome-border) !important;
+  border-radius: 0 !important;
+  background: var(--chrome-bg) !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+.site-header-inner {
+  box-sizing: border-box !important;
+  max-width: var(--chrome-max) !important;
+  width: 100% !important;
+  height: var(--nav-h) !important;
+  min-height: var(--nav-h) !important;
+  margin: 0 auto !important;
+  padding: 0 var(--chrome-pad) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 1rem !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.site-header .brand,
+.site-header .site-wordmark,
+.site-header a.brand {
+  flex-shrink: 0;
+  font-family: "Fraunces", Georgia, "Times New Roman", serif;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--chrome-text);
+  text-decoration: none;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: auto;
+  min-width: 0;
+}
+
+.crumb-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--chrome-muted);
+  text-decoration: none;
+  font-size: 13px;
+  border: none;
+  background: none;
+  padding: 0;
+}
+.crumb-back:hover { color: var(--chrome-text); }
+
+.site-header nav.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.site-header nav.site-nav a,
+.site-nav a {
+  position: relative;
+  font-size: 13px;
+  color: var(--chrome-muted);
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  padding-bottom: 3px;
+  background-image: linear-gradient(var(--chrome-text), var(--chrome-text));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1.5px;
+  transition: color 0.15s ease, background-size 0.2s ease;
+}
+.site-header nav.site-nav a:hover,
+.site-header nav.site-nav a:focus-visible,
+.site-nav a:hover,
+.site-nav a.is-active {
+  color: var(--chrome-text);
+  background-size: 100% 1.5px;
+}
+
+/* Mobile menu */
+.nav-menu {
+  display: none;
+  position: relative;
+}
+.nav-menu > summary {
+  list-style: none;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--chrome-muted);
+  border: 1px solid var(--chrome-border);
+  border-radius: 6px;
+  padding: 0.35rem 0.6rem;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+.nav-menu > summary::-webkit-details-marker { display: none; }
+.nav-menu-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.4rem);
+  min-width: 10rem;
+  background: var(--chrome-bg);
+  border: 1px solid var(--chrome-border);
+  border-radius: 8px;
+  padding: 0.35rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  z-index: 50;
+}
+.nav-menu-panel a {
+  display: block;
+  padding: 0.65rem 0.75rem;
+  font-size: 14px;
+  color: var(--chrome-muted);
+  text-decoration: none;
+  border-radius: 6px;
+}
+.nav-menu-panel a:hover {
+  background: color-mix(in srgb, var(--chrome-border) 45%, transparent);
+  color: var(--chrome-text);
+}
+
+.site-header [data-theme-toggle],
+.site-header .theme-toggle,
+.site-header .theme-toggle-inline {
+  font-size: 12px;
+  color: var(--chrome-muted);
+  border: 1px solid var(--chrome-border);
+  background: transparent;
+  border-radius: 6px;
+  padding: 0.35rem 0.55rem;
+  min-height: 32px;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.site-header [data-theme-toggle]:hover,
+.site-header .theme-toggle:hover,
+.site-header .theme-toggle-inline:hover {
+  color: var(--chrome-text);
+  border-color: var(--chrome-muted);
+}
+
+/* Legacy floating FAB — never show */
+#theme-toggle.theme-toggle {
+  display: none !important;
+}
+
+@media (max-width: 860px) {
+  .site-header nav.site-nav { display: none; }
+  .nav-menu { display: block; }
+  .crumb-back { display: none; }
+}
+
+/* Deck keeps sticky header too */
+body:has(.deck) .site-header {
+  position: sticky !important;
+}
+
+/* —— Top progress (home + essay) —— */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--chrome-text);
+  transform-origin: left center;
+  transform: scaleX(0);
+  z-index: 200;
+  pointer-events: none;
+  opacity: 0.35;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress { display: none !important; }
+}
