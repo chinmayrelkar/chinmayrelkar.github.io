@@ -18,11 +18,11 @@
   --text-muted: #999999;
   --border: #e4e4e4;
   --accent: #111111;
-  --max-w: 1100px;
+  --max-w: min(100rem, calc(100vw - 3rem));
   --nav-h: 52px;
   --pad: 48px;
-  --main-measure: 640px;
-  --side-w: 220px;
+  --main-measure: none;
+  --side-w: 240px;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Fraunces", Georgia, "Times New Roman", serif;
   color-scheme: light;
@@ -238,15 +238,16 @@
 
 .about-layout {
   display: grid;
-  grid-template-columns: 1fr var(--side-w);
-  gap: 64px;
+  grid-template-columns: minmax(0, 1fr) var(--side-w);
+  gap: clamp(3rem, 6vw, 6rem);
   padding: calc(var(--nav-h) + 48px) 0 96px;
   align-items: start;
 }
 
 .about-main {
-  max-width: var(--main-measure);
+  max-width: none;
   min-width: 0;
+  width: 100%;
 }
 
 .about-side {
