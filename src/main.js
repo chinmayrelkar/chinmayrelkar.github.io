@@ -50,7 +50,7 @@ function renderTicketList(list, items) {
     li.className = 'group'
     const a = document.createElement('a')
     a.href = item.link
-    a.className = 'flex items-baseline justify-between gap-4 py-4 hover:bg-neutral-100/70 dark:hover:bg-neutral-900/50'
+    a.className = 'flex items-baseline justify-between gap-4 border-b border-neutral-200 py-4 hover:bg-neutral-100/70 dark:border-neutral-800 dark:hover:bg-neutral-900/50'
     if (/^https?:\/\//.test(item.link)) {
       a.target = '_blank'
       a.rel = 'noopener'

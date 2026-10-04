@@ -39,7 +39,7 @@
   <a class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-neutral-900 focus:px-3 focus:py-2 focus:text-white" href="#main-content">Skip to content</a>
 
   <header class="sticky top-0 z-40 border-b border-neutral-200/80 bg-neutral-50/90 backdrop-blur dark:border-neutral-800 dark:bg-neutral-950/90">
-    <div class="mx-auto flex h-14 max-w-3xl items-center justify-between px-5 sm:px-6">
+    <div class="mx-auto flex h-14 max-w-6xl items-center justify-between px-6 sm:px-8 lg:max-w-7xl lg:px-10">
       <a href="/" class="text-sm font-semibold tracking-tight">Chinmay Relkar</a>
       <nav class="flex items-center gap-5 text-sm text-neutral-600 dark:text-neutral-400">
         <a class="hover:text-neutral-900 dark:hover:text-white" href="#writing">Writing</a>
@@ -51,10 +51,15 @@
     </div>
   </header>
 
-  <main id="main-content" class="mx-auto max-w-3xl px-5 py-16 sm:px-6 sm:py-20">
-    <section>
-      <p class="text-sm text-neutral-500 dark:text-neutral-400">Engineer. Jack of many trades</p>
-      <h1 class="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">Chinmay Relkar</h1>
+  <main id="main-content" class="mx-auto max-w-6xl px-6 py-16 sm:px-8 sm:py-20 lg:max-w-7xl lg:px-10">
+    <section class="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-16">
+      <div>
+        <p class="text-sm text-neutral-500 dark:text-neutral-400">Engineer. Jack of many trades</p>
+        <h1 class="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">Chinmay Relkar</h1>
+      </div>
+      <p class="max-w-md text-[15px] leading-6 text-neutral-600 dark:text-neutral-400 lg:justify-self-end lg:text-right">
+        Writing, projects, and experience. Clarisights.
+      </p>
     </section>
 
     <section id="writing" class="mt-20">
@@ -62,15 +67,15 @@
         <h2 class="text-sm font-semibold uppercase tracking-wider text-neutral-500">Writing</h2>
         <a class="text-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-white" href="https://chnmy.medium.com" target="_blank" rel="noopener">Medium</a>
       </div>
-      <ul id="ticket-list" class="mt-6 divide-y divide-neutral-200 border-y border-neutral-200 dark:divide-neutral-800 dark:border-neutral-800">
+      <ul id="ticket-list" class="mt-6 grid gap-x-10 divide-y divide-neutral-200 border-y border-neutral-200 dark:divide-neutral-800 dark:border-neutral-800 md:grid-cols-2 md:gap-y-0 md:divide-y-0 md:border-0 md:gap-x-12">
         <li>
-          <a class="flex items-baseline justify-between gap-4 py-4 hover:bg-neutral-100/70 dark:hover:bg-neutral-900/50" href="/presentations/the-evolution-of-agent-harness/">
+          <a class="flex items-baseline justify-between gap-4 border-b border-neutral-200 py-4 hover:bg-neutral-100/70 md:border-neutral-200 dark:border-neutral-800 dark:hover:bg-neutral-900/50" href="/presentations/the-evolution-of-agent-harness/">
             <span class="font-medium">The Evolution of the Agent Harness</span>
             <span class="shrink-0 text-sm text-neutral-500">Aug 2026</span>
           </a>
         </li>
         <li>
-          <a class="flex items-baseline justify-between gap-4 py-4 hover:bg-neutral-100/70 dark:hover:bg-neutral-900/50" href="/writing/organizational-cognition.html">
+          <a class="flex items-baseline justify-between gap-4 border-b border-neutral-200 py-4 hover:bg-neutral-100/70 md:border-neutral-200 dark:border-neutral-800 dark:hover:bg-neutral-900/50" href="/writing/organizational-cognition.html">
             <span class="font-medium">Organizational Cognition</span>
             <span class="shrink-0 text-sm text-neutral-500">Jul 2026</span>
           </a>
@@ -80,44 +85,44 @@
 
     <section id="projects" class="mt-20">
       <h2 class="text-sm font-semibold uppercase tracking-wider text-neutral-500">Projects</h2>
-      <ul class="mt-6 space-y-0 divide-y divide-neutral-200 border-y border-neutral-200 dark:divide-neutral-800 dark:border-neutral-800">
-        <li class="py-5">
+      <ul class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+        <li class="rounded-lg border border-neutral-200 p-5 dark:border-neutral-800">
           <a class="group block" href="https://github.com/chinmayrelkar/bawarchi" target="_blank" rel="noopener">
             <h3 class="font-semibold group-hover:underline">bawarchi</h3>
             <p class="mt-1 text-[15px] leading-6 text-neutral-600 dark:text-neutral-400">Generates a standalone CLI from an API spec. Point it at OpenAPI 3.x / Swagger 2.0 or a .proto and it compiles a typed command-line tool for that API.</p>
           </a>
         </li>
-        <li class="py-5">
+        <li class="rounded-lg border border-neutral-200 p-5 dark:border-neutral-800">
           <a class="group block" href="https://github.com/chinmayrelkar/backgrounds" target="_blank" rel="noopener">
             <h3 class="font-semibold group-hover:underline">Backgrounds</h3>
             <p class="mt-1 text-[15px] leading-6 text-neutral-600 dark:text-neutral-400">macOS app for things you started, not system processes.</p>
           </a>
         </li>
-        <li class="py-5">
+        <li class="rounded-lg border border-neutral-200 p-5 dark:border-neutral-800">
           <a class="group block" href="https://github.com/chinmayrelkar/zulip-mac" target="_blank" rel="noopener">
             <h3 class="font-semibold group-hover:underline">zulip-mac</h3>
             <p class="mt-1 text-[15px] leading-6 text-neutral-600 dark:text-neutral-400">Native macOS Zulip client. SwiftUI and the real-time events API.</p>
           </a>
         </li>
-        <li class="py-5">
+        <li class="rounded-lg border border-neutral-200 p-5 dark:border-neutral-800">
           <a class="group block" href="https://github.com/chinmayrelkar/astrophage" target="_blank" rel="noopener">
             <h3 class="font-semibold group-hover:underline">Astrophage</h3>
             <p class="mt-1 text-[15px] leading-6 text-neutral-600 dark:text-neutral-400">Specialized agents that scan repos for bugs and features, plan fixes, write code, test, review, and open PRs.</p>
           </a>
         </li>
-        <li class="py-5">
+        <li class="rounded-lg border border-neutral-200 p-5 dark:border-neutral-800">
           <a class="group block" href="https://github.com/chinmayrelkar/aws-nlb-controller" target="_blank" rel="noopener">
             <h3 class="font-semibold group-hover:underline">aws-nlb-controller</h3>
             <p class="mt-1 text-[15px] leading-6 text-neutral-600 dark:text-neutral-400">Kubernetes operator that provisions, updates, and tears down AWS Network Load Balancers to match service configs, across multiple VPCs.</p>
           </a>
         </li>
-        <li class="py-5">
+        <li class="rounded-lg border border-neutral-200 p-5 dark:border-neutral-800">
           <a class="group block" href="https://github.com/chinmayrelkar/monza" target="_blank" rel="noopener">
             <h3 class="font-semibold group-hover:underline">monza</h3>
             <p class="mt-1 text-[15px] leading-6 text-neutral-600 dark:text-neutral-400">Event-routing library for sending events to multiple destinations, with pluggable middleware (Opensearch, gin-gonic, and more).</p>
           </a>
         </li>
-        <li class="py-5">
+        <li class="rounded-lg border border-neutral-200 p-5 dark:border-neutral-800">
           <a class="group block" href="https://github.com/chinmayrelkar/dogpool" target="_blank" rel="noopener">
             <h3 class="font-semibold group-hover:underline">dogpool</h3>
             <p class="mt-1 text-[15px] leading-6 text-neutral-600 dark:text-neutral-400">Go worker pool backed by GORM, with customizable task functions and built-in error handling.</p>
@@ -126,49 +131,54 @@
       </ul>
     </section>
 
-    <section id="experience" class="mt-20">
-      <h2 class="text-sm font-semibold uppercase tracking-wider text-neutral-500">Experience</h2>
-      <ul class="mt-6 space-y-5">
-        <li class="grid gap-1 sm:grid-cols-[9.5rem_1fr]">
+        <section id="experience" class="mt-20">
+      <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
+        <div>
+          <h2 class="text-sm font-semibold uppercase tracking-wider text-neutral-500">Experience</h2>
+          <ul class="mt-6 space-y-5">
+        <li class="grid gap-1 sm:grid-cols-[7.5rem_1fr]">
           <p class="text-sm text-neutral-500">2024 - Present</p>
           <p><span class="font-medium">Clarisights</span> <span class="text-neutral-500">Software Engineer</span></p>
         </li>
-        <li class="grid gap-1 sm:grid-cols-[9.5rem_1fr]">
+        <li class="grid gap-1 sm:grid-cols-[7.5rem_1fr]">
           <p class="text-sm text-neutral-500">2022 - 2024</p>
           <p><span class="font-medium">Unacademy Group</span> <span class="text-neutral-500">Senior Software Engineer to Engineering Lead (incl. Cohesive)</span></p>
         </li>
-        <li class="grid gap-1 sm:grid-cols-[9.5rem_1fr]">
+        <li class="grid gap-1 sm:grid-cols-[7.5rem_1fr]">
           <p class="text-sm text-neutral-500">2021 - 2022</p>
           <p><span class="font-medium">Amazon</span> <span class="text-neutral-500">SDE</span></p>
         </li>
-        <li class="grid gap-1 sm:grid-cols-[9.5rem_1fr]">
+        <li class="grid gap-1 sm:grid-cols-[7.5rem_1fr]">
           <p class="text-sm text-neutral-500">2021</p>
           <p><span class="font-medium">100ms.live</span> <span class="text-neutral-500">Software Engineer</span></p>
         </li>
-        <li class="grid gap-1 sm:grid-cols-[9.5rem_1fr]">
+        <li class="grid gap-1 sm:grid-cols-[7.5rem_1fr]">
           <p class="text-sm text-neutral-500">2019 - 2021</p>
           <p><span class="font-medium">Schlumberger</span> <span class="text-neutral-500">Associate Application Engineer to Application Engineer</span></p>
         </li>
-        <li class="grid gap-1 sm:grid-cols-[9.5rem_1fr]">
+        <li class="grid gap-1 sm:grid-cols-[7.5rem_1fr]">
           <p class="text-sm text-neutral-500">2018 - 2019</p>
           <p><span class="font-medium">GarageBot, ArrayPointer</span> <span class="text-neutral-500">Internships</span></p>
         </li>
-      </ul>
-
-      <h3 class="mt-12 text-sm font-semibold uppercase tracking-wider text-neutral-500">Education</h3>
-      <ul class="mt-6 space-y-5">
-        <li class="grid gap-1 sm:grid-cols-[9.5rem_1fr]">
+          </ul>
+        </div>
+        <div>
+          <h2 class="text-sm font-semibold uppercase tracking-wider text-neutral-500">Education</h2>
+          <ul class="mt-6 space-y-5">
+        <li class="grid gap-1 sm:grid-cols-[7.5rem_1fr]">
           <p class="text-sm text-neutral-500">2025 - 2026</p>
           <p><span class="font-medium">Indian Institute of Management Bangalore</span> <span class="text-neutral-500">Executive General Management</span></p>
         </li>
-        <li class="grid gap-1 sm:grid-cols-[9.5rem_1fr]">
+        <li class="grid gap-1 sm:grid-cols-[7.5rem_1fr]">
           <p class="text-sm text-neutral-500">2015 - 2019</p>
           <p><span class="font-medium">Pune Vidhyarthi Griha's College of Engineering and Technology</span> <span class="text-neutral-500">B.E., Information Technology</span></p>
         </li>
-      </ul>
+          </ul>
+        </div>
+      </div>
     </section>
 
-    <section id="contact" class="mt-20 border-t border-neutral-200 pt-10 dark:border-neutral-800">
+<section id="contact" class="mt-20 border-t border-neutral-200 pt-10 dark:border-neutral-800">
       <h2 class="text-sm font-semibold uppercase tracking-wider text-neutral-500">Contact</h2>
       <p class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-[15px]">
         <a class="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-900 dark:hover:decoration-white" href="https://www.linkedin.com/in/chnmy/" target="_blank" rel="noopener">LinkedIn</a>
@@ -176,6 +186,7 @@
         <a class="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-900 dark:hover:decoration-white" href="https://chnmy.medium.com" target="_blank" rel="noopener">Medium</a>
         <a class="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-900 dark:hover:decoration-white" href="https://x.com/ChinmayRelkar" target="_blank" rel="noopener">X</a>
       </p>
+      </div>
     </section>
 
     <footer class="mt-20 border-t border-neutral-200 pt-8 text-sm text-neutral-500 dark:border-neutral-800">
