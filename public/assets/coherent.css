@@ -9,11 +9,13 @@
   --accent: #171717;
   --accent-ink: #fafafa;
   --font: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --nav-h: 52px;
   --glass: #fafafa;
   --shadow-soft: none;
   --radius-pill: 0.375rem;
   --radius-card: 0.5rem;
-  --header-h: 3.5rem;
+  --header-h: 52px;
 }
 
 html.dark,
@@ -35,57 +37,62 @@ html, body {
   font-family: var(--font);
 }
 
-/* Home-like sticky header */
+/* Sticky header — match home .nav */
 .site-header,
 .site-header.portfolio-chrome {
+  height: var(--nav-h) !important;
+  min-height: var(--nav-h) !important;
   position: sticky !important;
   top: 0 !important;
   left: 0;
   right: 0;
-  z-index: 40;
+  z-index: 100;
   margin: 0 !important;
   padding: 0 !important;
   border: none !important;
   border-bottom: 1px solid var(--rule) !important;
   border-radius: 0 !important;
-  background: color-mix(in srgb, var(--bg) 90%, transparent) !important;
-  backdrop-filter: blur(12px) !important;
+  background: var(--bg) !important;
+  backdrop-filter: none !important;
   box-shadow: none !important;
 }
 
 .site-header-inner {
-  max-width: none !important;
+  max-width: 1100px !important;
   width: 100% !important;
-  height: 3.5rem !important;
-  min-height: 3.5rem !important;
-  margin: 0 !important;
-  padding: 0 1.5rem !important;
+  height: var(--nav-h) !important;
+  min-height: var(--nav-h) !important;
+  margin: 0 auto !important;
+  padding: 0 24px !important;
   border: none !important;
   border-radius: 0 !important;
   background: transparent !important;
   backdrop-filter: none !important;
   box-shadow: none !important;
-  gap: 1.25rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 1rem !important;
   font-size: 0.875rem !important;
+  box-sizing: border-box !important;
 }
 
 @media (min-width: 640px) {
-  .site-header-inner { padding: 0 2.5rem !important; }
+  .site-header-inner { padding: 0 32px !important; }
 }
-@media (min-width: 1024px) {
-  .site-header-inner { padding: 0 4rem !important; }
-}
-@media (min-width: 1280px) {
-  .site-header-inner { padding: 0 5rem !important; }
+@media (min-width: 860px) {
+  .site-header-inner { padding: 0 48px !important; }
 }
 
 .site-header .brand,
 .site-header .site-wordmark,
 .site-header a.brand {
-  font-weight: 600;
-  letter-spacing: -0.01em;
   color: var(--ink);
   text-decoration: none;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }
 
 .site-header nav.site-nav {
@@ -98,7 +105,7 @@ html, body {
 .site-header nav.site-nav a {
   color: var(--ink-muted);
   text-decoration: none;
-  font-size: 0.875rem;
+  font-size: 13px;
 }
 .site-header nav.site-nav a:hover {
   color: var(--ink);
@@ -238,15 +245,6 @@ body:has(.post) .page {
 
 .post-rule { display: none !important; }
 
-body:has(.post) .reading-progress {
-  background: var(--rule);
-  height: 2px;
-}
-body:has(.post) .reading-progress > span,
-body:has(.post) .reading-progress::after {
-  background: var(--ink) !important;
-}
-
 .site-footer {
   border-top: 1px solid var(--rule);
   background: transparent !important;
@@ -357,7 +355,7 @@ body:has(.deck) {
 
   /* Essay: comfortable reading column feel on phone, no fancy frame */
   body:has(.post) {
-    --header-h: 3rem;
+    --header-h: 52px;
   }
   body:has(.post) .page {
     padding: 1rem 1rem 3rem !important;
@@ -421,7 +419,7 @@ body:has(.deck) {
   }
 
   body:has(.deck) {
-    --header-h: 3rem;
+    --header-h: 52px;
     --stage: 100% !important;
     --slide-pad: 1rem !important;
   }
@@ -530,3 +528,24 @@ body:has(.deck) {
 @media (min-width: 768px) {
   .nav-menu { display: none !important; }
 }
+
+
+/* Shared top progress (home + essay) */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--ink);
+  transform-origin: left center;
+  transform: scaleX(0);
+  z-index: 200;
+  pointer-events: none;
+  opacity: 0.35;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress { display: none !important; }
+}
+

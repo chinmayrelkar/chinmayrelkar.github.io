@@ -235,23 +235,16 @@
       post.appendChild(endRule);
     }
 
-    // Progress as a pipe: the essay's metaphor (free pipes, accumulation
-    // inside). Same scroll math as before; the chrome is the design move.
+    // Top hairline progress — same chrome as the home page.
     const progress = document.createElement("div");
-    progress.className = "reading-progress";
+    progress.className = "scroll-progress";
     progress.setAttribute("role", "progressbar");
     progress.setAttribute("aria-label", "Reading progress through the essay");
     progress.setAttribute("aria-valuemin", "0");
     progress.setAttribute("aria-valuemax", "100");
     progress.setAttribute("aria-valuenow", "0");
-
-    const pipe = document.createElement("div");
-    pipe.className = "reading-progress-pipe";
-    const bar = document.createElement("div");
-    bar.className = "reading-progress-bar";
-    pipe.appendChild(bar);
-    progress.appendChild(pipe);
-    document.body.appendChild(progress);
+    progress.setAttribute("aria-hidden", "false");
+    document.body.prepend(progress);
 
     const updateProgress = () => {
       const top = post.offsetTop;
@@ -259,8 +252,7 @@
       const pct = scrollable > 0
         ? Math.min(1, Math.max(0, (window.scrollY - top) / scrollable))
         : 1;
-      bar.style.width = `${pct * 100}%`;
-      bar.classList.toggle("has-fill", pct > 0.002);
+      progress.style.transform = `scaleX(${pct})`;
       progress.setAttribute("aria-valuenow", String(Math.round(pct * 100)));
     };
 

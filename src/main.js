@@ -80,19 +80,17 @@ function renderTicketList(list, items) {
   list.textContent = ''
   items.forEach((item) => {
     const li = document.createElement('li')
-    li.className = 'group'
     const a = document.createElement('a')
     a.href = item.link
-    a.className = 'flex items-baseline justify-between gap-4 border-b border-neutral-200 py-4 hover:bg-neutral-100/70 dark:border-neutral-800 dark:hover:bg-neutral-900/50'
     if (/^https?:\/\//.test(item.link)) {
       a.target = '_blank'
       a.rel = 'noopener'
     }
     const title = document.createElement('span')
-    title.className = 'font-medium'
+    title.className = 'ticket-title'
     title.textContent = item.title
     const date = document.createElement('span')
-    date.className = 'shrink-0 text-sm text-neutral-500'
+    date.className = 'ticket-date'
     date.textContent = formatTicketDate(item.pubDate)
     a.append(title, date)
     li.appendChild(a)
@@ -120,3 +118,144 @@ if (list) {
     })
     .finally(() => clearTimeout(timeout))
 }
+
+function initReveals() {
+  const nodes = [...document.querySelectorAll('[data-reveal]')]
+  if (!nodes.length) return
+
+  const show = (el) => el.classList.add('is-visible')
+
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    nodes.forEach(show)
+    return
+  }
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return
+        show(entry.target)
+        io.unobserve(entry.target)
+      })
+    },
+    { rootMargin: '0px 0px -4% 0px', threshold: 0.01 },
+  )
+
+  nodes.forEach((el) => {
+    const rect = el.getBoundingClientRect()
+    const inView = rect.top < window.innerHeight * 0.96 && rect.bottom > 0
+    if (inView) show(el)
+    else io.observe(el)
+  })
+
+  // Safety: never leave content invisible if IO misses
+  setTimeout(() => nodes.forEach(show), 1200)
+}
+
+initReveals()
+
+
+function initScrollSpy() {
+  const sideLinks = [...document.querySelectorAll('.side-link[href^="#"]')]
+  const navLinks = [...document.querySelectorAll('.nav-link[href^="#"]')]
+  const links = [...sideLinks, ...navLinks]
+  if (!links.length) return
+
+  const sections = []
+  const byId = new Map()
+  for (const link of sideLinks) {
+    const id = link.getAttribute('href').slice(1)
+    const section = document.getElementById(id)
+    if (!section) continue
+    sections.push(section)
+    byId.set(id, { section, side: link, nav: navLinks.find((n) => n.getAttribute('href') === `#${id}`) })
+  }
+  if (!sections.length) return
+
+  const rail = document.querySelector('.side-links')
+  let marker = rail && rail.querySelector('.side-marker')
+  if (rail && !marker) {
+    marker = document.createElement('span')
+    marker.className = 'side-marker'
+    marker.setAttribute('aria-hidden', 'true')
+    rail.prepend(marker)
+  }
+
+  const setActive = (id) => {
+    links.forEach((l) => {
+      const on = l.getAttribute('href') === `#${id}`
+      l.classList.toggle('is-active', on)
+    })
+    if (marker && rail) {
+      const active = byId.get(id)?.side
+      if (active) {
+        const top = active.offsetTop + active.offsetHeight / 2 - 2
+        marker.style.transform = `translateY(${top}px)`
+        marker.classList.add('is-on')
+      }
+    }
+  }
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      const visible = entries
+        .filter((e) => e.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
+      if (!visible.length) return
+      setActive(visible[0].target.id)
+    },
+    { rootMargin: '-22% 0px -52% 0px', threshold: [0.1, 0.3, 0.55] },
+  )
+  sections.forEach((s) => io.observe(s))
+}
+
+function initScrollProgress() {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return
+  let bar = document.querySelector('.scroll-progress')
+  if (!bar) {
+    bar = document.createElement('div')
+    bar.className = 'scroll-progress'
+    bar.setAttribute('role', 'progressbar')
+    bar.setAttribute('aria-label', 'Scroll progress')
+    bar.setAttribute('aria-valuemin', '0')
+    bar.setAttribute('aria-valuemax', '100')
+    bar.setAttribute('aria-valuenow', '0')
+    document.body.prepend(bar)
+  }
+  const update = () => {
+    const doc = document.documentElement
+    const max = doc.scrollHeight - doc.clientHeight
+    const p = max > 0 ? Math.min(1, Math.max(0, doc.scrollTop / max)) : 0
+    bar.style.transform = `scaleX(${p})`
+    bar.setAttribute('aria-valuenow', String(Math.round(p * 100)))
+  }
+  update()
+  window.addEventListener('scroll', update, { passive: true })
+  window.addEventListener('resize', update)
+}
+
+function initSectionBeats() {
+  const sections = document.querySelectorAll('.about-main section, .home-hero')
+  if (!sections.length) return
+
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    sections.forEach((s) => s.classList.add('is-inview'))
+    return
+  }
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return
+        entry.target.classList.add('is-inview')
+        io.unobserve(entry.target)
+      })
+    },
+    { rootMargin: '0px 0px -10% 0px', threshold: 0.12 },
+  )
+  sections.forEach((s) => io.observe(s))
+}
+
+initScrollSpy()
+initScrollProgress()
+initSectionBeats()
